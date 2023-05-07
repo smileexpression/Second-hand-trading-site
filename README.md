@@ -5,26 +5,24 @@
 
 #### 软件架构
 软件架构说明
-
+C/S
 
 #### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+现阶段vue框架使用参照视频https://www.bilibili.com/video/BV12J411m7MG/?spm_id_from=333.337.search-card.all.click
+
+后期学习改用vue-cli脚手架
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  在 backend 目录下 go run main.go 启动后端服务
 
 #### 参与贡献
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+1.  clone 本仓库
+2.  commit 代码
+3.  push 代码自动生成 pull request
+4.  管理员审查代码并合并
 
 
 #### 特技
