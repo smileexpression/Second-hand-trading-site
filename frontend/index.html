@@ -17,7 +17,11 @@
       </li>
     </ul>
   </div>
+
+  <!-- 导入axios使用后端接口 -->
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <!-- 导入vue2框架 -->
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
   <script>
     var app = new Vue({
@@ -29,6 +33,7 @@
       methods: {
         getMsg: function () {
           var that = this;
+          // 前端调用后端接口的简单参考
           axios.get("http://127.0.0.1:8080/ping").then(function (response) {
             console.log(response.data.message);
             that.list.push(response.data.message);

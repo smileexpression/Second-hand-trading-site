@@ -21,10 +21,17 @@ C/S
       https://blog.csdn.net/weichuangxxb/article/details/100763437  
 
 #### 安装教程
+1.  go导入gin：go get -u github.com/gin-gonic/gin
 
-    现阶段vue框架使用参照视频https://www.bilibili.com/video/BV12J411m7MG/?spm_id_from=333.337.search-card.all.click
+下面为数据库相关包
+2.  go导入gorm：go get -u http://github.com/jinzhu/gorm
+3.  go导入gorm.io：go get -u gorm.io/gorm
+                  go get -u gorm.io/driver/mysql
 
-    后期学习改用vue-cli脚手架
+
+1.  现阶段vue框架使用参照视频https://www.bilibili.com/video/BV12J411m7MG/?spm_id_from=333.337.search-card.all.click
+
+2.  后期学习改用vue-cli脚手架
 
 #### 使用说明
 
