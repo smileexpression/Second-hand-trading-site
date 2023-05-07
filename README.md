@@ -8,23 +8,23 @@
 C/S
 
 #### 学习目录
-1.  前端三件套：
-      html：https://www.bilibili.com/video/BV1vs411M7aT/?spm_id_from=333.337.search-card.all.click&vd_source=212ff176b778171e26249f81cfb5bdbc
-      javascript：https://www.bilibili.com/video/BV15L4y1a7or/?spm_id_from=333.337.search-card.all.click
-      css：https://www.bilibili.com/video/BV1mS4y1Z7Ga/?spm_id_from=333.337.search-card.all.click
+1.  前端三件套：  
+      html：https://www.bilibili.com/video/BV1vs411M7aT/?spm_id_from=333.337.search-card.all.click&vd_source=212ff176b778171e26249f81cfb5bdbc  
+      javascript：https://www.bilibili.com/video/BV15L4y1a7or/?spm_id_from=333.337.search-card.all.click  
+      css：https://www.bilibili.com/video/BV1mS4y1Z7Ga/?spm_id_from=333.337.search-card.all.click  
       vue：https://www.bilibili.com/video/BV12J411m7MG/?spm_id_from=333.337.search-card.all.click
 
-2.  后端接口参考：
-      https://blog.csdn.net/m0_51592186/article/details/118913401
+2.  后端接口参考：  
+      https://blog.csdn.net/m0_51592186/article/details/118913401  
 
-3.  前后端分离项目参考：
-      https://blog.csdn.net/weichuangxxb/article/details/100763437
+3.  前后端分离项目参考：  
+      https://blog.csdn.net/weichuangxxb/article/details/100763437  
 
 #### 安装教程
 
-现阶段vue框架使用参照视频https://www.bilibili.com/video/BV12J411m7MG/?spm_id_from=333.337.search-card.all.click
+    现阶段vue框架使用参照视频https://www.bilibili.com/video/BV12J411m7MG/?spm_id_from=333.337.search-card.all.click
 
-后期学习改用vue-cli脚手架
+    后期学习改用vue-cli脚手架
 
 #### 使用说明
 
