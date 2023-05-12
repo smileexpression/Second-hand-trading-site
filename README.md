@@ -5,13 +5,18 @@
 2.  npm 9.5.1（版本影响不大）
 3.  node.js v18.16.0（需16.0.0以上）
 
-#### 使用说明
+#### 安装依赖
+1.  在frontend目录下  
+npm install  
+npm add bootstrap  
+npm add @popperjs/core  
+
+#### 启动项目
 1.  后端启动    
 在 backend 目录下  
 go run main.go
 2.  前端启动  
-在 frontend 目录下  
-npm install（仅需执行一次）  
+在 frontend 目录下   
 npm run dev
 
 
@@ -32,23 +37,10 @@ https://blog.csdn.net/m0_51592186/article/details/118913401
 3.  前后端分离项目参考：  
 https://blog.csdn.net/weichuangxxb/article/details/100763437  
 
-#### 安装教程
-1.  go导入gin：  
-go get -u github.com/gin-gonic/gin
-
-下面为数据库相关包  
-
-2.  go导入gorm：  
-go get -u http://github.com/jinzhu/gorm
-3.  go导入gorm.io：  
-go get -u gorm.io/gorm  
-go get -u gorm.io/driver/mysql
-
-
 4.  现阶段vue框架使用参照视频  
 https://www.bilibili.com/video/BV12J411m7MG/?spm_id_from=333.337.search-card.all.click
 
-2.  后期学习改用vue-cli脚手架
+5.  后期学习改用vite脚手架
 
 
 #### 参与贡献
