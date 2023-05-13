@@ -34,6 +34,7 @@ func InitDB() *gorm.DB {
 	}
 	db.AutoMigrate(&model.User{}) // 此处创建了model文件夹下的user实体类，仅作参考
 	db.AutoMigrate(&model.Commodity{})
+	db.AutoMigrate(&model.Test{})
 
 	DB = db
 	return db
