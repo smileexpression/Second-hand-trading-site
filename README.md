@@ -7,9 +7,11 @@
 
 #### 安装依赖
 1.  在frontend目录下  
-npm install  
-npm add bootstrap  
-npm add @popperjs/core  
+npm install    
+npm install element-plus --save  
+npm install -D unplugin-vue-components unplugin-auto-import   
+npm i sass -D  
+npm install axios
 
 #### 启动项目
 1.  后端启动    
@@ -37,10 +39,9 @@ https://blog.csdn.net/m0_51592186/article/details/118913401
 3.  前后端分离项目参考：  
 https://blog.csdn.net/weichuangxxb/article/details/100763437  
 
-4.  现阶段vue框架使用参照视频  
-https://www.bilibili.com/video/BV12J411m7MG/?spm_id_from=333.337.search-card.all.click
+4.  现阶段vue项目（最新！！）使用参照视频  
+https://www.bilibili.com/video/BV1Ac411K7EQ/?p=29&spm_id_from=pageDriver&vd_source=212ff176b778171e26249f81cfb5bdbc
 
-5.  后期学习改用vite脚手架
 
 
 #### 参与贡献

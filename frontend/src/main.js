@@ -1,8 +1,20 @@
-import './assets/main.css'
+import '@/styles/common.scss'
 
 import { createApp } from 'vue'
-import App from './App.vue'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap'
+import { createPinia } from 'pinia'
 
-createApp(App).mount('#app')
+import App from './App.vue'
+import router from './router'
+
+// 测试接口函数
+import { getCategory } from './apis/testAPI'
+getCategory().then(res => {
+  console.log(res)
+})
+
+const app = createApp(App)
+
+app.use(createPinia())
+app.use(router)
+
+app.mount('#app')
