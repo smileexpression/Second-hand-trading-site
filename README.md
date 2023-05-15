@@ -12,7 +12,6 @@
    npm install -D unplugin-vue-components unplugin-auto-import   
    npm i sass -D  
    npm install axios         
-
    npm i @vueuse/core
 
 #### 启动项目
