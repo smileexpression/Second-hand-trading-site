@@ -6,12 +6,13 @@
 3.  node.js v18.16.0（需16.0.0以上）
 
 #### 安装依赖
-1.  在frontend目录下  
-npm install    
-npm install element-plus --save  
-npm install -D unplugin-vue-components unplugin-auto-import   
-npm i sass -D  
-npm install axios
+1. 在frontend目录下  
+   npm install    
+   npm install element-plus --save  
+   npm install -D unplugin-vue-components unplugin-auto-import   
+   npm i sass -D  
+   npm install axios         
+   npm i @vueuse/core
 
 #### 启动项目
 1.  后端启动    
