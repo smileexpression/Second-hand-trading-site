@@ -2,7 +2,7 @@
 import axios from 'axios'
 
 const httpInstance = axios.create({
-  baseURL: 'http://pcapi-xiaotuxian-front-devtest.itheima.net',
+  baseURL: 'https://mock.apifox.cn/m1/2726765-0-default',
   timeout: 5000
 })
 
