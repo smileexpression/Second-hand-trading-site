@@ -1,3 +1,3 @@
 <template>
-  我是最近
+  我是推荐
 </template>
