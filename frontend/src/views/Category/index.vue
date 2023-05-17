@@ -2,6 +2,7 @@
 import { getCategoryAPI } from '@/apis/category';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import GoodsItem from '../Home/components/GoodsItem.vue';
 
 const categoryData = ref({})
 const route = useRoute()
@@ -22,11 +23,32 @@ onMounted(() => getCategory())
   <div class="top-category">
     <div class="container m-top-20">
       <!-- 面包屑 -->
-      <div class="bread-container">
-        <el-breadcrumb separator=">">
+    <div class="bread-container">
+      <el-breadcrumb separator=">">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
           <el-breadcrumb-item>{{ categoryData.name }}</el-breadcrumb-item>
         </el-breadcrumb>
+      </div>
+
+      <!-- 分类列表 -->
+      <div class="sub-list">
+        <h3>{{ categoryData.name }}</h3>
+        <!-- <ul>
+              <li v-for="i in categoryData.children" :key="i.id">
+                  <RouterLink to="/">
+                    <img :src="i.picture" />
+                    <p>{{ i.name }}</p>
+                  </RouterLink>
+                </li>
+            </ul> -->
+      </div>
+      <div class="ref-goods">
+        <!-- <div class="head">
+              <h3>- {{ item.name }}-</h3>
+            </div> -->
+        <div class="body">
+          <GoodsItem v-for="good in categoryData.goods" :goods="good" :key="good.id" />
+        </div>
       </div>
     </div>
   </div>
