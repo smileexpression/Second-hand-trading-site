@@ -3,9 +3,10 @@ package controller
 import (
 	"gin/common"
 	"gin/model"
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-	"strconv"
 )
 
 // 获取全部商品信息
@@ -19,6 +20,20 @@ func AllIdle(ctx *gin.Context) {
 	ctx.JSON(200, gin.H{
 		"msg": commodities,
 	})
+}
+
+// test0520 doSomething
+func DoSomething(ctx *gin.Context) {
+	DB := common.GetDB()
+
+	var commodities []model.Commodity
+	DB.Find(&commodities)
+	ctx.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+
+	ctx.JSON(200, gin.H{
+		"msg": commodities,
+	})
+
 }
 
 //获取单个商品信息
