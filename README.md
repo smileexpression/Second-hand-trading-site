@@ -1,15 +1,23 @@
 # tkl
 
+#### 接口文档
+
+https://apifox.com/apidoc/shared-344f5ea8-7a45-4270-99db-1b293b9c0053
+
 #### 环境
+
 1.  go 1.20
 2.  npm 9.5.1（版本影响不大）
 3.  node.js v18.16.0（需16.0.0以上）
 
 #### 安装依赖
-1.  在frontend目录下  
-npm install  
-npm add bootstrap  
-npm add @popperjs/core  
+1. 在frontend目录下  
+   npm install    
+   npm install element-plus --save  
+   npm install -D unplugin-vue-components unplugin-auto-import   
+   npm i sass -D  
+   npm install axios         
+   npm i @vueuse/core
 
 #### 启动项目
 1.  后端启动    
@@ -26,21 +34,17 @@ C/S
 
 #### 学习目录
 1.  前端三件套：  
-html：https://www.bilibili.com/video/BV1vs411M7aT/?spm_id_from=333.337.search-card.all.click&vd_source=212ff176b778171e26249f81cfb5bdbc  
-javascript：https://www.bilibili.com/video/BV15L4y1a7or/?spm_id_from=333.337.search-card.all.click  
-css：https://www.bilibili.com/video/BV1mS4y1Z7Ga/?spm_id_from=333.337.search-card.all.click  
-vue：https://www.bilibili.com/video/BV12J411m7MG/?spm_id_from=333.337.search-card.all.click
-
-2.  后端接口参考：  
-https://blog.csdn.net/m0_51592186/article/details/118913401  
+    html：https://www.bilibili.com/video/BV1vs411M7aT/?spm_id_from=333.337.search-card.all.click&vd_source=212ff176b778171e26249f81cfb5bdbc  
+    javascript：https://www.bilibili.com/video/BV15L4y1a7or/?spm_id_from=333.337.search-card.all.click  
+    css：https://www.bilibili.com/video/BV1mS4y1Z7Ga/?spm_id_from=333.337.search-card.all.click  
+    vue：https://www.bilibili.com/video/BV12J411m7MG/?spm_id_from=333.337.search-card.all.click
 
 3.  前后端分离项目参考：  
 https://blog.csdn.net/weichuangxxb/article/details/100763437  
 
-4.  现阶段vue框架使用参照视频  
-https://www.bilibili.com/video/BV12J411m7MG/?spm_id_from=333.337.search-card.all.click
+4.  现阶段vue项目（最新！！）使用参照视频  
+https://www.bilibili.com/video/BV1Ac411K7EQ/?p=29&spm_id_from=pageDriver&vd_source=212ff176b778171e26249f81cfb5bdbc
 
-5.  后期学习改用vite脚手架
 
 
 #### 参与贡献
