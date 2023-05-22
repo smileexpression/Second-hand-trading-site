@@ -10,6 +10,13 @@ const getPayInfo = async () => {
   payInfo.value = res.result
 }
 onMounted(() => getPayInfo())
+
+// 跳转支付
+// 携带订单id以及回调地址跳转到支付地址（get）
+const baseURL = 'https://mock.apifox.cn/m1/2726765-0-default/'
+const backURL = 'http://localhost:5173/paycallback'
+const redirectUrl = encodeURIComponent(backURL)
+const payUrl = `${baseURL}pay/aliPay?orderId=${route.query.id}&redirect=${redirectUrl}`
 </script>
 
 
