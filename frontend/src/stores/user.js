@@ -1,0 +1,20 @@
+//管理用户数据
+
+import { defineStore } from "pinia";
+import { ref } from "vue";
+import { loginAPI } from '@/apis/login'
+
+export const useUserStore = defineStore ( 'user', ()=> {
+    const userInfo = ref({})
+    const getUserInfo = async ({ account, password }) => {
+        const res = await loginAPI({ account, password })
+        userInfo.value = res.result
+    }
+    return{
+        userInfo,
+        getUserInfo
+    }
+},{
+    persist: true,
+}
+)
