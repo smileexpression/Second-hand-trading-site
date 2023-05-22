@@ -6,13 +6,21 @@ import { loginAPI } from '@/apis/login'
 
 export const useUserStore = defineStore ( 'user', ()=> {
     const userInfo = ref({})
+    //获取用户信息
     const getUserInfo = async ({ account, password }) => {
         const res = await loginAPI({ account, password })
         userInfo.value = res.result
     }
+
+    //退出登录清除用户信息
+    const clearUserInfo = () => {
+        userInfo.value = {}
+    }
+
     return{
         userInfo,
-        getUserInfo
+        getUserInfo,
+        clearUserInfo
     }
 },{
     persist: true,
