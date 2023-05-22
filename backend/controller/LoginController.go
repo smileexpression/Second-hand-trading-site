@@ -16,11 +16,16 @@ import (
 func Register(ctx *gin.Context) {
 	//获取数据
 	DB := common.GetDB()
-	name := ctx.PostForm("name")
-	telephone := ctx.PostForm("telephone")
-	password := ctx.PostForm("password")
+	var receiveUser model.User
+	if err := ctx.BindJSON(&receiveUser); err != nil {
+		ctx.JSON(422, gin.H{"code": 422, "msg": "获取失败"})
+		return
+	}
 
-	//数据验证
+	name := receiveUser.Name
+	telephone := receiveUser.Telephone
+	password := receiveUser.Password
+
 	if len(telephone) != 11 {
 		ctx.JSON(422, gin.H{"code": 422, "msg": "手机号必须为11位"})
 		return
@@ -61,8 +66,14 @@ func Register(ctx *gin.Context) {
 func Login(ctx *gin.Context) {
 	//获取参数
 	DB := common.GetDB()
-	telephone := ctx.PostForm("telephone")
-	password := ctx.PostForm("password")
+	var receiveUser model.User
+	if err := ctx.BindJSON(&receiveUser); err != nil {
+		ctx.JSON(422, gin.H{"code": 422, "msg": "获取失败"})
+		return
+	}
+
+	telephone := receiveUser.Telephone
+	password := receiveUser.Password
 
 	//数据验证
 	if len(telephone) != 11 {
