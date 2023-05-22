@@ -22,6 +22,7 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
+	gender := receiveUser.Gender
 	name := receiveUser.Name
 	telephone := receiveUser.Telephone
 	password := receiveUser.Password
@@ -52,6 +53,7 @@ func Register(ctx *gin.Context) {
 	}
 
 	newUser := model.User{
+		Gender:    gender,
 		Name:      name,
 		Telephone: telephone,
 		Password:  string(HashPassword),
@@ -118,7 +120,7 @@ func Login(ctx *gin.Context) {
 			"token":        token,
 			"avatar":       "",
 			"nickname":     user.Name,
-			"gendar":       "",
+			"gendar":       user.Gender,
 			"cityCode":     "",
 			"provinceCode": "",
 		},
