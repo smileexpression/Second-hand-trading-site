@@ -1,9 +1,10 @@
 <script setup>
 import { getOrderAPI } from '@/apis/pay';
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
+const router = useRouter()
 const payInfo = ref({})
 const getPayInfo = async () => {
   const res = await getOrderAPI(route.query.id)
@@ -11,12 +12,17 @@ const getPayInfo = async () => {
 }
 onMounted(() => getPayInfo())
 
-// 跳转支付
-// 携带订单id以及回调地址跳转到支付地址（get）
-const baseURL = 'https://mock.apifox.cn/m1/2726765-0-default/'
-const backURL = 'http://localhost:5173/paycallback'
-const redirectUrl = encodeURIComponent(backURL)
-const payUrl = `${baseURL}pay/aliPay?orderId=${route.query.id}&redirect=${redirectUrl}`
+const pay = async () => {
+  console.log('pay');
+  router.push({
+    path: 'paycallback',
+    query: {
+      payResult: true,
+      orderId: route.query.id
+    }
+  })
+  // 更新购物车！！！！！！！！！！！！！！！！！！还没写
+}
 </script>
 
 
@@ -40,16 +46,16 @@ const payUrl = `${baseURL}pay/aliPay?orderId=${route.query.id}&redirect=${redire
         <p class="head">选择以下支付方式付款</p>
         <div class="item">
           <p>支付平台</p>
-          <a class="btn alipay" :href="payUrl"></a>
+          <a class="btn alipay" @click="pay"></a>
         </div>
-        <div class="item">
+        <!-- <div class="item">
           <p>支付方式</p>
           <a class="btn" href="javascript:;">招商银行</a>
           <a class="btn" href="javascript:;">工商银行</a>
           <a class="btn" href="javascript:;">建设银行</a>
           <a class="btn" href="javascript:;">农业银行</a>
           <a class="btn" href="javascript:;">交通银行</a>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
