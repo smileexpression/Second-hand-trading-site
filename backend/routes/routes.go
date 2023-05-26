@@ -16,11 +16,17 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 	{
 		test_api.GET("/doSomething", controller.DoSomething)
 	}
-	///home/goods
+
+	category := r.Group("")
+	{
+		category.GET("/category", controller.ChooseCategory)
+	}
 
 	home := r.Group("home")
 	{
 		home.GET("/goods", controller.GetGoods)
+		home.GET("/banner", controller.GetBanner)
+		home.GET("/new", controller.RecentIdle)
 	}
 	return r
 }
