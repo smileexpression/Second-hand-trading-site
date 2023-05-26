@@ -3,6 +3,7 @@ package controller
 import (
 	"gin/common"
 	"gin/model"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -50,12 +51,19 @@ func GetGoods(ctx *gin.Context) {
 
 func RecentIdle(ctx *gin.Context) {
 	DB := common.GetDB()
-	NUM := 4
-	var recentGoods [4]model.Goods
+
+	NUM := ctx.DefaultQuery("limit", "4")
+	IntNum, err := strconv.Atoi(NUM) // 函数原型 ：func Atoi(s string) (int, error)
+	if err != nil {
+		print(err)
+		//do not thing
+	}
+	//var recentGoods [4]model.Goods
+	var recentGoods = make([]model.Goods, IntNum)
 	var count int64
 	DB.Table("goods").Count(&count)
 
-	for i := int(count); i > int(count)-NUM; i-- {
+	for i := int(count); i > int(count)-IntNum; i-- {
 		print(int(count) - i)
 		DB.Table("goods").Where("id = ?", i).Find(&recentGoods[int(count)-i])
 	}
