@@ -1,5 +1,9 @@
 <script setup>
 import { ref } from 'vue';
+import 'element-plus/es/components/message/style/css'
+import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/user';
 
 //表单对象
 const form = ref({
@@ -31,12 +35,22 @@ const rules = ref({
   ]
 })
 
-//获取form实例进行同意校验
+//获取userStore实例
+const userStore = useUserStore()
+
+//获取form实例进行统一校验
 const formRef = ref(null)
+const router = useRouter()
 const doLogin = () => {
-  formRef.value.validate((valid) => {
+  const { account, password } = form.value
+  formRef.value.validate( async (valid) => {
     if(valid){
-      console.log(valid);
+      //通过userStore实例调用登录接口
+      await userStore.getUserInfo({ account, password })
+      //用户提示
+      ElMessage({ type:'success', message: '登录成功'})
+      //跳转回主页
+      router.replace({path: '/'})
     }
   })
 }
