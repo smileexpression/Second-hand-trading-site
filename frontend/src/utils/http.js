@@ -7,17 +7,26 @@ import router from '@/router'
 
 const httpInstance = axios.create({
   baseURL: 'https://mock.apifox.cn/m1/2726765-0-default',
+  //baseURL: 'http://localhost:8080',
   timeout: 5000
 })
 
 // axios请求拦截器
 httpInstance.interceptors.request.use(config => {
+  //获取token数据
+  const userStore = useUserStore()
+  const token = userStore.userInfo.token
+  //将token拼接到数据报头部
+  if(token){
+    config.headers.Authorization = `Bearer ${token}`
+  }
+
   return config
 }, e => Promise.reject(e))
 
 // axios响应式拦截器
 httpInstance.interceptors.response.use(res => res.data, e => {
-  userStore = useUserStore()
+  const userStore = useUserStore()
 
   //统一提示错误
   ElMessage({
