@@ -3,9 +3,10 @@ package common
 import (
 	"fmt"
 	"gin/model"
+	"net/url"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"net/url"
 )
 
 var DB *gorm.DB
@@ -34,7 +35,9 @@ func InitDB() *gorm.DB {
 	}
 	db.AutoMigrate(&model.User{}) // 此处创建了model文件夹下的user实体类，仅作参考
 	db.AutoMigrate(&model.Commodity{})
-	db.AutoMigrate(&model.Test{})
+	db.AutoMigrate(&model.Goods{})
+	db.AutoMigrate(&model.Category{})
+	db.AutoMigrate(&model.Banner{})
 
 	DB = db
 	return db
