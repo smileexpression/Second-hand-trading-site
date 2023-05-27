@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gin/common"
 	"gin/model"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -56,5 +57,27 @@ func GetGoods(ctx *gin.Context) {
 
 	ctx.JSON(200, gin.H{
 		"result": result,
+	})
+}
+
+//暂且不考虑id转换错误
+
+func GetOneGood(c *gin.Context) {
+	db := common.GetDB()
+	idStr := c.Query("id")
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	//i := 1
+	fmt.Println(1)
+	if err != nil {
+		fmt.Errorf("invalid id fomrat %v", err)
+	}
+	var target model.Goods
+	db.Table("goods").Where("id = ?", id).First(&target)
+	//if err != nil {
+	//	fmt.Println("断点位于查表")
+	//}
+	c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+	c.JSON(200, gin.H{
+		"result": target,
 	})
 }

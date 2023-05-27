@@ -21,6 +21,12 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 	home := r.Group("home")
 	{
 		home.GET("/goods", controller.GetGoods)
+		home.GET("onegood", controller.GetOneGood)
+	}
+
+	goods := r.Group("")
+	{
+		goods.GET("/goods", controller.GetOneGood)
 	}
 	return r
 }
