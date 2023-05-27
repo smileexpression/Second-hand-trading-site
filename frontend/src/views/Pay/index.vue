@@ -26,7 +26,6 @@ const pay = async () => {
       orderId: route.query.id
     }
   })
-  // 更新购物车！！！！！！！！！！！！！！！！！！还没写
 }
 </script>
 

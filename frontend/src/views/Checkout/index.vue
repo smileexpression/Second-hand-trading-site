@@ -1,3 +1,6 @@
+<!-- CartList还需要配置点击按钮的路由 -->
+
+
 <script setup>
 import { getCheckInfoAPI, createOrderAPI } from '@/apis/checkout'
 import { useRouter } from 'vue-router'
@@ -31,7 +34,11 @@ const confirm = () => {
 // 创建订单
 const createOrder = async () => {
   const res = await createOrderAPI({
-
+    goods: checkInfo.value.goods.map(item => {
+      return {
+        id: item.id,
+      }
+    }),
     addressId: curAddress.value.id
   })
   const orderId = res.result.id
@@ -42,6 +49,8 @@ const createOrder = async () => {
     }
   })
   // 更新购物车！！！！！！！！！！！！！！！！！！还没写
+  // 需要usecartstore
+
 }
 
 </script>
