@@ -9,9 +9,7 @@ type User struct {
 	Password  string `json:"password" gorm:"size:255"`                        //密码长度：6-14
 	Gender    string `json:"gender" gorm:"type:varchar(10);not null"`
 	Token     string `json:"token" gorm:"size:255;not null"`
-	Avatar    string `json:"avatar" gorm:"size:255;not null"`
-	City      string `json:"cityCode" gorm:"size:255;not null"`
-	Province  string `json:"provinceCode" gorm:"size:255;not null"`
+	Avatar    string `json:"avatar" gorm:"type:varchar(1024);not null"`
 }
 
 //user实体类仅作为参考，可在mysql中看到这张表

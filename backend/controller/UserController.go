@@ -52,6 +52,7 @@ func Register(ctx *gin.Context) {
 		Name:      receiveUser.Name,
 		Telephone: receiveUser.Telephone,
 		Password:  string(HashPassword),
+		Avatar:    receiveUser.Avatar,
 	}
 	DB.Create(&newUser)
 	ctx.JSON(200, gin.H{
@@ -108,14 +109,12 @@ func Login(ctx *gin.Context) {
 		"code": 200,
 		"msg":  "登录成功",
 		"result": gin.H{
-			"id":           user.ID,
-			"account":      user.Telephone,
-			"token":        user.Token,
-			"avatar":       user.Avatar,
-			"nickname":     user.Name,
-			"gendar":       user.Gender,
-			"cityCode":     user.City,
-			"provinceCode": user.Province,
+			"id":       user.ID,
+			"account":  user.Telephone,
+			"token":    user.Token,
+			"avatar":   user.Avatar,
+			"nickname": user.Name,
+			"gendar":   user.Gender,
 		},
 	})
 }
