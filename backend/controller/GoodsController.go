@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type AllIdle_2 struct { // "_2" 区分于commoditycontroller的AllIdle
+type AllIdle struct { // "_2" 区分于commoditycontroller的AllIdle
 
 	Id      string
 	Name    string `gorm:"type:varchar(20);not null"`
@@ -26,7 +26,7 @@ type SingleIdle struct {
 func GetGoods(ctx *gin.Context) {
 
 	DB := common.GetDB()
-	var result [4]AllIdle_2
+	var result [4]AllIdle
 
 	for i := 0; i < 4; i++ {
 
