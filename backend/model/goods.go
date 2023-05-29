@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type Goods struct {
 	gorm.Model  //Id gen update del
-	Cata_Id     string
+	Cate_Id     string
 	User        string `gorm:"type:varchar(30);not null"`
 	Name        string `gorm:"type:varchar(50);not null"`
 	Picture     string `gorm:"type:varchar(1024);not null"`
