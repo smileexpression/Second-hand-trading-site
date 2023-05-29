@@ -10,5 +10,5 @@ type Goods struct {
 	Picture     string `gorm:"type:varchar(1024);not null"`
 	Price       string `gorm:"type:float;not null"`
 	Description string `gorm:"type:varchar(255);not null"`
-	IsSold      *bool
+	Is_Sold     bool
 }
