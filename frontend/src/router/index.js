@@ -4,6 +4,7 @@ import Layout from '@/views/Layout/index.vue'
 import Home from '@/views/Home/index.vue'
 import Category from '@/views/Category/index.vue'
 import Detail from '@/views/Detail/index.vue'
+import Register from '@/views/Register/index.vue'
 import Checkout from '@/views/Checkout/index.vue'
 import Pay from '@/views/Pay/index.vue'
 import PayBack from '@/views/Pay/PayBack.vue'
@@ -45,6 +46,10 @@ const router = createRouter({
     {
       path: '/login',
       component: Login
+    },
+    {
+      path: '/register',
+      component: Register
     }
   ],
   // 路由滚动行为定制

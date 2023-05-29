@@ -5,7 +5,7 @@ import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 
-//表单对象
+//登录表单对象
 const form = ref({
   account: '',
   password: '',
@@ -41,6 +41,7 @@ const userStore = useUserStore()
 //获取form实例进行统一校验
 const formRef = ref(null)
 const router = useRouter()
+//登录操作
 const doLogin = () => {
   const { account, password } = form.value
   formRef.value.validate( async (valid) => {
@@ -72,32 +73,35 @@ const doLogin = () => {
         </RouterLink>
       </div>
     </header>
-    <section class="login-section">
-      <div class="wrapper">
-        <nav>
-          <a href="javascript:;">账户登录</a>
-        </nav>
-        <div class="account-box">
-          <div class="form">
-            <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="60px"
-              status-icon>
-              <el-form-item prop="account" label="账户">
-                <el-input v-model="form.account" />
-              </el-form-item>
-              <el-form-item prop="password" label="密码">
-                <el-input v-model="form.password" />
-              </el-form-item>
-              <el-form-item prop="agree" label-width="22px">
-                <el-checkbox v-model="form.agree" size="large">
-                  我已同意隐私条款和服务条款
-                </el-checkbox>
-              </el-form-item>
-              <el-button size="large" class="subBtn" @click="doLogin">点击登录</el-button>
-            </el-form>
+      <section class="login-section">
+        <div class="wrapper">
+          <nav>
+            <a href="javascript:;">账户登录</a>
+          </nav>
+          <div class="account-box">
+            <div class="form">
+              <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="60px"
+                status-icon>
+                <el-form-item prop="account" label="账户">
+                  <el-input v-model="form.account" />
+                </el-form-item>
+                <el-form-item prop="password" label="密码">
+                  <el-input v-model="form.password" />
+                </el-form-item>
+                <el-form-item prop="agree" label-width="22px">
+                  <el-checkbox v-model="form.agree" size="large">
+                    我已同意隐私条款和服务条款
+                  </el-checkbox>
+                </el-form-item>
+                <div style="text-align: right;font-size: smaller;" >
+                  <el-link @click="$router.push('register')">没有账号？立即注册</el-link>
+                </div>
+                <el-button size="large" class="subBtn" @click="doLogin">点击登录</el-button>
+              </el-form>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
     <footer class="login-footer">
       <div class="container">

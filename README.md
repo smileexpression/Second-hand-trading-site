@@ -17,7 +17,9 @@ https://apifox.com/apidoc/shared-344f5ea8-7a45-4270-99db-1b293b9c0053
    npm install -D unplugin-vue-components unplugin-auto-import   
    npm i sass -D  
    npm install axios         
-   npm i @vueuse/core
+   npm i @vueuse/core  
+   npm i pinia-plugin-persistedstate
+
 
 #### 启动项目
 1.  后端启动    

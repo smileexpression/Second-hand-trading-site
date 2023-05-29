@@ -21,7 +21,7 @@ const logoutConfirm = () => {
       <ul>
         <!-- 通过userStore是否携带token选择模板进行渲染 -->
         <template v-if="userStore.userInfo.token">
-          <li><a href="javascript:;"><i class="iconfont icon-user"></i>{{ userStore.userInfo.account }}</a></li>
+          <li><a href="javascript:;"><i class="iconfont icon-user"></i>{{ userStore.userInfo.nickname }}</a></li>
           <li>
             <el-popconfirm title="确认退出吗?" @confirm="logoutConfirm" confirm-button-text="确认" cancel-button-text="取消">
               <template #reference>
