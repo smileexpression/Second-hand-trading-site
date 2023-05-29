@@ -93,7 +93,7 @@ const doLogin = () => {
                   </el-checkbox>
                 </el-form-item>
                 <div style="text-align: right;font-size: smaller;" >
-                  <el-link @click="">没有账号？立即注册</el-link>
+                  <el-link @click="$router.push('register')">没有账号？立即注册</el-link>
                 </div>
                 <el-button size="large" class="subBtn" @click="doLogin">点击登录</el-button>
               </el-form>
