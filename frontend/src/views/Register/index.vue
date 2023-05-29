@@ -53,7 +53,27 @@ const registerRules = ref({
   ]
 })
 
+//获取用户实例
+const userStore = useUserStore()
 
+//获取注册表单实例进行统一检验
+const registerFormRef = ref(null)
+
+const router = useRouter()
+//注册操作
+const doRegister = () => {
+    const {account, password, nickname, gender} = registerForm.value
+    registerFormRef.value.validate( async (valid) => {
+        if(valid){
+            //通过用户实例调用注册接口
+            await userStore.registerUser({account, password, nickname, gender})
+            //消息提示
+            ElMessage({ type:'success', message: '注册成功'})
+            //跳转至主页
+            router.replace('/')
+        }
+    })
+}
 
 
 </script>
@@ -81,7 +101,7 @@ const registerRules = ref({
           </nav>
           <div class="account-box">
             <div class="form">
-              <el-form :model="registerForm" :rules="registerRules" label-position="right" label-width="70px"
+              <el-form ref="registerFormRef" :model="registerForm" :rules="registerRules" label-position="right" label-width="70px"
                 status-icon>
                 <el-form-item prop="account" label="账户">
                   <el-input v-model="registerForm.account" />
@@ -102,7 +122,7 @@ const registerRules = ref({
                 <div style="text-align: right;font-size: smaller;" >
                   <el-link @click="$router.push('/login')">已有账号，立即登录</el-link>
                 </div>
-                <el-button size="large" class="subBtn" @click="">点击注册</el-button>
+                <el-button size="large" class="subBtn" @click="doRegister()">点击注册</el-button>
               </el-form>
             </div>
           </div>

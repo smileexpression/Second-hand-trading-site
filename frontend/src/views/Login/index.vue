@@ -41,6 +41,7 @@ const userStore = useUserStore()
 //获取form实例进行统一校验
 const formRef = ref(null)
 const router = useRouter()
+//登录操作
 const doLogin = () => {
   const { account, password } = form.value
   formRef.value.validate( async (valid) => {
