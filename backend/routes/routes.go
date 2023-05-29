@@ -7,11 +7,6 @@ import (
 )
 
 func CollectRoute(r *gin.Engine) *gin.Engine {
-	apiCommodity := r.Group("api/commodity")
-	{
-		apiCommodity.POST("/sellIdle", controller.SellIdle) //POST(接口，函数)
-		apiCommodity.GET("/allIdle", controller.AllIdle)
-	}
 
 	category := r.Group("")
 	{
