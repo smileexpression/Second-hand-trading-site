@@ -7,7 +7,7 @@ import { useRouter } from 'vue-router'
 
 const httpInstance = axios.create({
   baseURL: 'https://mock.apifox.cn/m1/2726765-0-default',
-  //baseURL: 'http://localhost:8080',
+  // baseURL: 'http://localhost:8080',
   timeout: 5000
 })
 
@@ -17,7 +17,7 @@ httpInstance.interceptors.request.use(config => {
   const userStore = useUserStore()
   const token = userStore.userInfo.token
   //将token拼接到数据报头部
-  if(token){
+  if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
 
@@ -36,7 +36,7 @@ httpInstance.interceptors.response.use(res => res.data, e => {
   })
 
   //token失效处理
-  if(e.response.status === 401){
+  if (e.response.status === 401) {
     userStore.clearUserInfo()
     router.push('/login')
   }
