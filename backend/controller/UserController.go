@@ -21,7 +21,7 @@ func Register(ctx *gin.Context) {
 		ctx.JSON(422, gin.H{"code": 422, "msg": "获取失败"})
 		return
 	}
-
+	//账号密码基本数据长度验证
 	if len(receiveUser.Telephone) != 11 {
 		ctx.JSON(422, gin.H{"code": 422, "msg": "手机号必须为11位"})
 		return
@@ -47,16 +47,33 @@ func Register(ctx *gin.Context) {
 		receiveUser.Name = RandomName(10)
 	}
 
+	//发放Token
+	receiveUser.Token, err = common.ReleaseToken(receiveUser)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"code": 500, "msg": "系统异常"})
+		log.Println("token generate error:%v", err)
+	}
+
 	newUser := model.User{
 		Gender:    receiveUser.Gender,
 		Name:      receiveUser.Name,
+		Token:     receiveUser.Token,
 		Telephone: receiveUser.Telephone,
 		Password:  string(HashPassword),
-		Avatar:    receiveUser.Avatar,
+		Avatar:    "https://ts4.cn.mm.bing.net/th?id=OIP-C.Gve_dIeGxTpoiaU8CmdwOwHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2",
 	}
 	DB.Create(&newUser)
 	ctx.JSON(200, gin.H{
-		"msg": "注册成功",
+		"code": 200,
+		"msg":  "注册成功",
+		"result": gin.H{
+			"id":       newUser.ID,
+			"account":  newUser.Telephone,
+			"token":    newUser.Token,
+			"avatar":   newUser.Avatar,
+			"nickname": newUser.Name,
+			"gender":   newUser.Gender,
+		},
 	})
 }
 

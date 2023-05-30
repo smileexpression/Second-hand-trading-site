@@ -2,6 +2,7 @@ package routes
 
 import (
 	"gin/controller"
+	"gin/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,7 +15,7 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 
 	r.POST("/login", controller.Login)
 	r.POST("/register", controller.Register)
-	//r.GET("/info", middleware.AuthMiddleware(), controller.Info)
+	r.GET("/info", middleware.AuthMiddleware(), controller.Info)
 
 	test_api := r.Group("api/ds")
 	{
