@@ -1,6 +1,7 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import 'element-plus/es/components/message-box/style/index'
 
 const UploadUrl = 'https://png.pngtree.com/png-vector/20191129/ourlarge/pngtree-image-upload-icon-photo-upload-icon-png-image_2047545.jpg'
 const index = ref(0)
@@ -20,13 +21,13 @@ const open = () => {
 
       ElMessage({
         type: 'success',
-        message: `Your email is:${value}`,
+        message: `上传图片成功`,
       })
     })
     .catch(() => {
       ElMessage({
         type: 'info',
-        message: 'Input canceled',
+        message: '取消',
       })
     })
 }
@@ -35,7 +36,6 @@ const del = (idx) => {
   form.picture.splice(idx, 1)
 }
 
-// do not use same name with ref
 const form = reactive({
   name: '',
   cate_id: '',
@@ -60,7 +60,7 @@ const onSubmit = () => {
             <el-input v-model="form.name" />
           </el-form-item>
           <el-form-item label="描述">
-            <el-input class="desc" v-model="form.desc" type="textarea" placeholder="描述一下宝贝的品牌型号、货品来源……" />
+            <el-input class="desc" v-model="form.desc" type="textarea" placeholder="描述一下宝贝的品牌型号、货品来源……" :rows="10" />
           </el-form-item>
           <el-form-item label="分类">
             <el-select v-model="form.region" placeholder="请选择宝贝的分类">
@@ -68,7 +68,9 @@ const onSubmit = () => {
               <el-option label="保真奢品" value="beijing" />
             </el-select>
           </el-form-item>
+          <el-form-item label="上传图片（图片数量1 ~ 5）">
 
+          </el-form-item>
           <div class="demo-image">
             <div v-for="(item, idx) in form.picture" class="block">
               <el-image v-if="idx < form.picture.length - 1" style="width: 100px; height: 100px" :src="item" :fit="fill"
@@ -78,9 +80,9 @@ const onSubmit = () => {
           </div>
 
           <el-form-item label="价格">
-            <el-input v-model="form.price" />
+            <el-input v-model="form.price" style="width: 200px;" />
           </el-form-item>
-          <el-form-item>
+          <el-form-item class="footer">
             <el-button type="primary" @click="onSubmit">发布</el-button>
             <el-button>取消</el-button>
           </el-form-item>
@@ -102,9 +104,11 @@ const onSubmit = () => {
     font-weight: bold;
   }
 
-  // .desc {
-  //   height: 200;
-  // }
+  .footer {
+    position: relative;
+    margin: auto;
+    text-align: center;
+  }
 }
 
 .demo-image .block {
