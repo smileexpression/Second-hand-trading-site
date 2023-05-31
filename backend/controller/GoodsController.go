@@ -105,3 +105,11 @@ func ChooseCategory(ctx *gin.Context) {
 	})
 
 }
+
+func CreateOrder(ctx *gin.Context) {
+	//接收参数header body
+
+	//生成表项
+	//返回id
+
+}
