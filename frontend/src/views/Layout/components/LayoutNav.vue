@@ -31,6 +31,7 @@ const logoutConfirm = () => {
           </li>
           <li><a href="javascript:;">我的订单</a></li>
           <li><a href="javascript:;">会员中心</a></li>
+          <li><a href="javascript:;">卖闲置</a></li>
         </template>
         <template v-else>
           <li><a href="javascript:;" @click="$router.push('/login')">请先登录</a></li>

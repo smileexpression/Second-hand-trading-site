@@ -105,9 +105,10 @@ const onSubmit = () => {
   }
 
   .footer {
-    position: relative;
-    margin: auto;
-    text-align: center;
+    button {
+      position: relative;
+      margin: auto;
+    }
   }
 }
 
