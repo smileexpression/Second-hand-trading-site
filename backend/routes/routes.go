@@ -7,9 +7,11 @@ import (
 )
 
 func CollectRoute(r *gin.Engine) *gin.Engine {
-	apiCommodity := r.Group("api/commodity")
+	r.Use(middleware.CORSMiddleware(), middleware.RecoveryMiddleware())
+	category := r.Group("")
 	{
-		apiCommodity.POST("/sellIdle", controller.SellIdle) //POST(Êé•Âè£ÔºåÂáΩÊï∞),
+		apiCommodity.POST("/sellIdle", controller.SellIdle) //POST(Ω”ø⁄£¨∫Ø ˝),
+		category.GET("/category", controller.ChooseCategory)
 		apiCommodity.GET("/allIdle", controller.AllIdle)
 	}
 
@@ -26,6 +28,14 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 	home := r.Group("home")
 	{
 		home.GET("/goods", controller.GetGoods)
+
+		home.GET("/banner", controller.GetBanner)
+		home.GET("/new", controller.RecentIdle)
+	}
+
+	goods := r.Group("")
+	{
+		goods.GET("/goods", controller.GetOneGood)
 	}
 	return r
 }
