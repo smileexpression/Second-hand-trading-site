@@ -1,7 +1,9 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { useRouter } from 'vue-router';
 import 'element-plus/es/components/message-box/style/index'
+import { releaseAPI } from '@/apis/release'
 
 const UploadUrl = 'https://png.pngtree.com/png-vector/20191129/ourlarge/pngtree-image-upload-icon-photo-upload-icon-png-image_2047545.jpg'
 const index = ref(0)
@@ -43,11 +45,21 @@ const form = reactive({
   picture: [UploadUrl],
   price: '',
 })
-
-const onSubmit = () => {
-  console.log('submit!')
+const router = useRouter()
+const onSubmit = async () => {
+  console.log(form)
+  const res = await releaseAPI({
+    name: form.name,
+    cate_id: form.cate_id,
+    description: form.description,
+    picture: form.picture,
+    price: form.price,
+  })
+  ElMessage({ type: 'success', message: '发布成功' })
+  //跳转回主页
+  router.replace({ path: '/' })
+  // console.log('submit!')
 }
-
 </script>
 
 <template>
@@ -60,16 +72,16 @@ const onSubmit = () => {
             <el-input v-model="form.name" />
           </el-form-item>
           <el-form-item label="描述">
-            <el-input class="desc" v-model="form.desc" type="textarea" placeholder="描述一下宝贝的品牌型号、货品来源……" :rows="10" />
+            <el-input class="desc" v-model="form.description" type="textarea" placeholder="描述一下宝贝的品牌型号、货品来源……"
+              :rows="10" />
           </el-form-item>
           <el-form-item label="分类">
-            <el-select v-model="form.region" placeholder="请选择宝贝的分类">
+            <el-select v-model="form.cate_id" placeholder="请选择宝贝的分类">
               <el-option label="手机严选" value="1" />
-              <el-option label="保真奢品" value="beijing" />
+              <el-option label="保真奢品" value="2" />
             </el-select>
           </el-form-item>
           <el-form-item label="上传图片（图片数量1 ~ 5）">
-
           </el-form-item>
           <div class="demo-image">
             <div v-for="(item, idx) in form.picture" class="block">
@@ -95,7 +107,7 @@ const onSubmit = () => {
 <style scoped lang="scss">
 .common-layout {
   position: relative;
-  width: 60%;
+  width: 40%;
   margin: auto;
 
   .header {
@@ -108,6 +120,7 @@ const onSubmit = () => {
     button {
       position: relative;
       margin: auto;
+      width: 20%;
     }
   }
 }
@@ -117,7 +130,7 @@ const onSubmit = () => {
   text-align: center;
   border-right: solid 1px var(--el-border-color);
   display: inline-block;
-  width: 20%;
+  width: 33%;
   box-sizing: border-box;
   vertical-align: top;
 }
