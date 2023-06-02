@@ -21,7 +21,7 @@ const logoutConfirm = () => {
       <ul>
         <!-- 通过userStore是否携带token选择模板进行渲染 -->
         <template v-if="userStore.userInfo.token">
-          <li><a href="javascript:;"><i class="iconfont icon-user"></i>{{ userStore.userInfo.account }}</a></li>
+          <li><a href="javascript:;"><i class="iconfont icon-user"></i>{{ userStore.userInfo.nickname }}</a></li>
           <li>
             <el-popconfirm title="确认退出吗?" @confirm="logoutConfirm" confirm-button-text="确认" cancel-button-text="取消">
               <template #reference>
@@ -31,6 +31,7 @@ const logoutConfirm = () => {
           </li>
           <li><a href="javascript:;">我的订单</a></li>
           <li><a href="javascript:;">会员中心</a></li>
+          <li><a href="javascript:;">卖闲置</a></li>
         </template>
         <template v-else>
           <li><a href="javascript:;" @click="$router.push('/login')">请先登录</a></li>

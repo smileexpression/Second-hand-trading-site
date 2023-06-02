@@ -3,11 +3,11 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import 'element-plus/es/components/message/style/css'
 import { useUserStore } from '@/stores/user'
-import router from '@/router'
+import { useRouter } from 'vue-router'
 
 const httpInstance = axios.create({
   baseURL: 'https://mock.apifox.cn/m1/2726765-0-default',
-  //baseURL: 'http://localhost:8080',
+  // baseURL: 'http://localhost:8080',
   timeout: 5000
 })
 
@@ -17,7 +17,7 @@ httpInstance.interceptors.request.use(config => {
   const userStore = useUserStore()
   const token = userStore.userInfo.token
   //将token拼接到数据报头部
-  if(token){
+  if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
 
@@ -27,6 +27,7 @@ httpInstance.interceptors.request.use(config => {
 // axios响应式拦截器
 httpInstance.interceptors.response.use(res => res.data, e => {
   const userStore = useUserStore()
+  const router = useRouter()
 
   //统一提示错误
   ElMessage({
@@ -35,7 +36,7 @@ httpInstance.interceptors.response.use(res => res.data, e => {
   })
 
   //token失效处理
-  if(e.response.status === 401){
+  if (e.response.status === 401) {
     userStore.clearUserInfo()
     router.push('/login')
   }
