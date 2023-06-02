@@ -23,9 +23,9 @@ const allCheck = (s) =>{
                 <el-checkbox :model-value="cartStore.allSelected" @change="allCheck" />
               </th>
               <th width="400">商品信息</th>
-              <th width="220">单价</th>
-              <th width="180">数量</th>
-              <th width="180">小计</th>
+              <th width="220">价格</th>
+              <!-- <th width="180">数量</th>
+              <th width="180">小计</th> -->
               <th width="140">操作</th>
             </tr>
           </thead>
@@ -38,7 +38,7 @@ const allCheck = (s) =>{
               </td>
               <td>
                 <div class="goods">
-                  <RouterLink to="/"><img :src="i.picture" alt="" /></RouterLink>
+                  <RouterLink :to="`/detail/${i.id}`"><img :src="i.picture" alt="" /></RouterLink>
                   <div>
                     <p class="name ellipsis">
                       {{ i.name }}
@@ -46,14 +46,14 @@ const allCheck = (s) =>{
                   </div>
                 </div>
               </td>
-              <td class="tc">
+              <!-- <td class="tc">
                 <p>&yen;{{ i.price }}</p>
               </td>
               <td class="tc">
                 <el-input-number v-model="i.count" />
-              </td>
+              </td> -->
               <td class="tc">
-                <p class="f16 red">&yen;{{ (i.price * i.count).toFixed(2) }}</p>
+                <p class="f16 red">&yen;{{ i.price.toFixed(2) }}</p>
               </td>
               <td class="tc">
                 <p>
@@ -81,8 +81,8 @@ const allCheck = (s) =>{
       <!-- 操作栏 -->
       <div class="action">
         <div class="batch">
-          共 10 件商品，已选择 2 件，商品合计：
-          <span class="red">¥ 200.00 </span>
+          共 {{cartStore.allCount}} 件商品，已选择 {{ cartStore.selectedCount }} 件，商品合计：
+          <span class="red">¥ {{cartStore.selectedPrice.toFixed(2)}} </span>
         </div>
         <div class="total">
           <el-button size="large" type="primary" >下单结算</el-button>
