@@ -22,15 +22,25 @@ export const useCartStore = defineStore('cart', () =>{
         const i = cartList.value.findIndex((item) => goods.id === item.id)
         cartList.value.splice(i, 1)
     }
+    const singleCheck = (id, selected) =>{
+        const item = cartList.value.find((item) => item.id === id)
+        item.selected = selected
+    }
+    const allCheck = (selected) =>{
+        cartList.value.forEach(item => item.selected = selected)
+    }
     const allCount = computed(()=> cartList.value.reduce((a,c) => a + 1, 0))
     const allPrice = computed(()=> cartList.value.reduce((a,c) => (a*100 + c.price*100)/100, 0))
-
+    const allSelected = computed(()=> cartList.value.every((item) =>item.selected))
     return{
         cartList,
         addCart,
         delCart,
+        singleCheck,
+        allCheck,
         allCount,
-        allPrice
+        allPrice,
+        allSelected
     }
 }, {
     persist: true,

@@ -76,6 +76,11 @@ const addCart = () =>{
                 <el-button size="large" class="btn" @click="addCart()">
                   加入购物车
                 </el-button>
+                <!-- TO DO 
+
+                  卖掉商品后状态切换
+
+                 -->
                 <!-- <label class="g-label" v-show="!goods.forSale">
                   卖掉了
                 </label> -->
