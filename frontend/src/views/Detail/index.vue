@@ -58,7 +58,7 @@ const addCart = () =>{
               <p class="g-name"> {{goods.name}} </p>
               <p class="g-desc">{{goods.desc}} </p>
               <p class="g-price">
-                <span>{{goods.price}}</span>
+                <span>{{goods.price.toFixed(2)}}</span>
               </p>
               <div class="g-service">
                 <dl>                  
@@ -71,10 +71,6 @@ const addCart = () =>{
                   <dd>{{goods.user.id}}</dd>
                 </dl>
               </div>
-              <!-- sku组件 -->
-
-              <!-- 数据组件 -->
-
               <!-- 按钮组件 -->
               <div >
                 <el-button size="large" class="btn" @click="addCart()">
