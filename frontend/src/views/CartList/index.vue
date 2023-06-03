@@ -9,6 +9,9 @@ const singleCheck = (i, selected) =>{
 const allCheck = (s) =>{
   cartStore.allCheck(s)
 }
+const delCart = (i) =>{
+  cartStore.delCart(i.id)
+}
 
 </script>
 

@@ -2,19 +2,21 @@
 import { defineStore } from "pinia"
 import { ref, computed } from "vue"
 import { useUserStore } from "./user"
-import { insertCartAPI, findNewCartLisrAPI} from "@/apis/cart"
+import { insertCartAPI, findNewCartListAPI, deleteCartAPI} from "@/apis/cart"
+import {ElMessage} from 'element-plus'
+
 export const useCartStore = defineStore('cart', () =>{
     const userStore = useUserStore()
     const isLogin = computed(() => userStore.userInfo.token)
     //定义state - cartList
     const cartList = ref([])
-    //定义action - addCart
+    //定义action 
     const addCart = async (goods) =>{
         if(isLogin.value){
             //登录之后添加购物车
             await insertCartAPI(goods.id)
-            const request = await findNewCartLisrAPI()
-            cartList.value = request.result
+            updateCart()
+            ElMessage.success('成功加入购物车')
         }else
         {//未登录则添加到本地购物车
             //添加购物车操作
@@ -31,10 +33,26 @@ export const useCartStore = defineStore('cart', () =>{
 
 
     }
-    const delCart = (goods) =>{
-        const i = cartList.value.findIndex((item) => goods.id === item.id)
-        cartList.value.splice(i, 1)
+    const delCart = async(goods) =>{
+        if(isLogin.value){
+            //登录之后删除购物车
+            await deleteCartAPI([goods.id])
+            updateCart()
+        }else
+        {
+            const i = cartList.value.findIndex((item) => goods.id === item.id)
+            cartList.value.splice(i, 1)
+        }
+
     }
+    const updateCart = async() =>{
+        const request = await findNewCartListAPI()
+        cartList.value = request.result
+    }
+    const clearCart = () =>{
+        cartList.value =[]
+    }
+
     const singleCheck = (id, selected) =>{
         const item = cartList.value.find((item) => item.id === id)
         item.selected = selected
@@ -53,6 +71,8 @@ export const useCartStore = defineStore('cart', () =>{
         cartList,
         addCart,
         delCart,
+        updateCart,
+        clearCart,
         singleCheck,
         allCheck,
         allCount,

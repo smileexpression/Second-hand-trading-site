@@ -11,8 +11,16 @@ export const insertCartAPI = (id) => {
     })
 }
 //获取最新购物车列表
-export const findNewCartLisrAPI = () =>{
+export const findNewCartListAPI = () =>{
     return request({
         url: '/member/cart'
+    })
+}
+//删除购物车
+export const deleteCartAPI = (ids) =>{
+    return request({
+        url: '/member/cart',
+        method: 'DElETE',
+        data: {ids}
     })
 }
