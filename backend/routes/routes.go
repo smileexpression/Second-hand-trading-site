@@ -34,7 +34,8 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 	chatList := r.Group("chat")
 	{
 		chatList.GET("/getmsg", middleware.AuthMiddleware(), controller.GetMsg)
-		chatList.POST("/sendmsg", controller.SendMsg)
+		chatList.POST("/sendmsg", middleware.AuthMiddleware(), controller.SendMsg)
+		chatList.POST("/addchat", middleware.AuthMiddleware(), controller.AddChat)
 	}
 	return r
 }
