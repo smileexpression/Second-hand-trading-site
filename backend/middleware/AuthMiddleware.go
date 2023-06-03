@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"gin/common"
 	"gin/model"
 	"net/http"
@@ -14,7 +13,6 @@ func AuthMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		//获取anthorization header
 		tokenString := ctx.GetHeader("Authorization")
-		fmt.Println("0")
 		//验证token格式
 		if tokenString == "" || !strings.HasPrefix(tokenString, "Bearer ") {
 			ctx.JSON(http.StatusUnauthorized, gin.H{

@@ -10,6 +10,7 @@ import Pay from '@/views/Pay/index.vue'
 import PayBack from '@/views/Pay/PayBack.vue'
 import Release from '@/views/Release/index.vue'
 import CartList from '@/views/CartList/index.vue'
+import Chat from '@/views/Chat/index.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -49,6 +50,10 @@ const router = createRouter({
         {
           path: 'cartList',
           component: CartList
+        },
+        {
+          path: 'chat',
+          component: Chat
         }
       ]
     },
