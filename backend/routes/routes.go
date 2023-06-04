@@ -24,7 +24,11 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 
 		home.GET("/banner", controller.GetBanner)
 		home.GET("/new", controller.RecentIdle)
-		home.POST("/order",controller.CreateOrder)
+		
+	}
+	member:=r.Group("member")
+	{
+		member.POST("/order", middleware.AuthMiddleware(), controller.CreateOrder)
 	}
 
 	goods := r.Group("")

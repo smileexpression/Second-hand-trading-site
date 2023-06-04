@@ -131,28 +131,36 @@ func ChooseCategory(ctx *gin.Context) {
 }
 
 type OrderInfo struct {
-	Id        string `json:"username"` //goods_Id
-	AddressId string `json:"password"`
+	Id        string `json:"goodId"` //goods_Id
+	AddressId string `json:"addressId"`
 }
 
 func CreateOrder(ctx *gin.Context) {
-	//接收参数header body
+
+	user, exist := ctx.Get("user")
+	if exist == false {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"msg": "user not exist"})
+		return
+	}
+	user.ID
 	var orderInfo OrderInfo
-	Authorization := ctx.Request.Header.Get("Authorization")
-
-	//验证？
-
+	//绑定结构体
 	if err := ctx.BindJSON(&orderInfo); err != nil {
 		// 返回错误信息
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	//生成表项
+	//生成订单表
+	//买家id（user）、商品id（body）、地址id（body）？、订单id（gorm）、
 
 	//返回id
 	ctx.JSON(200, gin.H{
-		//
+		//订单id
 	})
 
+	//地址表：接口一  用户id？
+	//2  用token验证，body参数与user建表
+	//3  ？
+	//1  ？
 }
