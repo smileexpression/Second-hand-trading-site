@@ -14,20 +14,20 @@ const form = ref({
 
 //规则对象
 const rules = ref({
-  account:[
-    {required: true, message: '账号不能为空！', trigger: 'blur'},
-    {type: "string", len:11, pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: '请输入正确的手机号！', trigger: 'blur'}
+  account: [
+    { required: true, message: '账号不能为空！', trigger: 'blur' },
+    { type: "string", len: 11, pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: '请输入正确的手机号！', trigger: 'blur' }
   ],
-  password:[
-    {required: true, message: '密码不能为空！', trigger: 'blur'},
-    {min: 6, max: 14, message: '密码长度应为6~14个字符！', trigger: 'blur'}
+  password: [
+    { required: true, message: '密码不能为空！', trigger: 'blur' },
+    { min: 6, max: 14, message: '密码长度应为6~14个字符！', trigger: 'blur' }
   ],
-  agree:[
+  agree: [
     {
       validator: (rule, value, callback) => {
-        if(value){
+        if (value) {
           callback()
-        } else{
+        } else {
           callback(new Error('请同意服务协议！'))
         }
       }
@@ -44,14 +44,14 @@ const router = useRouter()
 //登录操作
 const doLogin = () => {
   const { account, password } = form.value
-  formRef.value.validate( async (valid) => {
-    if(valid){
+  formRef.value.validate(async (valid) => {
+    if (valid) {
       //通过userStore实例调用登录接口
       await userStore.getUserInfo({ account, password })
       //用户提示
-      ElMessage({ type:'success', message: '登录成功'})
+      ElMessage({ type: 'success', message: '登录成功' })
       //跳转回主页
-      router.replace({path: '/'})
+      router.replace({ path: '/' })
     }
   })
 }
@@ -73,35 +73,34 @@ const doLogin = () => {
         </RouterLink>
       </div>
     </header>
-      <section class="login-section">
-        <div class="wrapper">
-          <nav>
-            <a href="javascript:;">账户登录</a>
-          </nav>
-          <div class="account-box">
-            <div class="form">
-              <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="60px"
-                status-icon>
-                <el-form-item prop="account" label="账户">
-                  <el-input v-model="form.account" />
-                </el-form-item>
-                <el-form-item prop="password" label="密码">
-                  <el-input v-model="form.password" />
-                </el-form-item>
-                <el-form-item prop="agree" label-width="22px">
-                  <el-checkbox v-model="form.agree" size="large">
-                    我已同意隐私条款和服务条款
-                  </el-checkbox>
-                </el-form-item>
-                <div style="text-align: right;font-size: smaller;" >
-                  <el-link @click="$router.push('register')">没有账号？立即注册</el-link>
-                </div>
-                <el-button size="large" class="subBtn" @click="doLogin">点击登录</el-button>
-              </el-form>
-            </div>
+    <section class="login-section">
+      <div class="wrapper">
+        <nav>
+          <a href="javascript:;">账户登录</a>
+        </nav>
+        <div class="account-box">
+          <div class="form">
+            <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="60px" status-icon>
+              <el-form-item prop="account" label="账户">
+                <el-input v-model="form.account" />
+              </el-form-item>
+              <el-form-item prop="password" label="密码">
+                <el-input v-model="form.password" />
+              </el-form-item>
+              <el-form-item prop="agree" label-width="22px">
+                <el-checkbox v-model="form.agree" size="large">
+                  我已同意隐私条款和服务条款
+                </el-checkbox>
+              </el-form-item>
+              <div style="text-align: right;font-size: smaller;">
+                <el-link @click="$router.push('register')">没有账号？立即注册</el-link>
+              </div>
+              <el-button size="large" class="subBtn" @click="doLogin">点击登录</el-button>
+            </el-form>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
     <footer class="login-footer">
       <div class="container">

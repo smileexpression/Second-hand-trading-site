@@ -38,10 +38,9 @@ func GetGoods(ctx *gin.Context) {
 		result[i].Picture = category.Picture
 
 		var goods []model.Goods
-		DB.Table("goods").Where("Cate_Id = ?", i+1).Find(&goods)
+		DB.Table("goods").Where("Cate_Id = ? AND is_sold=?", i+1, false).Find(&goods)
 		result[i].Goods = append(result[i].Goods, goods...)
 	}
-	ctx.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 
 	ctx.JSON(200, gin.H{
 		"code":   "1",
@@ -55,18 +54,18 @@ func GetGoods(ctx *gin.Context) {
 func GetOneGood(c *gin.Context) {
 	db := common.GetDB()
 	idStr := c.Query("id")
-	id, err := strconv.ParseInt(idStr, 10, 64)
+	id, _ := strconv.ParseInt(idStr, 10, 64)
 	//i := 1
 	fmt.Println(1)
-	if err != nil {
-		fmt.Errorf("invalid id fomrat %v", err)
-	}
+	// if err != nil {
+	// 	fmt.Errorf("invalid id fomrat %v", err)
+	// }
 	var target model.Goods
 	db.Table("goods").Where("id = ?", id).First(&target)
 	//if err != nil {
 	//	fmt.Println("断点位于查表")
 	//}
-	c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+
 	c.JSON(200, gin.H{
 		"result": target,
 	})
@@ -81,16 +80,17 @@ func RecentIdle(ctx *gin.Context) {
 		print(err)
 		//do not thing
 	}
-	//var recentGoods [4]model.Goods
-	var recentGoods = make([]model.Goods, IntNum)
 	var count int64
-	DB.Table("goods").Count(&count)
+	DB.Table("goods").Where("is_sold=?", false).Count(&count)
+	if IntNum > int(count) {
+		IntNum = int(count) //让返回的数目不大于库存
+	}
+	var recentGoods = make([]model.Goods, IntNum)
 
 	for i := int(count); i > int(count)-IntNum; i-- {
 		print(int(count) - i)
-		DB.Table("goods").Where("id = ?", i).Find(&recentGoods[int(count)-i])
+		DB.Table("goods").Where("id = ? AND is_sold=?", i, false).Find(&recentGoods[int(count)-i])
 	}
-	ctx.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 
 	ctx.JSON(200, gin.H{
 		"code":   "1",
@@ -114,10 +114,8 @@ func ChooseCategory(ctx *gin.Context) {
 	result.Picture = category.Picture
 
 	var goods []model.Goods
-	DB.Table("goods").Where("cate_Id = ?", Cate_id).Find(&goods)
+	DB.Table("goods").Where("cate_Id = ? AND is_sold=?", Cate_id, false).Find(&goods)
 	result.Goods = append(result.Goods, goods...)
-
-	ctx.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 
 	ctx.JSON(200, gin.H{
 		"code":   "1",
