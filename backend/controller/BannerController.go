@@ -13,8 +13,6 @@ func GetBanner(ctx *gin.Context) {
 	var banners []model.Banner
 	DB.Find(&banners)
 
-	ctx.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-
 	ctx.JSON(200, gin.H{
 		"code":   "1",
 		"msg":    "获取轮播图数据成功",

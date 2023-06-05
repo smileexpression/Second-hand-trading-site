@@ -3,16 +3,16 @@ package middleware
 import (
 	"gin/common"
 	"gin/model"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		//获取anthorization header
 		tokenString := ctx.GetHeader("Authorization")
-
 		//验证token格式
 		if tokenString == "" || !strings.HasPrefix(tokenString, "Bearer ") {
 			ctx.JSON(http.StatusUnauthorized, gin.H{
@@ -34,6 +34,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		//验证通过后获取claim中的userid
 		userid := claims.UserID
+
 		DB := common.GetDB()
 		var user model.User
 		DB.First(&user, userid)

@@ -1,12 +1,10 @@
 package controller
 
 import (
+	"fmt"
 	"gin/common"
 	"gin/model"
-	"log"
-	"math/rand"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -44,33 +42,31 @@ func Register(ctx *gin.Context) {
 		return
 	}
 	// 如果名称为空，随机创建一个名称
-	if len(receiveUser.Name) == 0 {
-		receiveUser.Name = RandomName(10)
-	}
-
-	//发放Token
-	receiveUser.Token, err = common.ReleaseToken(receiveUser)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"code": 500, "msg": "系统异常"})
-		log.Println("token generate error:%v", err)
-	}
+	// if len(receiveUser.Name) == 0 {
+	// 	receiveUser.Name = RandomName(10)
+	// }
 
 	newUser := model.User{
-		Gender:    receiveUser.Gender,
-		Name:      receiveUser.Name,
-		Token:     receiveUser.Token,
+		Gender: receiveUser.Gender,
+		Name:   receiveUser.Name,
+		// Token:     receiveUser.Token,
 		Telephone: receiveUser.Telephone,
 		Password:  string(HashPassword),
 		Avatar:    "https://ts4.cn.mm.bing.net/th?id=OIP-C.Gve_dIeGxTpoiaU8CmdwOwHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2",
 	}
 	DB.Create(&newUser)
+	//发放Token
+	token, err := common.ReleaseToken(newUser)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"code": 500, "msg": "系统异常"})
+	}
 	ctx.JSON(200, gin.H{
 		"code": 200,
 		"msg":  "注册成功",
 		"result": gin.H{
 			"id":       newUser.ID,
 			"account":  newUser.Telephone,
-			"token":    newUser.Token,
+			"token":    token,
 			"avatar":   newUser.Avatar,
 			"nickname": newUser.Name,
 			"gender":   newUser.Gender,
@@ -117,10 +113,9 @@ func Login(ctx *gin.Context) {
 
 	//发放token
 	var err error
-	user.Token, err = common.ReleaseToken(user)
+	token, err := common.ReleaseToken(user)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"code": 500, "msg": "系统异常"})
-		log.Println("token generate error:%v", err)
 	}
 
 	ctx.JSON(200, gin.H{
@@ -129,7 +124,7 @@ func Login(ctx *gin.Context) {
 		"result": gin.H{
 			"id":       user.ID,
 			"account":  user.Telephone,
-			"token":    user.Token,
+			"token":    token,
 			"avatar":   user.Avatar,
 			"nickname": user.Name,
 			"gendar":   user.Gender,
@@ -141,24 +136,24 @@ func Login(ctx *gin.Context) {
 func isTelephoneExist(db *gorm.DB, telephone string) bool {
 	var user model.User
 	db.Where("telephone = ?", telephone).First(&user)
-	if user.ID != 0 {
-		return true
-	}
-	return false
+	return user.ID != 0
 }
 
-// 随机创建用户名称
-func RandomName(n int) string {
-	var letters = []byte("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-	result := make([]byte, n)
-	rand.Seed(time.Now().Unix())
-	for i := range result {
-		result[i] = letters[rand.Intn(len(letters))]
-	}
-	return string(result)
-}
+// // 随机创建用户名称
+// func RandomName(n int) string {
+// 	var letters = []byte("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+// 	result := make([]byte, n)
+// 	rand.Seed(time.Now().Unix())
+// 	for i := range result {
+// 		result[i] = letters[rand.Intn(len(letters))]
+// 	}
+// 	return string(result)
+// }
 
 func Info(ctx *gin.Context) {
 	user, _ := ctx.Get("user")
+	userinfo := user.(model.User)
+	id := userinfo.ID
+	fmt.Println(id)
 	ctx.JSON(http.StatusOK, gin.H{"code": 200, "data": gin.H{"user": user}})
 }
