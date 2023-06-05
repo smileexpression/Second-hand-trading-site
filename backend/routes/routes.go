@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"gin/common"
 	"gin/controller"
 	"gin/middleware"
 
@@ -43,5 +44,15 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 		chatList.POST("/sendmsg", middleware.AuthMiddleware(), controller.SendMsg)
 		chatList.POST("/addchat", middleware.AuthMiddleware(), controller.AddChat)
 	}
+
+	db := common.GetDB()
+	imageController := controller.NewImageController(db)
+
+	imageRoutes := r.Group("/images")
+	{
+		imageRoutes.POST("", imageController.UploadImage)
+		imageRoutes.GET("/:id", imageController.GetImage)
+	}
+
 	return r
 }
