@@ -2,9 +2,12 @@
 import { ref, onMounted } from "vue";
 import { useUserStore } from "@/stores/user";
 import { getLikeListAPI } from "@/apis/likelist";
+import { ElMessage } from "element-plus";
 import GoodsItem from "@/views/Home/components/GoodsItem.vue";
 
 const userStore = useUserStore()
+const token = userStore.userInfo.token
+const imageUrl = ref(userStore.userInfo.avatar)
 
 const likeList = ref([])
 
@@ -15,6 +18,38 @@ const getLikeList = async () => {
 
 onMounted(() => getLikeList())
 
+//上传头像标头
+const headersObj = {'Authorization': `Bearer ${token}`}
+
+//上传文件类型限制
+const beforeUpdate = (rawFile) => {
+  if(rawFile.type !== 'image/png' && rawFile.type !== 'image/jpeg'){
+    ElMessage({
+      type: 'error',
+      message: '请选择png或jpeg格式文件'
+    })
+    return false
+  }
+  return true
+}
+
+//上传头像成功
+const updateSuccess = (res, upload) => {
+  ElMessage({
+    type: 'success',
+    message: '上传成功'
+  })
+  imageUrl.value = URL.createObjectURL(upload.raw)
+}
+
+//上传头像失败
+const updateError = (res, upload) => {
+  ElMessage({
+    type: 'error',
+    message: '上传失败'
+  })
+}
+
 </script>
 
 <template>
@@ -22,9 +57,18 @@ onMounted(() => getLikeList())
     <!-- 用户信息 -->
     <div class="user-meta">
       <div class="avatar">
-        <img :src="userStore.userInfo.avatar" />
+        <el-upload 
+        action="https://mock.apifox.cn/m1/2726765-0-default/member/updateavatar"
+        :headers="headersObj"
+        :show-file-list="false"
+        :before-upload="beforeUpdate"
+        :on-success="updateSuccess"
+        :on-error="updateError"
+        v-model="userStore.userInfo.avatar">
+          <img :src="imageUrl" />
+        </el-upload>
       </div>
-      <h4>{{ userStore.userInfo.account }}</h4>
+      <h4>{{ userStore.userInfo.nickname }}</h4>
     </div>
     <div class="item">
       <a href="javascript:;">
