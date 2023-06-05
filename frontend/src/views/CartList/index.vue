@@ -1,6 +1,8 @@
 <script setup>
 import { useCartStore } from '@/stores/cartStore';
+import { useRouter } from 'vue-router';
 const cartStore = useCartStore()
+const router = useRouter()
 
 const singleCheck = (i, selected) =>{
     console.log(i,selected)
@@ -10,7 +12,19 @@ const allCheck = (s) =>{
   cartStore.allCheck(s)
 }
 const delCart = (i) =>{
-  cartStore.delCart(i.id)
+  cartStore.delCart([i.id])
+}
+const deleteCheckCart = () =>{
+  const selectedList = cartStore.cartList.filter(item => item.selected === true)
+  const selectedID = selectedList.map(item => (item.id) )
+  cartStore.delCart(selectedID)
+}
+const checkGood = (i) =>{
+  const id = i.id
+  router.push({
+    path: 'checkout',
+    query: { goodID: id }    
+  })
 }
 
 </script>
@@ -27,9 +41,7 @@ const delCart = (i) =>{
               </th>
               <th width="400">商品信息</th>
               <th width="220">价格</th>
-              <!-- <th width="180">数量</th>
-              <th width="180">小计</th> -->
-              <th width="140">操作</th>
+              <th width="240">操作</th>
             </tr>
           </thead>
           <!-- 商品列表 -->
@@ -49,12 +61,6 @@ const delCart = (i) =>{
                   </div>
                 </div>
               </td>
-              <!-- <td class="tc">
-                <p>&yen;{{ i.price }}</p>
-              </td>
-              <td class="tc">
-                <el-input-number v-model="i.count" />
-              </td> -->
               <td class="tc">
                 <p class="f16 red">&yen;{{ i.price.toFixed(2) }}</p>
               </td>
@@ -65,6 +71,11 @@ const delCart = (i) =>{
                       <a href="javascript:;">删除</a>
                     </template>
                   </el-popconfirm>
+                  <el-popconfirm title="确认购买吗?" confirm-button-text="确认" cancel-button-text="取消" @confirm="checkGood(i)">
+                    <template #reference>
+                      <a href="javascript:;">购买</a>
+                    </template>
+                  </el-popconfirm>
                 </p>
               </td>
             </tr>
@@ -72,7 +83,7 @@ const delCart = (i) =>{
               <td colspan="6">
                 <div class="cart-none">
                   <el-empty description="购物车列表为空">
-                    <el-button type="primary">随便逛逛</el-button>
+                    <el-button type="primary" @click="$router.push('/category/1')">随便逛逛 </el-button>
                   </el-empty>
                 </div>
               </td>
@@ -88,7 +99,7 @@ const delCart = (i) =>{
           <span class="red">¥ {{cartStore.selectedPrice.toFixed(2)}} </span>
         </div>
         <div class="total">
-          <el-button size="large" type="primary" >下单结算</el-button>
+          <el-button size="large" type="primary" @click="deleteCheckCart()" >批量删除</el-button>
         </div>
       </div>
     </div>
@@ -143,12 +154,8 @@ const delCart = (i) =>{
     text-align: center;
 
     a {
+      padding: 0 10px;
       color: $xtxColor;
-    }
-
-    .xtx-numbox {
-      margin: 0 auto;
-      width: 120px;
     }
   }
 
@@ -156,9 +163,6 @@ const delCart = (i) =>{
     color: $priceColor;
   }
 
-  .green {
-    color: $xtxColor;
-  }
 
   .f16 {
     font-size: 16px;
@@ -195,10 +199,6 @@ const delCart = (i) =>{
     justify-content: space-between;
     padding: 0 30px;
 
-    .xtx-checkbox {
-      color: #999;
-    }
-
     .batch {
       a {
         margin-left: 20px;
@@ -212,12 +212,6 @@ const delCart = (i) =>{
     }
   }
 
-  .tit {
-    color: #666;
-    font-size: 16px;
-    font-weight: normal;
-    line-height: 50px;
-  }
 
 }
 </style>
