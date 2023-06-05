@@ -21,7 +21,6 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 	home := r.Group("home")
 	{
 		home.GET("/goods", controller.GetGoods)
-
 		home.GET("/banner", controller.GetBanner)
 		home.GET("/new", controller.RecentIdle)
 	}
@@ -29,6 +28,7 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 	goods := r.Group("")
 	{
 		goods.GET("/goods", controller.GetOneGood)
+		goods.GET("/goods/relevant", middleware.AuthMiddleware(), controller.RecommendGoods)
 	}
 	return r
 }

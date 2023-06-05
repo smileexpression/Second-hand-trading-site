@@ -1,12 +1,14 @@
 package controller
 
 import (
+	"crypto/rand"
 	"fmt"
 	"gin/common"
 	"gin/model"
-	"strconv"
-
 	"github.com/gin-gonic/gin"
+	"math/big"
+	"net/http"
+	"strconv"
 )
 
 type AllIdle struct { // "_2" 区分于commoditycontroller的AllIdle
@@ -123,4 +125,59 @@ func ChooseCategory(ctx *gin.Context) {
 		"result": result,
 	})
 
+}
+
+func RecommendGoods(ctx *gin.Context) {
+	DB := common.GetDB()
+	NUM := ctx.DefaultQuery("limit", "4")
+	IntNum, err := strconv.Atoi(NUM) // 函数原型 ：func Atoi(s string) (int, error)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get limit"})
+		return
+	}
+
+	result := make([]model.Goods, IntNum)
+	var count int64
+	if err := DB.Model(&model.Goods{}).Count(&count).Error; err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get count"})
+		return
+	}
+
+	var idRecord = make([]uint, IntNum)
+	for i := 0; i < IntNum; i++ {
+		var ranGood model.Goods
+		for {
+			ranID, _ := rand.Int(rand.Reader, big.NewInt(count))
+			id := int(ranID.Int64())
+			//str_ranID := strconv.Itoa(id)
+			DB.Table("goods").Where("id = ? AND is_sold=?", id+1, false).Find(&ranGood)
+			if checkRanID(idRecord, i+1, ranGood.ID) {
+				break
+			}
+		}
+		idRecord[i] = ranGood.ID
+		result[i] = ranGood
+	}
+
+	//user, _ := ctx.Get("user")
+	//userinfo := user.(model.User)
+
+	ctx.JSON(200, gin.H{
+		"code":   200,
+		"msg":    "操作成功",
+		"result": result,
+	})
+}
+
+//检查查询商品结果的ID号，如果重复或者没有对应的商品，则返回false
+func checkRanID(idArray []uint, num int, checkID uint) bool {
+	if checkID == 0 {
+		return false
+	}
+	for i := 0; i < num; i++ {
+		if idArray[i] == checkID {
+			return false
+		}
+	}
+	return true
 }
