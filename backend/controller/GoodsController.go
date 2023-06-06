@@ -129,39 +129,56 @@ func ChooseCategory(ctx *gin.Context) {
 
 func RecommendGoods(ctx *gin.Context) {
 	DB := common.GetDB()
-	NUM := ctx.DefaultQuery("limit", "4")
-	IntNum, err := strconv.Atoi(NUM) // 函数原型 ：func Atoi(s string) (int, error)
+	str_limit := ctx.DefaultQuery("limit", "4")
+	int_limit, err := strconv.Atoi(str_limit) // 函数原型 ：func Atoi(s string) (int, error)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get limit"})
 		return
 	}
 
-	result := make([]model.Goods, IntNum)
-	var count int64
-	if err := DB.Model(&model.Goods{}).Count(&count).Error; err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get count"})
-		return
-	}
+	//未售出商品数量
+	var isNotSold_Num int64
+	DB.Table("goods").Where("is_sold=?", false).Count(&isNotSold_Num)
+	//获得未售出的商品数组，数量为isNotSold_Num
+	var notSoldGood_Array []model.Goods
+	DB.Table("goods").Where("is_sold=?", false).Limit(int(isNotSold_Num)).Find(&notSoldGood_Array)
+	println("isNotSold_Num", isNotSold_Num)
 
-	var idRecord = make([]uint, IntNum)
-	for i := 0; i < IntNum; i++ {
-		var ranGood model.Goods
+	//打印未售出的商品数组
+	//println("notSoldGood_Array:")
+	//for i, v := range notSoldGood_Array {
+	//	println("k", i, ",v", v.ID)
+	//}
+
+	//通过比较获得最终展出商品的数量
+	times := minNum(int_limit, int(isNotSold_Num))
+	result := make([]model.Goods, times)
+	//记录已随机抽取商品的id
+	var idRecord = make([]uint, times)
+	println("idRecord:")
+	for _, v := range idRecord {
+		println(v)
+	}
+	for i := 0; i < times; i++ {
 		for {
-			ranID, _ := rand.Int(rand.Reader, big.NewInt(count))
-			id := int(ranID.Int64())
+			//随机抽取一个index,范围[0,total)
+			ranIndex, _ := rand.Int(rand.Reader, big.NewInt(isNotSold_Num))
+			println("ranIndex=", ranIndex.Int64())
+			index := uint(ranIndex.Int64())
 			//str_ranID := strconv.Itoa(id)
-			DB.Table("goods").Where("id = ? AND is_sold=?", id+1, false).Find(&ranGood)
-			if checkRanID(idRecord, i+1, ranGood.ID) {
+			id := notSoldGood_Array[index].ID
+			if checkRanID(idRecord, id) {
+				idRecord[i] = id
+				notSoldGood_Array[index].Is_Sold = true
+				result[i] = notSoldGood_Array[index]
 				break
 			}
 		}
-		idRecord[i] = ranGood.ID
-		result[i] = ranGood
 	}
 
-	//user, _ := ctx.Get("user")
-	//userinfo := user.(model.User)
-
+	for i := range idRecord {
+		println(idRecord[i])
+	}
 	ctx.JSON(200, gin.H{
 		"code":   200,
 		"msg":    "操作成功",
@@ -169,15 +186,20 @@ func RecommendGoods(ctx *gin.Context) {
 	})
 }
 
-//检查查询商品结果的ID号，如果重复或者没有对应的商品，则返回false
-func checkRanID(idArray []uint, num int, checkID uint) bool {
-	if checkID == 0 {
-		return false
-	}
-	for i := 0; i < num; i++ {
-		if idArray[i] == checkID {
+func checkRanID(idRecord []uint, checkID uint) bool {
+	//检查该id是否已经被抽取,如果已经被抽取，返回false
+	for i := 0; i < len(idRecord); i++ {
+		if idRecord[i] == checkID {
 			return false
 		}
 	}
 	return true
+}
+
+func minNum(limit int, total int) int {
+	if limit <= total {
+		return limit
+	} else {
+		return total
+	}
 }
