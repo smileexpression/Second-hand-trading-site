@@ -67,9 +67,12 @@ func CartDel(c *gin.Context) {
 			"msg":    "商品不在购物车内",
 		})
 	} else {
-		if err := db.Table("carts").Where("user_id = ? AND  good_id= ?", uId, gId).Delete(&model.Cart{}).Error; err != nil {
+		tx := db.Begin()
+		if err := tx.Table("carts").Where("user_id = ? AND  good_id= ?", uId, gId).Delete(&model.Cart{}).Error; err != nil {
 			// 处理错误
+			tx.Rollback()
 		}
+		tx.Commit()
 		//有必要可以先查询验证
 		c.JSON(200, gin.H{
 			"code":   "1",

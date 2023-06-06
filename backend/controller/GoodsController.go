@@ -1,11 +1,7 @@
 package controller
 
 import (
-<<<<<<< HEAD
-=======
 	"crypto/rand"
-	"fmt"
->>>>>>> 2f7999f1a791b3d5437a6c64f80f409d0cf26d0c
 	"gin/common"
 	"gin/model"
 	"github.com/gin-gonic/gin"
@@ -167,7 +163,7 @@ func RecommendGoods(ctx *gin.Context) {
 	})
 }
 
-//检查查询商品结果的ID号，如果重复或者没有对应的商品，则返回false
+// 检查查询商品结果的ID号，如果重复或者没有对应的商品，则返回false
 func checkRanID(idArray []uint, num int, checkID uint) bool {
 	if checkID == 0 {
 		return false
