@@ -32,6 +32,7 @@ const handleUploadSuccess = (response, file) => {
   images.value.push({ id: response.imageIds[0] })
 }
 
+// 上传图片
 const uploadImages = async () => {
   const formData = new FormData()
   for (const file of $refs.upload.uploadFiles) {
@@ -39,6 +40,7 @@ const uploadImages = async () => {
   }
   const response = await uploadImageAPI(formData)
   if (response.ok) {
+    // 获取返回的图片id
     const data = await response.json()
     data.imageIds.forEach((id) => {
       images.value.push({ id })
@@ -85,13 +87,14 @@ const del = async (index) => {
               <el-option label="保真奢品" value="2" />
             </el-select>
           </el-form-item>
+          <!-- 这里的uploadUrl必须再上面声明 -->
           <el-upload ref="upload" :action="uploadUrl" :show-file-list="false" :on-success="handleUploadSuccess"
             :before-upload="beforeUpload">
             <el-button>上传图片</el-button>
           </el-upload>
           <div class="demo-image">
             <div class="block" v-for="(image, index) in images" :key="image.id">
-              <!-- <img :src="getImageUrl(image.id)" /> -->
+              <!-- 通过调用getImageUrl(参数为图片id)接口将图片url绑定到 :src -->
               <el-image style="width: 100px; height: 100px" :src="getImageUrl(image.id)" :fit="fill"
                 @click="del(index)" />
               <!-- <h1></h1> -->
