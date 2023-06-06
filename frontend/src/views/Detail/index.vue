@@ -76,16 +76,7 @@ const addCart = () =>{
                 <el-button size="large" class="btn" @click="addCart()">
                   加入购物车
                 </el-button>
-                <!-- TO DO 
-
-                  卖掉商品后状态切换
-
-                 -->
-                <!-- <label class="g-label" v-show="!goods.forSale">
-                  卖掉了
-                </label> -->
               </div>
-
             </div>
           </div>
 
@@ -195,13 +186,6 @@ const addCart = () =>{
   margin-top: 20px;
 
 }
-// .g-label {
-//   margin-top: 500px;
-//   margin-left: 50px;
-//     span {
-//       font-size: 30px;
-//   }
-// }
 .bread-container {
   padding: 25px 0;
 }

@@ -40,7 +40,12 @@ func InitDB() *gorm.DB {
 	db.AutoMigrate(&model.Picture{})
 	db.AutoMigrate(&model.Chat{})
 	db.AutoMigrate(&model.ChatList{})
+<<<<<<< HEAD
 	db.AutoMigrate(&model.Cart{})
+=======
+	db.AutoMigrate(&model.Order{})
+	db.AutoMigrate(&model.Image{})
+>>>>>>> 2f7999f1a791b3d5437a6c64f80f409d0cf26d0c
 
 	DB = db
 	return db

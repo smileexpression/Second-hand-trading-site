@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"gin/common"
 	"gin/controller"
 	"gin/middleware"
 
@@ -21,14 +22,20 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 	home := r.Group("home")
 	{
 		home.GET("/goods", controller.GetGoods)
-
 		home.GET("/banner", controller.GetBanner)
 		home.GET("/new", controller.RecentIdle)
+
+	}
+	member := r.Group("member")
+	{
+		member.POST("/order", middleware.AuthMiddleware(), controller.CreateOrder)
+		member.GET("/order/:id", middleware.AuthMiddleware(), controller.GetOrder)
 	}
 
 	goods := r.Group("")
 	{
 		goods.GET("/goods", controller.GetOneGood)
+		goods.GET("/goods/relevant", middleware.AuthMiddleware(), controller.RecommendGoods)
 	}
 
 	chatList := r.Group("chat")
@@ -37,6 +44,7 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 		chatList.POST("/sendmsg", middleware.AuthMiddleware(), controller.SendMsg)
 		chatList.POST("/addchat", middleware.AuthMiddleware(), controller.AddChat)
 	}
+<<<<<<< HEAD
 	//member路由完善后可以将下面这个路由整合
 	CartGroup := r.Group("member/cart")
 	{
@@ -44,5 +52,17 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 		CartGroup.GET("/pull", middleware.AuthMiddleware(), controller.CartOut)
 		CartGroup.DELETE("/del", middleware.AuthMiddleware(), controller.CartDel)
 	}
+=======
+
+	db := common.GetDB()
+	imageController := controller.NewImageController(db)
+
+	imageRoutes := r.Group("/images")
+	{
+		imageRoutes.POST("", imageController.UploadImage)
+		imageRoutes.GET("/:id", imageController.GetImage)
+	}
+
+>>>>>>> 2f7999f1a791b3d5437a6c64f80f409d0cf26d0c
 	return r
 }

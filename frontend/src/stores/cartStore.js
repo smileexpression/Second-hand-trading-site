@@ -14,34 +14,32 @@ export const useCartStore = defineStore('cart', () =>{
     const addCart = async (goods) =>{
         if(isLogin.value){
             //登录之后添加购物车
-            await insertCartAPI(goods.id)
-            updateCart()
-            ElMessage.success('成功加入购物车')
-        }else
-        {//未登录则添加到本地购物车
-            //添加购物车操作
             const itemExisted = cartList.value.find((item) => goods.id === item.id)
             if(itemExisted){
-                //已经添加，提示
                 ElMessage('已经在购物车')
             }else{
-                //还没有添加，push并提示
-                cartList.value.push(goods)
+                await insertCartAPI(goods.id)
+                updateCart()
                 ElMessage.success('成功加入购物车')
             }
+        }else
+        {//未登录则 提示无法加入购物车
+            ElMessage('请先登录')
         }
 
 
     }
-    const delCart = async(goods) =>{
+    const delCart = async(goodsIdList) =>{
         if(isLogin.value){
             //登录之后删除购物车
-            await deleteCartAPI([goods.id])
+            await deleteCartAPI(goodsIdList)
             updateCart()
         }else
         {
-            const i = cartList.value.findIndex((item) => goods.id === item.id)
-            cartList.value.splice(i, 1)
+            //理论上不会执行这里，不登录时购物车为空
+            ElMessage('请先登录')            
+            // const i = cartList.value.findIndex((item) => goods.id === item.id)
+            // cartList.value.splice(i, 1)
         }
 
     }
