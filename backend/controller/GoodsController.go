@@ -127,6 +127,18 @@ func ChooseCategory(ctx *gin.Context) {
 
 }
 
+type apiGood struct {
+	Id      uint
+	Name    string
+	Desc    string
+	Price   string
+	Picture string
+}
+
+func transApiGood(good model.Goods) apiGood {
+	return apiGood{Id: good.ID, Name: good.Name, Desc: good.Name, Price: good.Price, Picture: good.Picture}
+}
+
 func RecommendGoods(ctx *gin.Context) {
 	DB := common.GetDB()
 	str_limit := ctx.DefaultQuery("limit", "4")
@@ -152,33 +164,33 @@ func RecommendGoods(ctx *gin.Context) {
 
 	//通过比较获得最终展出商品的数量
 	times := minNum(int_limit, int(isNotSold_Num))
-	result := make([]model.Goods, times)
+	result := make([]apiGood, times)
 	//记录已随机抽取商品的id
 	var idRecord = make([]uint, times)
-	println("idRecord:")
-	for _, v := range idRecord {
-		println(v)
-	}
+	//println("idRecord:")
+	//for _, v := range idRecord {
+	//	println(v)
+	//}
 	for i := 0; i < times; i++ {
 		for {
 			//随机抽取一个index,范围[0,total)
 			ranIndex, _ := rand.Int(rand.Reader, big.NewInt(isNotSold_Num))
-			println("ranIndex=", ranIndex.Int64())
+			//println("ranIndex=", ranIndex.Int64())
 			index := uint(ranIndex.Int64())
 			//str_ranID := strconv.Itoa(id)
 			id := notSoldGood_Array[index].ID
 			if checkRanID(idRecord, id) {
 				idRecord[i] = id
 				notSoldGood_Array[index].Is_Sold = true
-				result[i] = notSoldGood_Array[index]
+				result[i] = transApiGood(notSoldGood_Array[index])
 				break
 			}
 		}
 	}
 
-	for i := range idRecord {
-		println(idRecord[i])
-	}
+	//for i := range idRecord {
+	//	println(idRecord[i])
+	//}
 	ctx.JSON(200, gin.H{
 		"code":   200,
 		"msg":    "操作成功",
