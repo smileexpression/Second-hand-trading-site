@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type Cart struct {
 	gorm.Model
-	Name      string `gorm:"type:varchar(20);not null"`
-	Telephone string `gorm:"type:varchar(20);not null;unique"`
-	Password  string `gorm:"size:255"`
+	//数据的规格参考goods表
+	User_id string `gorm:"type:varchar(20);not null"`
+	Good_id string `gorm:"type:varchar(20);not null"`
 }

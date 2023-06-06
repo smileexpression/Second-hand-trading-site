@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"gin/common"
 	"gin/model"
 	"strconv"
@@ -55,11 +54,6 @@ func GetOneGood(c *gin.Context) {
 	db := common.GetDB()
 	idStr := c.Query("id")
 	id, _ := strconv.ParseInt(idStr, 10, 64)
-	//i := 1
-	fmt.Println(1)
-	// if err != nil {
-	// 	fmt.Errorf("invalid id fomrat %v", err)
-	// }
 	var target model.Goods
 	db.Table("goods").Where("id = ?", id).First(&target)
 	//if err != nil {
