@@ -1,72 +1,71 @@
 package controller
 
 import (
-	"bytes"
-	"fmt"
-	"io"
+	"gin/common"
+	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 type Image struct {
-	ID   uint
+	ID   uint `gorm:"primarykey"`
 	Blob []byte
 }
 
-type ImageController struct {
-	db *gorm.DB
-}
-
-func NewImageController(db *gorm.DB) *ImageController {
-	return &ImageController{db}
-}
-
-func (c *ImageController) UploadImage(ctx *gin.Context) {
-	file, _, err := ctx.Request.FormFile("image")
+func HandleUpload(c *gin.Context) {
+	db := common.GetDB()
+	form, err := c.MultipartForm()
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "无效的文件"})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	defer file.Close()
-
-	data, err := io.ReadAll(file)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "无法读取文件"})
-		return
-	}
-
-	image := Image{Blob: data}
-	c.db.Create(&image)
-
-	ctx.JSON(http.StatusOK, gin.H{"id": image.ID})
-}
-
-func (c *ImageController) GetImage(ctx *gin.Context) {
-	id := ctx.Param("id")
-	if id == "" {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "缺少参数"})
-		return
-	}
-
-	var image Image
-	result := c.db.First(&image, id)
-	if result.Error != nil {
-		if result.Error == gorm.ErrRecordNotFound {
-			ctx.JSON(http.StatusNotFound, gin.H{"error": "未找到指定的图片"})
-		} else {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "内部错误"})
+	var imageIds []uint
+	for _, fileHeaders := range form.File {
+		for _, fileHeader := range fileHeaders {
+			file, err := fileHeader.Open()
+			if err != nil {
+				log.Println("Error opening uploaded file:", err)
+				continue
+			}
+			defer file.Close()
+			blob, err := ioutil.ReadAll(file)
+			if err != nil {
+				log.Println("Error reading uploaded file:", err)
+				continue
+			}
+			dbImage := Image{Blob: blob}
+			err = db.Create(&dbImage).Error
+			if err != nil {
+				log.Println("Error creating image record:", err)
+				continue
+			}
+			imageIds = append(imageIds, dbImage.ID)
 		}
+	}
+	c.JSON(http.StatusOK, gin.H{"imageIds": imageIds})
+}
+
+func HandleImage(c *gin.Context) {
+	db := common.GetDB()
+	id := c.Query("id")
+	var image Image
+	err := db.First(&image, id).Error
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "Image not found"})
 		return
 	}
+	c.Data(http.StatusOK, "image/jpeg", image.Blob)
+}
 
-	buffer := bytes.NewBuffer(image.Blob)
-
-	ctx.Header("Content-Type", http.DetectContentType(image.Blob))
-	ctx.Header("Content-Length", fmt.Sprintf("%d", len(image.Blob)))
-	ctx.Stream(func(w io.Writer) bool {
-		_, err := buffer.WriteTo(w)
-		return err == nil
-	})
+func DeleteImage(c *gin.Context) {
+	db := common.GetDB()
+	id := c.Query("id")
+	err := db.Table("images").Where("id = ?", id).Delete(&Image{})
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "failed to delete image"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "image deleted"})
 }
