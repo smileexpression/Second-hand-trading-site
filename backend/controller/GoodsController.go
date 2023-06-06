@@ -2,7 +2,6 @@ package controller
 
 import (
 	"crypto/rand"
-	"fmt"
 	"gin/common"
 	"gin/model"
 	"github.com/gin-gonic/gin"
@@ -57,11 +56,6 @@ func GetOneGood(c *gin.Context) {
 	db := common.GetDB()
 	idStr := c.Query("id")
 	id, _ := strconv.ParseInt(idStr, 10, 64)
-	//i := 1
-	fmt.Println(1)
-	// if err != nil {
-	// 	fmt.Errorf("invalid id fomrat %v", err)
-	// }
 	var target model.Goods
 	db.Table("goods").Where("id = ?", id).First(&target)
 	//if err != nil {
@@ -169,7 +163,7 @@ func RecommendGoods(ctx *gin.Context) {
 	})
 }
 
-//检查查询商品结果的ID号，如果重复或者没有对应的商品，则返回false
+// 检查查询商品结果的ID号，如果重复或者没有对应的商品，则返回false
 func checkRanID(idArray []uint, num int, checkID uint) bool {
 	if checkID == 0 {
 		return false

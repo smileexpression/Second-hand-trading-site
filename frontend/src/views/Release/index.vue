@@ -4,7 +4,7 @@ import { ref, reactive } from 'vue'
 // import { useRouter } from 'vue-router';
 import 'element-plus/es/components/message-box/style/index'
 import { releaseAPI } from '@/apis/release'
-import { getImageUrl, uploadImageAPI, deleteImageAPI } from '@/apis/image'
+import { getImageUrl, uploadImageAPI } from '@/apis/image'
 
 const uploadUrl = 'http://localhost:8080/image/upload'
 const images = ref([])
@@ -90,10 +90,10 @@ const del = async (index) => {
             <el-button>上传图片</el-button>
           </el-upload>
           <div class="demo-image">
-            <div class="block" v-for="image in images" :key="image.id">
+            <div class="block" v-for="(image, index) in images" :key="image.id">
               <!-- <img :src="getImageUrl(image.id)" /> -->
               <el-image style="width: 100px; height: 100px" :src="getImageUrl(image.id)" :fit="fill"
-                @click="del(image.id)" />
+                @click="del(index)" />
               <!-- <h1></h1> -->
             </div>
           </div>
