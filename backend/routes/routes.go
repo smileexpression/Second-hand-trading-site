@@ -21,7 +21,6 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 	home := r.Group("home")
 	{
 		home.GET("/goods", controller.GetGoods)
-
 		home.GET("/banner", controller.GetBanner)
 		home.GET("/new", controller.RecentIdle)
 
@@ -35,6 +34,7 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 	goods := r.Group("")
 	{
 		goods.GET("/goods", controller.GetOneGood)
+		goods.GET("/goods/relevant", middleware.AuthMiddleware(), controller.RecommendGoods)
 	}
 
 	chatList := r.Group("chat")
@@ -43,5 +43,13 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 		chatList.POST("/sendmsg", middleware.AuthMiddleware(), controller.SendMsg)
 		chatList.POST("/addchat", middleware.AuthMiddleware(), controller.AddChat)
 	}
+
+	imageRoutes := r.Group("/image")
+	{
+		imageRoutes.POST("/upload", controller.HandleUpload)
+		imageRoutes.GET("/get", controller.HandleImage)
+		imageRoutes.POST("/delete", controller.DeleteImage)
+	}
+
 	return r
 }

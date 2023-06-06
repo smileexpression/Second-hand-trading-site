@@ -5,7 +5,7 @@ import request from '@/utils/http'
 //加入购物车
 export const insertCartAPI = (id) => {
     return request({
-        url: '/member/cart',
+        url: '/member/cart/add',
         method: 'POST',
         data: {id}
     })
@@ -13,13 +13,13 @@ export const insertCartAPI = (id) => {
 //获取最新购物车列表
 export const findNewCartListAPI = () =>{
     return request({
-        url: '/member/cart'
+        url: '/member/cart/pull'
     })
 }
 //删除购物车
 export const deleteCartAPI = (ids) =>{
     return request({
-        url: '/member/cart',
+        url: '/member/cart/del',
         method: 'DElETE',
         data: {ids}
     })

@@ -1,14 +1,18 @@
-<!-- CartList还需要配置点击按钮的路由 -->
 <script setup>
 import { getCheckInfoAPI, createOrderAPI } from '@/apis/checkout'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { ref, onMounted } from 'vue'
+import { useCartStore } from '@/stores/cartStore';
+const cartStore = useCartStore()
 
 const router = useRouter()
+const route = useRoute()
 const checkInfo = ref({})  // 订单对象
 const curAddress = ref({})
 const getCheckInfo = async () => {
-  const res = await getCheckInfoAPI()
+  const i = route.query.goodID 
+  console.log(i)
+  const res = await getCheckInfoAPI(i)
   checkInfo.value = res.result
   const item = checkInfo.value.userAddresses.find(item => item.isDefault === 0)
   curAddress.value = item
@@ -46,9 +50,8 @@ const createOrder = async () => {
       id: orderId
     }
   })
-  // 更新购物车！！！！！！！！！！！！！！！！！！还没写
-  // 需要usecartstore
-
+  // 更新购物车
+  cartStore.updateCart()
 }
 
 </script>

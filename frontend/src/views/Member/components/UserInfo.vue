@@ -52,6 +52,15 @@ const updateError = (res, upload) => {
   })
 }
 
+//安全管理修改密码
+const dialogVisible = ref(false)
+//表单
+const userForm = ref({
+  password: '',
+  confirmed: ''
+
+})
+
 </script>
 
 <template>
@@ -68,10 +77,6 @@ const updateError = (res, upload) => {
       <h4>{{ userStore.userInfo.nickname }}</h4>
     </div>
     <div class="item">
-      <a href="javascript:;">
-        <span class="iconfont icon-hy"></span>
-        <p>会员中心</p>
-      </a>
       <a href="javascript:;">
         <span class="iconfont icon-aq"></span>
         <p>安全设置</p>

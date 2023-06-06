@@ -1,64 +1,68 @@
 <script setup>
+import { ElMessage } from 'element-plus'
 import { ref, reactive } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import { useRouter } from 'vue-router';
+// import { useRouter } from 'vue-router';
 import 'element-plus/es/components/message-box/style/index'
 import { releaseAPI } from '@/apis/release'
+import { getImageUrl, uploadImageAPI, deleteImageAPI } from '@/apis/image'
 
-const UploadUrl = 'https://png.pngtree.com/png-vector/20191129/ourlarge/pngtree-image-upload-icon-photo-upload-icon-png-image_2047545.jpg'
-const index = ref(0)
-
-const open = () => {
-  console.log("open")
-  ElMessageBox.prompt('请输入图片url', '提示', {
-    confirmButtonText: '完成',
-    cancelButtonText: '取消',
-    inputErrorMessage: 'Invalid Email',
-  })
-    .then(({ value }) => {
-      index.value++
-      form.picture.pop()
-      form.picture.push(value)
-      form.picture.push(UploadUrl)
-
-      ElMessage({
-        type: 'success',
-        message: `上传图片成功`,
-      })
-    })
-    .catch(() => {
-      ElMessage({
-        type: 'info',
-        message: '取消',
-      })
-    })
-}
-const del = (idx) => {
-  console.log("del")
-  form.picture.splice(idx, 1)
-}
-
+const uploadUrl = 'http://localhost:8080/image/upload'
+const images = ref([])
 const form = reactive({
   name: '',
   cate_id: '',
   description: '',
-  picture: [UploadUrl],
   price: '',
 })
-const router = useRouter()
+
+const beforeUpload = (file) => {
+  const isImage = file.type.startsWith('image/')
+  if (!isImage) {
+    ElMessage.error('只能上传图片文件')
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2
+  if (!isLt2M) {
+    ElMessage.error('上传图片文件大小不能超过 2MB')
+  }
+  return isImage && isLt2M
+}
+
+const handleUploadSuccess = (response, file) => {
+  console.log(response)
+  images.value.push({ id: response.imageIds[0] })
+}
+
+const uploadImages = async () => {
+  const formData = new FormData()
+  for (const file of $refs.upload.uploadFiles) {
+    formData.append('images', file.raw)
+  }
+  const response = await uploadImageAPI(formData)
+  if (response.ok) {
+    const data = await response.json()
+    data.imageIds.forEach((id) => {
+      images.value.push({ id })
+    })
+  } else {
+    ElMessage.error('上传图片失败')
+  }
+}
+
 const onSubmit = async () => {
-  console.log(form)
   const res = await releaseAPI({
     name: form.name,
     cate_id: form.cate_id,
     description: form.description,
-    picture: form.picture,
     price: form.price,
+    picture: images.value.map((image) => image.id),
   })
-  ElMessage({ type: 'success', message: '发布成功' })
-  //跳转回主页
-  router.replace({ path: '/' })
-  // console.log('submit!')
+  console.log(images.value)
+}
+
+const del = async (index) => {
+  // await deleteImageAPI(index)
+  images.value.splice(index, 1)
+  console.log(images.value)
 }
 </script>
 
@@ -81,16 +85,18 @@ const onSubmit = async () => {
               <el-option label="保真奢品" value="2" />
             </el-select>
           </el-form-item>
-          <el-form-item label="上传图片（图片数量1 ~ 5）">
-          </el-form-item>
+          <el-upload ref="upload" :action="uploadUrl" :show-file-list="false" :on-success="handleUploadSuccess"
+            :before-upload="beforeUpload">
+            <el-button>上传图片</el-button>
+          </el-upload>
           <div class="demo-image">
-            <div v-for="(item, idx) in form.picture" class="block">
-              <el-image v-if="idx < form.picture.length - 1" style="width: 100px; height: 100px" :src="item" :fit="fill"
-                @click="del" />
-              <el-image v-else-if="idx < 5" style="width: 100px; height: 100px" :src="item" :fit="fill" @click="open" />
+            <div class="block" v-for="image in images" :key="image.id">
+              <!-- <img :src="getImageUrl(image.id)" /> -->
+              <el-image style="width: 100px; height: 100px" :src="getImageUrl(image.id)" :fit="fill"
+                @click="del(image.id)" />
+              <!-- <h1></h1> -->
             </div>
           </div>
-
           <el-form-item label="价格">
             <el-input v-model="form.price" style="width: 200px;" />
           </el-form-item>

@@ -6,8 +6,8 @@ import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 
 const httpInstance = axios.create({
-  baseURL: 'https://mock.apifox.cn/m1/2726765-0-default',
-  // baseURL: 'http://localhost:8080',
+  // baseURL: 'https://mock.apifox.cn/m1/2726765-0-default',
+  baseURL: 'http://localhost:8080',
   timeout: 5000
 })
 
@@ -25,7 +25,7 @@ httpInstance.interceptors.request.use(config => {
 }, e => Promise.reject(e))
 
 // axios响应式拦截器
-httpInstance.interceptors.response.use(res => res.data, e => {
+httpInstance.interceptors.response.use(res => res?.data, e => {
   const userStore = useUserStore()
   const router = useRouter()
 
