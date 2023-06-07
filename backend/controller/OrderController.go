@@ -18,7 +18,7 @@ type OrderInfo struct {
 func CreateOrder(ctx *gin.Context) {
 
 	user, is_Exist := ctx.Get("user")
-	if is_Exist == false {
+	if !is_Exist {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"msg": "user not exist"})
 		return
 	}
@@ -37,7 +37,7 @@ func CreateOrder(ctx *gin.Context) {
 	var good model.Goods
 	DB := common.GetDB()
 	DB.Where("ID=?", orderInfo.Id).Find(&good)
-	if good.Is_Sold == true {
+	if good.Is_Sold {
 		ctx.JSON(200, gin.H{
 			"code": "0",
 			"msg":  "手速太慢，商品被抢",
@@ -45,9 +45,8 @@ func CreateOrder(ctx *gin.Context) {
 		return
 	}
 	DB.Model(&good).Update("is_sold", true) //要不要考虑多线程？
-	pMoney, err := strconv.Atoi(good.Price) //商品的价格为string，订单pay为int（字段类型）
-	if err != nil {                         /*nothing*/
-	}
+	pMoney, _ := strconv.Atoi(good.Price)   //商品的价格为string，订单pay为int（字段类型）
+
 	order := model.Order{
 		Good_Id:   orderInfo.Id,
 		AddressId: orderInfo.AddressId,
