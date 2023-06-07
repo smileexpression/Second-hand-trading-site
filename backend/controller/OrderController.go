@@ -79,10 +79,11 @@ func GetOrder(ctx *gin.Context) {
 	err := DB.Where("ID=?", orderId).Find(&Order)
 
 	if err != nil { //应该没有
-		ctx.JSON(400, gin.H{
-			"code": "0",
-			"msg":  "订单不存在",
-		})
+		// ctx.JSON(400, gin.H{
+		// 	"code": "0",
+		// 	"msg":  "订单不存在",
+		// })
+		fmt.Print(err)
 	}
 	ctx.JSON(200, gin.H{
 		"code":      "1",
