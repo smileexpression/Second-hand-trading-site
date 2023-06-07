@@ -17,13 +17,6 @@ const getChatList = async () => {
 
 const curPerson = (key) => {
   index.value = key
-  // if (msgList.value?.Chat.length !== chatList.value?.[index.value]?.Chat.length) {
-  //   console.log("change");
-  //   msgList.value = chatList.value[index.value]
-  // }
-  // else {
-  //   console.log("no change");
-  // }
   msgList.value = chatList.value[index.value]
 }
 
