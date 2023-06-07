@@ -10,6 +10,5 @@ type Goods struct {
 	Picture     string `json:"picture"gorm:"type:varchar(1024);not null"`
 	Price       string `json:"price"gorm:"type:float;not null"`
 	Description string `json:"desc"gorm:"type:varchar(255);not null"`
-	Category    string `json:"category"gorm:"type:varchar(255);not null"`
 	Is_Sold     bool   `json:"forsale"`
 }
