@@ -13,28 +13,24 @@ const { categoryData } = useCategory();
     <div class="bread-container">
       <el-breadcrumb separator=">">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>{{ categoryData.name }}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ categoryData.Name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <!-- 轮播图 -->
     <div class="home-banner">
       <el-carousel height="500px">
-        <el-carousel-item v-for="item in bannerList" :key="item.id">
-          <img :src="item.imgUrl" alt="">
+        <el-carousel-item v-for="item in bannerList" :key="item.Id">
+          <img :src="item.ImgUrl" alt="">
         </el-carousel-item>
       </el-carousel>
     </div>
     <div>
-      <h3>- {{ categoryData.name }} -</h3>
+      <h3>- {{ categoryData.Name }} -</h3>
     </div>
     <div class="sub-container">
-      <!-- <el-tabs>
-        <el-tab-pane label="推荐" name="orderNum"></el-tab-pane>
-        <el-tab-pane label="最近发布" name="publishTime"></el-tab-pane>
-      </el-tabs> -->
       <div class="body">
         <!-- 商品列表-->
-        <GoodsItem v-for="goods in categoryData.goods" :goods="goods" :key="goods.id" />
+        <GoodsItem v-for="goods in categoryData.Goods" :goods="goods" :key="goods.ID" />
       </div>
     </div>
   </div>

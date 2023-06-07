@@ -17,14 +17,13 @@ const categoryStore = useCategoryStore()
       <RouterLink class="logo" to="/" />
       <!-- 导航区域 -->
       <ul class="app-header-nav ">
-        <li class="home" v-for="item in categoryStore.categoryList" :key="item.id">
-          <RouterLink active-class="active" :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
+        <li class="home" v-for="item in categoryStore.categoryList" :key="item.Id">
+          <RouterLink active-class="active" :to="`/category/${item.Id}`">{{ item.Name }}</RouterLink>
         </li>
       </ul>
-
-      <div class="right">
-        <RouterLink to="/">品牌</RouterLink>
-        <RouterLink to="/">专题</RouterLink>
+      <div class="search">
+        <i class="iconfont icon-search"></i>
+        <input type="text" placeholder="搜一搜">
       </div>
     </div>
   </div>
