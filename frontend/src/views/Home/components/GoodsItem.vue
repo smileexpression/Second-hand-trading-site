@@ -1,5 +1,5 @@
-
 <script setup>
+import { getImageUrl } from '@/apis/image'
 defineProps({
   goods: {
     type: Object,
@@ -10,7 +10,7 @@ defineProps({
 
 <template>
   <RouterLink :to="`/detail/${goods.ID}`" class="goods-item">
-    <img :src="goods.picture" alt="" />
+    <img :src="getImageUrl(goods.picture)" alt="" />
     <p class="name ellipsis">{{ goods.name }}</p>
     <p class="desc ellipsis">{{ goods.desc }}</p>
     <p class="price">&yen;{{ goods.price }}</p>

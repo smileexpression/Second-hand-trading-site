@@ -3,7 +3,9 @@ import PersonCard from '@/views/Chat/components/PersonCard.vue'
 import ChatWindow from '@/views/Chat/components/chatwindow.vue'
 import { ref, onMounted, onUnmounted } from "vue";
 import { getChatListAPI } from "@/apis/chat";
+import { useUserStore } from '@/stores/user'
 
+const userStore = useUserStore()
 const showChatWindow = ref(false)
 const chatList = ref([])
 const msgList = ref({})
@@ -44,7 +46,7 @@ onUnmounted(() => {
   <div class="chatHome">
     <div class="chatLeft">
       <div class="title">
-        <h1>聊天</h1>
+        <h1>{{ userStore.userInfo.nickname }}</h1>
       </div>
       <div class="online-person">
         <span class="onlin-text">聊天列表</span>
@@ -83,10 +85,11 @@ onUnmounted(() => {
     .title {
       color: #fff;
       padding-left: 10px;
+      margin-top: 20px;
     }
 
     .online-person {
-      margin-top: 100px;
+      margin-top: 50px;
 
       .onlin-text {
         padding-left: 10px;

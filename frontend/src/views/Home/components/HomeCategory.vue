@@ -1,5 +1,6 @@
 <script setup>
 import { useCategoryStore } from '@/stores/category';
+import { getImageUrl } from '@/apis/image'
 
 const categoryStore = useCategoryStore()
 </script>
@@ -15,7 +16,7 @@ const categoryStore = useCategoryStore()
           <ul>
             <li v-for="i in item.Goods" :key="i.id">
               <RouterLink :to="`/detail/${i.ID}`">
-                <img :src="i.picture" alt="" />
+                <img :src="getImageUrl(i.picture)" alt="" />
                 <div class="info">
                   <p class="name ellipsis-2">
                     {{ i.name }}
