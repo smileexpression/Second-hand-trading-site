@@ -1,16 +1,18 @@
-<!-- CartList还需要配置点击按钮的路由 -->
-
-
 <script setup>
 import { getCheckInfoAPI, createOrderAPI } from '@/apis/checkout'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { ref, onMounted } from 'vue'
+import { useCartStore } from '@/stores/cartStore';
+const cartStore = useCartStore()
 
 const router = useRouter()
+const route = useRoute()
 const checkInfo = ref({})  // 订单对象
 const curAddress = ref({})
 const getCheckInfo = async () => {
-  const res = await getCheckInfoAPI()
+  const i = route.query.goodID 
+  console.log(i)
+  const res = await getCheckInfoAPI(i)
   checkInfo.value = res.result
   const item = checkInfo.value.userAddresses.find(item => item.isDefault === 0)
   curAddress.value = item
@@ -48,9 +50,8 @@ const createOrder = async () => {
       id: orderId
     }
   })
-  // 更新购物车！！！！！！！！！！！！！！！！！！还没写
-  // 需要usecartstore
-
+  // 更新购物车
+  cartStore.updateCart()
 }
 
 </script>
@@ -60,7 +61,7 @@ const createOrder = async () => {
     <div class="container">
       <div class="wrapper">
         <!-- 收货地址 -->
-        <h3 class="box-title">收货地址</h3>
+      <h3 class="box-title">收货地址</h3>
         <div class="box-body">
           <div class="address">
             <div class="text">
@@ -105,17 +106,17 @@ const createOrder = async () => {
         </div>
         <!-- 配送时间 -->
         <!-- <h3 class="box-title">配送时间</h3>
-        <div class="box-body">
-          <a class="my-btn active" href="javascript:;">不限送货时间：周一至周日</a>
-          <a class="my-btn" href="javascript:;">工作日送货：周一至周五</a>
-          <a class="my-btn" href="javascript:;">双休日、假日送货：周六至周日</a>
-        </div> -->
+          <div class="box-body">
+            <a class="my-btn active" href="javascript:;">不限送货时间：周一至周日</a>
+            <a class="my-btn" href="javascript:;">工作日送货：周一至周五</a>
+            <a class="my-btn" href="javascript:;">双休日、假日送货：周六至周日</a>
+          </div> -->
         <!-- 支付方式 -->
         <h3 class="box-title">支付方式</h3>
         <div class="box-body">
           <a class="my-btn active" href="javascript:;">在线支付</a>
           <!-- <a class="my-btn" href="javascript:;">货到付款</a>
-          <span style="color:#999">货到付款需付5元手续费</span> -->
+            <span style="color:#999">货到付款需付5元手续费</span> -->
         </div>
         <!-- 金额明细 -->
         <h3 class="box-title">金额明细</h3>

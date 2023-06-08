@@ -5,7 +5,7 @@
       <div class="container">
         <dl>
           <dt>客户服务</dt>
-          <dd><i class="iconfont icon-kefu"></i> 在线客服</dd>
+
           <dd><i class="iconfont icon-question"></i> 问题反馈</dd>
         </dl>
         <dl>
@@ -24,7 +24,7 @@
         </dl>
         <dl>
           <dt>服务热线</dt>
-          <dd class="hotline">400-0000-000 <small>周一至周日 8:00-18:00</small></dd>
+          <dd class="hotline"><small>无上班时间</small></dd>
         </dl>
       </div>
     </div>
@@ -34,29 +34,23 @@
         <div class="slogan">
           <a href="javascript:;">
             <i class="iconfont icon-footer01"></i>
-            <span>价格亲民</span>
+            <span>如果你像</span>
           </a>
           <a href="javascript:;">
             <i class="iconfont icon-footer02"></i>
-            <span>物流快捷</span>
+            <span>我一样那</span>
           </a>
           <a href="javascript:;">
             <i class="iconfont icon-footer03"></i>
-            <span>品质新鲜</span>
+            <span>泰酷辣！</span>
           </a>
         </div>
         <!-- 版权信息 -->
         <div class="copyright">
           <p>
-            <a href="javascript:;">关于我们</a>
             <a href="javascript:;">帮助中心</a>
-            <a href="javascript:;">售后服务</a>
-            <a href="javascript:;">配送与验收</a>
-            <a href="javascript:;">商务合作</a>
-            <a href="javascript:;">搜索推荐</a>
-            <a href="javascript:;">友情链接</a>
           </p>
-          <p>CopyRight © 小兔鲜儿</p>
+          <p>CopyRight © TKL</p>
         </div>
       </div>
     </div>

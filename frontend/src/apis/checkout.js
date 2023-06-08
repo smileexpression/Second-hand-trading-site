@@ -2,9 +2,10 @@ import request from '@/utils/http'
 /**
  * 获取结算信息
  */
-export const getCheckInfoAPI = () => {
+export const getCheckInfoAPI = (id) => {
   return request({
-    url: '/member/order/pre'
+    url: '/member/order/pre',
+    id
   })
 }
 
