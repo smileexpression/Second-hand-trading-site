@@ -1,4 +1,5 @@
 <script setup>
+import { getImageUrl } from '@/apis/image'
 const props = defineProps({
   imgUrl: {
     type: String,
@@ -9,7 +10,7 @@ console.log("head", props.imgUrl)
 
 <template>
   <div class="head-portrait">
-    <img :src="props.imgUrl" alt="">
+    <img :src="getImageUrl(props.imgUrl)" alt="">
   </div>
 </template>
 

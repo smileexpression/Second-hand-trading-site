@@ -1,4 +1,3 @@
-
 <script setup>
 import { getImageUrl } from '@/apis/image';
 
