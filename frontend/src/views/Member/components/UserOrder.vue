@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { getUserOrder } from '@/apis/order';
+import { getImageUrl } from '@/apis/image';
 
 
 // 订单列表
@@ -46,7 +47,7 @@ const pageChange = (page) => {
                 <ul>
                   <li :key="order.skus.id">
                     <a class="image" href="javascript:;">
-                      <img :src="order.skus.image" alt="" />
+                      <img :src="getImageUrl(order.skus.image)" alt="" />
                     </a>
                     <div class="info">
                       <p class="name ellipsis-2">
