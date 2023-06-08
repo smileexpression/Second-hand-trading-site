@@ -1,5 +1,6 @@
 <script setup>
-import { getImageUrl } from '@/apis/image'
+import { getImageUrl } from '@/apis/image';
+
 defineProps({
   goods: {
     type: Object,

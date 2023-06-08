@@ -4,11 +4,14 @@ import { useUserStore } from "@/stores/user";
 import { getLikeListAPI } from "@/apis/likelist";
 import { ElMessage } from "element-plus";
 import GoodsItem from "@/views/Home/components/GoodsItem.vue";
+import { getImageUrl } from "@/apis/image";
 
 const userStore = useUserStore()
 const token = userStore.userInfo.token
 // const imageUrl = ref(userStore.userInfo.avatar)
-const imageUrl = ref('http://localhost:5173/92274fb1-9901-41b6-852b-1f70da06a6f0')
+// const imageUrl = ref('http://localhost:5173/92274fb1-9901-41b6-852b-1f70da06a6f0')
+const uploadUrl = 'http://localhost:8080/image/upload'
+const image = ref()
 
 const likeList = ref([])
 
@@ -23,25 +26,26 @@ onMounted(() => getLikeList())
 const headersObj = { 'Authorization': `Bearer ${token}` }
 
 //上传文件类型限制
-const beforeUpdate = (rawFile) => {
-  if (rawFile.type !== 'image/png' && rawFile.type !== 'image/jpeg') {
-    ElMessage({
-      type: 'error',
-      message: '请选择png或jpeg格式文件'
-    })
-    return false
+const beforeUpload = (file) => {
+  const isImage = file.type.startsWith('image/')
+  if (!isImage) {
+    ElMessage.error('只能上传图片文件')
   }
-  return true
+  const isLt2M = file.size / 1024 / 1024 < 2
+  if (!isLt2M) {
+    ElMessage.error('上传图片文件大小不能超过 2MB')
+  }
+  return isImage && isLt2M
 }
 
 //上传头像成功
 const updateSuccess = (res, upload) => {
-  ElMessage({
-    type: 'success',
-    message: '上传成功'
-  })
-  imageUrl.value = URL.createObjectURL(upload.raw)
-  console.log(imageUrl.value, "image");
+  //获取图片ID
+  image.value = res.imageIds
+  console.log(image);
+
+  //用图片ID更改头像
+  userStore.updateAvatar(image.value)
 }
 
 //上传头像失败
@@ -53,13 +57,14 @@ const updateError = (res, upload) => {
 }
 
 //安全管理修改密码
-const dialogVisible = ref(false)
+const passwordDialogVisible = ref(false)
 //表单
-const userForm = ref({
+const passwordForm = ref({
+  oldpassword: '',
   password: '',
   confirmed: ''
-
 })
+
 
 </script>
 
@@ -68,10 +73,9 @@ const userForm = ref({
     <!-- 用户信息 -->
     <div class="user-meta">
       <div class="avatar">
-        <el-upload action="https://mock.apifox.cn/m1/2726765-0-default/member/updateavatar" :headers="headersObj"
-          :show-file-list="false" :before-upload="beforeUpdate" :on-success="updateSuccess" :on-error="updateError"
-          v-model="userStore.userInfo.avatar">
-          <img :src="imageUrl" />
+        <el-upload :action="uploadUrl" :headers="headersObj"
+        :show-file-list="false" :before-upload="beforeUpload" :on-success="updateSuccess" :on-error="updateError">
+          <img :src="getImageUrl(userStore.userInfo.avatar)" />
         </el-upload>
       </div>
       <h4>{{ userStore.userInfo.nickname }}</h4>

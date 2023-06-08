@@ -5,6 +5,7 @@ import { ref } from "vue";
 import { loginAPI } from '@/apis/login'
 import { registerAPI } from "@/apis/register";
 import { useCartStore } from "./cartStore";
+import { getUserInfoAPI, updateAvatarAPI } from "@/apis/userInfo"
 
 export const useUserStore = defineStore ( 'user', ()=> {
     const userInfo = ref({})
@@ -28,11 +29,18 @@ export const useUserStore = defineStore ( 'user', ()=> {
         cartStore.clearCart()
     }
 
+    //更改头像
+    const updateAvatar = async ({ pictrueID }) => {
+        const res = await updateAvatarAPI(pictrueID)
+        userInfo.avatar = res.avatarID
+    }
+
     return{
         userInfo,
         getUserInfo,
         registerUser,
-        clearUserInfo
+        clearUserInfo,
+        updateAvatar
     }
 },{
     persist: true,
