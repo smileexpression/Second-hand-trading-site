@@ -2,6 +2,7 @@
 import HomePanel from './HomePanel.vue'
 import { findNewAPI } from '@/apis/home'
 import { ref, onMounted } from 'vue'
+import { getImageUrl } from '@/apis/image'
 
 const newList = ref([])
 const getNewList = async () => {
@@ -10,8 +11,6 @@ const getNewList = async () => {
 }
 
 onMounted(() => getNewList())
-
-
 </script>
 
 <template>
@@ -19,7 +18,7 @@ onMounted(() => getNewList())
     <ul class="goods-list">
       <li v-for="item in newList" :key="item.ID">
         <RouterLink :to="`/detail/${item.ID}`">
-          <img v-img-lazy="item.picture" alt="" />
+          <img v-img-lazy="getImageUrl(item.picture)" alt="" />
           <p class="name">{{ item.name }}</p>
           <p class="price">&yen;{{ item.price }}</p>
         </RouterLink>
