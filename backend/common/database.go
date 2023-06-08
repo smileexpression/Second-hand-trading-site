@@ -12,7 +12,7 @@ import (
 var DB *gorm.DB
 
 func InitDB() *gorm.DB {
-	//可以用navicat或datagram等数据库操作软件，利用下面的信息登录数据库查看数据
+	//可以用navicat或datagrip等数据库操作软件，利用下面的信息登录数据库查看数据
 	host := "gz-cynosdbmysql-grp-04b3z61j.sql.tencentcdb.com"
 	port := "20464"
 	database := "gin" //使用了mysql中的gin数据库，不要改其他的数据库！！
@@ -40,8 +40,10 @@ func InitDB() *gorm.DB {
 	db.AutoMigrate(&model.Picture{})
 	db.AutoMigrate(&model.Chat{})
 	db.AutoMigrate(&model.ChatList{})
+	db.AutoMigrate(&model.Cart{})
 	db.AutoMigrate(&model.Order{})
-	db.AutoMigrate(&model.Image{})
+	//check check
+	//如果你能发现这句话，来东京湾寻找光吧！
 
 	DB = db
 	return db

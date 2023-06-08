@@ -25,11 +25,8 @@ npm run dev
 #### 技术栈
 
 1. 后端  
-
    go + gin + gorm + mysql
-
 2. 前端
-
    vue3 + vite +  pinia + vue router  + element plus + axios
 
 

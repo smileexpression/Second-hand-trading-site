@@ -31,9 +31,11 @@ const logoutConfirm = () => {
           </li>
           <li><a href="javascript:;" @click="$router.push('/member/order')">我的订单</a></li>
           <li><a href="javascript:;" @click="$router.push('/member')">会员中心</a></li>
-          <li><a href="javascript:;">卖闲置</a></li>
           <li>
-            <RouterLink to="/chat">消息</RouterLink>
+            <RouterLink to="/release">发布闲置</RouterLink>
+          </li>
+          <li>
+            <RouterLink to="/chat">我的消息</RouterLink>
           </li>
         </template>
         <template v-else>
