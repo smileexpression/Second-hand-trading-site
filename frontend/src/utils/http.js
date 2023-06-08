@@ -6,8 +6,8 @@ import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 
 const httpInstance = axios.create({
-  baseURL: 'https://mock.apifox.cn/m1/2726765-0-default',
-  // baseURL: 'http://localhost:8080',
+  aseURL: 'https://mock.apifox.cn/m1/2726765-0-default',
+  //baseURL: 'http://localhost:8080',
   timeout: 5000
 })
 
