@@ -4,7 +4,7 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router';
 import 'element-plus/es/components/message-box/style/index'
 import { releaseAPI } from '@/apis/release'
-import { getImageUrl, uploadImageAPI } from '@/apis/image'
+import { getImageUrl, uploadImageAPI, deleteImageAPI } from '@/apis/image'
 
 const uploadUrl = 'http://localhost:8080/image/upload'
 const images = ref([])
@@ -70,6 +70,22 @@ const release = async () => {
 }
 
 const onSubmit = () => {
+  if (form.name === '') {
+    ElMessage.error('请输入名称')
+    return
+  } else if (form.cate_id === '') {
+    ElMessage.error('请选择分类')
+    return
+  } else if (form.description === '') {
+    ElMessage.error('请输入描述')
+    return
+  } else if (form.price === '') {
+    ElMessage.error('请输入价格')
+    return
+  } else if (images.value.length < 1 || images.value.length > 5) {
+    ElMessage.error('请上传1-5张图片')
+    return
+  }
   release()
 }
 
@@ -77,8 +93,14 @@ const onCancel = () => {
   router.replace({ path: '/' })
 }
 
-const del = async (index) => {
+const deleteImage = async (id) => {
+  console.log("deleteImage", id)
+  const res = await deleteImageAPI(id.toString())
+  console.log(res)
+}
+const del = async (index, id) => {
   // await deleteImageAPI(index)
+  await deleteImage(id)
   images.value.splice(index, 1)
   console.log(images.value)
 }
@@ -114,7 +136,7 @@ const del = async (index) => {
             <div class="block" v-for="(image, index) in images" :key="image.id">
               <!-- 通过调用getImageUrl(参数为图片id)接口将图片url绑定到 :src -->
               <el-image style="width: 100px; height: 100px" :src="getImageUrl(image.id)" :fit="fill"
-                @click="del(index)" />
+                @click="del(index, image.id)" />
               <!-- <h1></h1> -->
             </div>
           </div>

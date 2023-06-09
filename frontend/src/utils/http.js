@@ -29,6 +29,7 @@ httpInstance.interceptors.response.use(res => res?.data, e => {
   const userStore = useUserStore()
   const router = useRouter()
 
+  // console.log(e.response)
   //统一提示错误
   ElMessage({
     type: 'warning',

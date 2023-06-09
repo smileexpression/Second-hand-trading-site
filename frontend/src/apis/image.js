@@ -16,7 +16,7 @@ export const deleteImageAPI = (id) => {
   return request({
     url: '/image/delete',
     method: 'POST',
-    params: id,
+    params: { id },
   })
 }
 
