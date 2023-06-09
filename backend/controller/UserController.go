@@ -160,12 +160,12 @@ func Info(ctx *gin.Context) {
 
 func UpdateAvatar(ctx *gin.Context) {
 	pictureID, isSuccess := ctx.GetQuery("pictureID")
-	//user, is_Exist := ctx.Get("user")
-	//if !is_Exist {
-	//	ctx.JSON(http.StatusUnauthorized, gin.H{"msg": "user not exist"})
-	//	return
-	//}
-	//userInfo := user.(model.User)
+	user, is_Exist := ctx.Get("user")
+	if !is_Exist {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"msg": "user not exist"})
+		return
+	}
+	userInfo := user.(model.User)
 	if isSuccess == false {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"code": 400,
@@ -180,12 +180,12 @@ func UpdateAvatar(ctx *gin.Context) {
 		})
 		return
 	}
-	//if userInfo.Avatar!=pictureID{
-	//	userInfo.Avatar=pictureID
-	//}
+	if userInfo.Avatar != pictureID {
+		userInfo.Avatar = pictureID
+	}
 	ctx.JSON(200, gin.H{
 		"code":     200,
-		"msg":      "获得头像成功",
-		"avatarID": pictureID,
+		"msg":      "更换头像成功",
+		"avatarID": userInfo.Avatar,
 	})
 }
