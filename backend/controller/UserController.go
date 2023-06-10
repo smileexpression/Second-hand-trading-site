@@ -52,7 +52,7 @@ func Register(ctx *gin.Context) {
 		// Token:     receiveUser.Token,
 		Telephone: receiveUser.Telephone,
 		Password:  string(HashPassword),
-		Avatar:    "https://ts4.cn.mm.bing.net/th?id=OIP-C.Gve_dIeGxTpoiaU8CmdwOwHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2",
+		Avatar:    "1",
 	}
 	DB.Create(&newUser)
 	//发放Token
@@ -118,6 +118,8 @@ func Login(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"code": 500, "msg": "系统异常"})
 	}
 
+	println("login's password", user.Password)
+
 	ctx.JSON(200, gin.H{
 		"code": 200,
 		"msg":  "登录成功",
@@ -159,6 +161,7 @@ func Info(ctx *gin.Context) {
 }
 
 func UpdateAvatar(ctx *gin.Context) {
+	DB := common.GetDB()
 	pictureID, isSuccess := ctx.GetQuery("pictureID")
 	user, is_Exist := ctx.Get("user")
 	if !is_Exist {
@@ -183,9 +186,68 @@ func UpdateAvatar(ctx *gin.Context) {
 	if userInfo.Avatar != pictureID {
 		userInfo.Avatar = pictureID
 	}
+	DB.Model(&userInfo).Where("id=?", userInfo.ID).Update("avatar", userInfo.Avatar)
 	ctx.JSON(200, gin.H{
 		"code":     200,
 		"msg":      "更换头像成功",
 		"avatarID": userInfo.Avatar,
+	})
+}
+
+type onPassword struct {
+	Oldpassword string `json:"oldpassword"`
+	Newpassword string `json:"newpassword"`
+}
+
+func ChangePassword(ctx *gin.Context) {
+	DB := common.GetDB()
+	var receivePassword onPassword
+	if err := ctx.BindJSON(&receivePassword); err != nil {
+		ctx.JSON(422, gin.H{"code": 422, "msg": "获取失败"})
+		return
+	}
+	user, is_Exist := ctx.Get("user")
+	if !is_Exist {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"msg": "user not exist"})
+		return
+	}
+	userInfo := user.(model.User)
+
+	//验证新旧密码长度
+	if len(receivePassword.Oldpassword) < 6 || len(receivePassword.Oldpassword) > 14 {
+		ctx.JSON(422, gin.H{"code": 422, "msg": "旧密码长度为6-14个字符"})
+		return
+	}
+
+	if len(receivePassword.Newpassword) < 6 || len(receivePassword.Newpassword) > 14 {
+		ctx.JSON(422, gin.H{"code": 422, "msg": "新密码长度为6-14个字符"})
+		return
+	}
+
+	//验证旧密码输入是否正确
+	if err := bcrypt.CompareHashAndPassword([]byte(userInfo.Password), []byte(receivePassword.Oldpassword)); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code": 400,
+			"msg":  "旧密码错误",
+		})
+		return
+	}
+
+	//如果旧密码输入正确且新密码长度符合，对新密码进行加密
+	HashPassword, err := bcrypt.GenerateFromPassword([]byte(receivePassword.Newpassword), bcrypt.DefaultCost)
+	if err != nil {
+		ctx.JSON(500, gin.H{"code": 500, "msg": "加密错误"})
+		return
+	}
+
+	//更换密码
+	println("oldpassword:", userInfo.Password)
+	userInfo.Password = string(HashPassword)
+	println("newpassword:", userInfo.Password)
+	DB.Model(&userInfo).Where("id=?", userInfo.ID).Update("password", userInfo.Password)
+	//返回响应
+	ctx.JSON(200, gin.H{
+		"code": 200,
+		"msg":  "更换密码成功",
 	})
 }
