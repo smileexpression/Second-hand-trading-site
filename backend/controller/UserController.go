@@ -141,12 +141,12 @@ func Login(ctx *gin.Context) {
 			"avatar":   user.Avatar,
 			"nickname": user.Name,
 			"gendar":   user.Gender,
-		},
-		"userAddress": gin.H{
-			"id":       userAddress.ID,
-			"receiver": userAddress.Receiver,
-			"contact":  userAddress.Contact,
-			"address":  userAddress.Address,
+			"userAddress": gin.H{
+				"id":       string(userAddress.ID),
+				"receiver": userAddress.Receiver,
+				"contact":  userAddress.Contact,
+				"address":  userAddress.Address,
+			},
 		},
 	})
 }
