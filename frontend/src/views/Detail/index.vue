@@ -7,23 +7,25 @@ import {useCartStore} from '@/stores/cartStore'
 import imageView from '@/components/imageView/index.vue';
 
 const goods = ref({})
+const category = ["手机严选","保真奢品","文玩珠宝","限量潮品"]
 const route = useRoute()
 const getGoods = async () =>{
     const res = await getDetail(route.params.id)
     goods.value = res.result
+    // console.log(goods.value)
 }
 onMounted(() => getGoods())
 
 const cartStore = useCartStore()
 const addCart = () =>{
-  if(goods.value.forSale){
+  if(!goods.value.forsale){
     //商品在售，可以加入购物车
     //console.log(goods.value.forSale)
     cartStore.addCart({
-      id: goods.value.id,
+      id: String(goods.value.ID),
       name: goods.value.name,
-      price: goods.value.price,
-      picture: goods.value.mainPictures[0],
+      price: Number(goods.value.price),
+      picture: goods.value.picture,
       selected: true
     })
   }else{
@@ -32,15 +34,17 @@ const addCart = () =>{
     //console.log(goods.value.forSale)
   }
 }
+
+
 </script>
 
 <template>
   <div class="xtx-goods-page">
-    <div class="container" v-if="goods.category">
+    <div class="container" v-if="goods.ID">
       <div class="bread-container">
         <el-breadcrumb separator=">">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: `/category/${goods.category.id}` }">{{goods.category.name}}
+          <el-breadcrumb-item :to="{ path: `/category/${goods.Cate_Id}` }">{{ category[goods.Cate_Id-1] }}
           </el-breadcrumb-item>          
           <el-breadcrumb-item>{{goods.name}}</el-breadcrumb-item>
         </el-breadcrumb>
@@ -51,24 +55,24 @@ const addCart = () =>{
           <div class="goods-info">
             <div class="media">
               <!-- 图片预览区 -->
-              <imageView :imageList="goods.mainPictures"/>
+              <imageView :imageList="[goods.picture]"/>
             </div>
             <div class="spec">
               <!-- 商品信息区 -->
               <p class="g-name"> {{goods.name}} </p>
               <p class="g-desc">{{goods.desc}} </p>
               <p class="g-price">
-                <span>{{goods.price.toFixed(2)}}</span>
+                <span>{{Number(goods.price).toFixed(2)}}</span>
               </p>
               <div class="g-service">
-                <dl>                  
-                  <dt>卖家</dt>                
+                 <dl>                  
+                  <!-- <dt>卖家</dt>                
                   <img :src = "goods.user.avator" alt="" /> 
                   <dd>{{goods.user.nickname}}</dd>
                 </dl>
                 <dl>
                   <dt>联系方式</dt>
-                  <dd>{{goods.user.id}}</dd>
+                  <dd>{{goods.user.id}}</dd>  -->
                 </dl>
               </div>
               <!-- 按钮组件 -->
