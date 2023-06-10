@@ -116,6 +116,31 @@ const doChange = () => {
   })
 }
 
+//个人信息管理
+const infoDialogVisible = ref(false)
+const infoForm = ref({
+  account: `${userStore.userInfo.account}`,
+  name: `${userStore.userInfo.nickname}`,
+  gender: `${userStore.userInfo.gender}`
+})
+const infoRules = ref({
+  name: [
+    {required: true, message: '用户名不能为空！', trigger: 'blur'},
+    {type: "string", max: 20, message: '用户名应为长度至多为20的字符！', trigger: 'blur'}
+  ]
+})
+//表单实例
+const infoFormRef = ref(null)
+const doInfo = () => {
+  const { name, gender } = infoForm.value
+  infoFormRef.value.validate(async (valid) => {
+    if(valid){
+      await userStore.changeInfo({ name, gender })
+      ElMessage({ type: 'success', message: '修改成功' })
+    }
+  })
+}
+
 </script>
 
 <template>
@@ -128,7 +153,7 @@ const doChange = () => {
           <img :src="getImageUrl(userStore.userInfo.avatar)" />
         </el-upload>
       </div>
-      <h4>{{ userStore.userInfo.nickname }}</h4>
+      <h4 @click="infoDialogVisible = true">{{ userStore.userInfo.nickname }}</h4>
     </div>
     <div class="item">
       <a href="javascript:;" @click="passwordDialogVisible = true">
@@ -168,6 +193,30 @@ const doChange = () => {
         <div style="margin:0 auto; text-align: center;">
             <el-button size="large" class="subBtn" @click="doChange">确认更改</el-button>
             <el-button size="large" class="subBtn" @click="passwordDialogVisible = false">取消</el-button>
+        </div>
+      </el-form>
+    </div>
+  </el-dialog>
+
+  <!-- 修改个人信息对话框 -->
+  <el-dialog v-model="infoDialogVisible" title="修改个人信息" width="450">
+    <div class="form">
+      <el-form :model="infoForm" :rules="infoRules" label-position="right" label-width="70px" status-icon>
+        <el-form-item prop="account" label="账号">
+          <el-input v-model="infoForm.account" disabled />
+        </el-form-item>
+        <el-form-item prop="name" label="用户名">
+          <el-input v-model="infoForm.name" />
+        </el-form-item>
+        <el-form-item prop="gender" label="性别">
+          <el-radio v-model="infoForm.gender" label="男">男</el-radio>
+          <el-radio v-model="infoForm.gender" label="女">女</el-radio>
+        </el-form-item>
+        <div style="margin:0 auto; text-align: center;">
+          <el-popconfirm title="确认修改吗？" confirm-button-text="确定" cancel-button-text="取消" @comfirm="">
+            <el-button size="large" class="subBtn">确认更改</el-button>
+          </el-popconfirm>
+          <el-button size="large" class="subBtn" @click="infoDialogVisible = false">取消</el-button>
         </div>
       </el-form>
     </div>

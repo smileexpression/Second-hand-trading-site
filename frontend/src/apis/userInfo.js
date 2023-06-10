@@ -31,6 +31,15 @@ export const changePasswordAPI = ({ oldpassword, newpassword }) => {
 }
 
 //更改个人信息
-
+export const changeInfoAPI = ({ name, gender }) => {
+    return request({
+        url: 'member/changeinfo',
+        method: 'POST',
+        data: {
+            name,
+            gender
+        }
+    })
+}
 
 //地址管理

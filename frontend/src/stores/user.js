@@ -5,7 +5,7 @@ import { ref } from "vue";
 import { loginAPI } from '@/apis/login'
 import { registerAPI } from "@/apis/register";
 import { useCartStore } from "./cartStore";
-import { getUserInfoAPI, updateAvatarAPI,changePasswordAPI } from "@/apis/userInfo"
+import { getUserInfoAPI, updateAvatarAPI,changePasswordAPI, changeInfoAPI } from "@/apis/userInfo"
 
 export const useUserStore = defineStore ( 'user', ()=> {
     const userInfo = ref({})
@@ -14,7 +14,7 @@ export const useUserStore = defineStore ( 'user', ()=> {
     const getUserInfo = async ({ account, password }) => {
         const res = await loginAPI({ account, password })
         userInfo.value = res.result
-        cartStore.updateCart()
+        //cartStore.updateCart()
     }
 
     //注册用户
@@ -40,13 +40,21 @@ export const useUserStore = defineStore ( 'user', ()=> {
         const res = await changePasswordAPI({ oldpassword, newpassword })
     }
 
+    //修改个人信息
+    const changeInfo = async ({ name, gender }) => {
+        const res = await changeInfoAPI({ name, gender })
+        userInfo.nickname = res.result.name
+        userInfo,gender = res.result.gender
+    }
+
     return{
         userInfo,
         getUserInfo,
         registerUser,
         clearUserInfo,
         updateAvatar,
-        changePassword
+        changePassword,
+        changeInfo
     }
 },{
     persist: true,
