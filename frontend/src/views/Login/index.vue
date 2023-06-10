@@ -85,7 +85,7 @@ const doLogin = () => {
                 <el-input v-model="form.account" />
               </el-form-item>
               <el-form-item prop="password" label="密码">
-                <el-input v-model="form.password" />
+                <el-input show-password v-model="form.password" />
               </el-form-item>
               <el-form-item prop="agree" label-width="22px">
                 <el-checkbox v-model="form.agree" size="large">

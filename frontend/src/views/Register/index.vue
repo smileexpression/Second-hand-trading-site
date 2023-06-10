@@ -107,10 +107,10 @@ const doRegister = () => {
                   <el-input v-model="registerForm.account" />
                 </el-form-item>
                 <el-form-item prop="password" label="密码">
-                  <el-input v-model="registerForm.password" />
+                  <el-input show-password v-model="registerForm.password" />
                 </el-form-item>
                 <el-form-item prop="confirmedPassword" label="确认密码">
-                  <el-input v-model="registerForm.confirmedPassword" />
+                  <el-input show-password v-model="registerForm.confirmedPassword" />
                 </el-form-item>
                 <el-form-item prop="nickname" label="用户名">
                   <el-input v-model="registerForm.nickname" />

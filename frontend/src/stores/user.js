@@ -5,7 +5,7 @@ import { ref } from "vue";
 import { loginAPI } from '@/apis/login'
 import { registerAPI } from "@/apis/register";
 import { useCartStore } from "./cartStore";
-import { getUserInfoAPI, updateAvatarAPI } from "@/apis/userInfo"
+import { getUserInfoAPI, updateAvatarAPI,changePasswordAPI } from "@/apis/userInfo"
 
 export const useUserStore = defineStore ( 'user', ()=> {
     const userInfo = ref({})
@@ -35,12 +35,18 @@ export const useUserStore = defineStore ( 'user', ()=> {
         userInfo.avatar = res.avatarID
     }
 
+    //更改密码
+    const changePassword = async ({ oldpassword, newpassword }) => {
+        const res = await changePasswordAPI({ oldpassword, newpassword })
+    }
+
     return{
         userInfo,
         getUserInfo,
         registerUser,
         clearUserInfo,
-        updateAvatar
+        updateAvatar,
+        changePassword
     }
 },{
     persist: true,

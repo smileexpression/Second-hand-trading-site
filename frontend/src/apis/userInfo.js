@@ -19,7 +19,16 @@ export const updateAvatarAPI = (pictrueID) => {
 }
 
 //更换密码
-
+export const changePasswordAPI = ({ oldpassword, newpassword }) => {
+    return request({
+        url: 'member/changepassword',
+        method: 'POST',
+        data: {
+            oldpassword,
+            newpassword
+        }
+    })
+}
 
 //更改个人信息
 
