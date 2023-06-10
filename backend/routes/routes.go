@@ -53,6 +53,7 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 		CartGroup.POST("/add", middleware.AuthMiddleware(), controller.CartIn)
 		CartGroup.GET("/pull", middleware.AuthMiddleware(), controller.CartOut)
 		CartGroup.DELETE("/del", middleware.AuthMiddleware(), controller.CartDel)
+		CartGroup.DELETE("/del2", middleware.AuthMiddleware(), controller.CartDelOne)
 	}
 
 	imageRoutes := r.Group("/image")
