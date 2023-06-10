@@ -10,5 +10,5 @@ type User struct {
 	Gender    string `json:"gender" gorm:"type:varchar(10);not null"`
 	// Token     string `json:"token" gorm:"size:255;not null"`
 	Avatar    string `json:"avatar" gorm:"type:varchar(1024);not null"`
-	AddressID string `json:"addressid" gorm:"type:varchar(255);not null"`
+	AddressID uint   `json:"addressid" gorm:"type:varchar(255);not null"`
 }

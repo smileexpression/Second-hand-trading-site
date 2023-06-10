@@ -54,6 +54,15 @@ func Register(ctx *gin.Context) {
 		Password:  string(HashPassword),
 		Avatar:    "1",
 	}
+
+	//测试address
+	var testAddress model.UserAddress
+	testAddress.Address = "中山大学珠海校区俊俊子的洞"
+	testAddress.Contact = "1234567"
+	testAddress.Receiver = "椰子融"
+	DB.Create(&testAddress)
+
+	newUser.AddressID = testAddress.ID
 	DB.Create(&newUser)
 	//发放Token
 	token, err := common.ReleaseToken(newUser)
@@ -133,7 +142,12 @@ func Login(ctx *gin.Context) {
 			"nickname": user.Name,
 			"gendar":   user.Gender,
 		},
-		"userAddress": userAddress,
+		"userAddress": gin.H{
+			"id":       userAddress.ID,
+			"receiver": userAddress.Receiver,
+			"contact":  userAddress.Contact,
+			"address":  userAddress.Address,
+		},
 	})
 }
 
