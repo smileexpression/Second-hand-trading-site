@@ -1,6 +1,8 @@
 package model
 
+import "gorm.io/gorm"
+
 type Image struct {
-	ID   uint
+	gorm.Model
 	Blob []byte
 }

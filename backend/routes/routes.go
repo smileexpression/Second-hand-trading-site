@@ -30,6 +30,7 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 		member.POST("/order", middleware.AuthMiddleware(), controller.CreateOrder)
 		member.GET("/order/:id", middleware.AuthMiddleware(), controller.GetOrder)
 		member.POST("/release", middleware.AuthMiddleware(), controller.Release)
+		member.GET("/updateavatar", middleware.AuthMiddleware(), controller.UpdateAvatar)
 	}
 
 	goods := r.Group("")
@@ -44,7 +45,6 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 		chatList.POST("/sendmsg", middleware.AuthMiddleware(), controller.SendMsg)
 		chatList.POST("/addchat", middleware.AuthMiddleware(), controller.AddChat)
 	}
-
 
 	//member路由完善后可以将下面这个路由整合
 	CartGroup := r.Group("member/cart")

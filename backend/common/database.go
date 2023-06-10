@@ -42,6 +42,7 @@ func InitDB() *gorm.DB {
 	db.AutoMigrate(&model.ChatList{})
 	db.AutoMigrate(&model.Cart{})
 	db.AutoMigrate(&model.Order{})
+	db.AutoMigrate(&model.Image{})
 	//check check
 	//如果你能发现这句话，来东京湾寻找光吧！
 
