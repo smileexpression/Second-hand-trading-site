@@ -52,7 +52,7 @@ func Register(ctx *gin.Context) {
 		// Token:     receiveUser.Token,
 		Telephone: receiveUser.Telephone,
 		Password:  string(HashPassword),
-		Avatar:    "https://ts4.cn.mm.bing.net/th?id=OIP-C.Gve_dIeGxTpoiaU8CmdwOwHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2",
+		Avatar:    "1",
 	}
 	DB.Create(&newUser)
 	//发放Token
