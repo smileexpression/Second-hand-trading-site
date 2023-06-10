@@ -20,6 +20,14 @@ type CartGoods struct {
 	Is_Sold     bool   `json:"forsale"`
 }
 
+type goodids struct {
+	Gids []string `json:"ids"`
+}
+
+type goodid struct {
+	Gid string `json:"id"`
+}
+
 func CartIn(c *gin.Context) {
 
 	user, _ := c.Get("user")
@@ -27,7 +35,13 @@ func CartIn(c *gin.Context) {
 	uId := userinfo.ID
 	fmt.Println("uId: ", uId)
 	db := common.GetDB()
-	gId := c.Query("id")
+	var gId goodid
+	if err := c.BindJSON(&gId); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 	// 查询是否存在相同的数据
 	var count int64
 	db.Table("carts").Where("user_id = ? AND  good_id= ?", uId, gId).Count(&count)
@@ -38,7 +52,7 @@ func CartIn(c *gin.Context) {
 		var re model.Cart
 		re.ID = mId + 1
 		re.User_id = strconv.Itoa(int(uId))
-		re.Good_id = gId
+		re.Good_id = gId.Gid
 		tx := db.Begin()
 
 		if err := tx.Table("carts").Create(&re).Error; err != nil {
@@ -61,10 +75,6 @@ func CartIn(c *gin.Context) {
 		})
 	}
 
-}
-
-type goodids struct {
-	Gids []string `json:"ids"`
 }
 
 func CartDel(c *gin.Context) {
