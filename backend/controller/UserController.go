@@ -71,6 +71,7 @@ func Register(ctx *gin.Context) {
 			"nickname": newUser.Name,
 			"gender":   newUser.Gender,
 		},
+		"userAddress": "",
 	})
 }
 
@@ -118,7 +119,8 @@ func Login(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"code": 500, "msg": "系统异常"})
 	}
 
-	println("login's password", user.Password)
+	var userAddress model.UserAddress
+	DB.Where("id=?", user.AddressID).First(&userAddress)
 
 	ctx.JSON(200, gin.H{
 		"code": 200,
@@ -131,6 +133,7 @@ func Login(ctx *gin.Context) {
 			"nickname": user.Name,
 			"gendar":   user.Gender,
 		},
+		"userAddress": userAddress,
 	})
 }
 
