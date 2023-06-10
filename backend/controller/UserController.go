@@ -5,6 +5,7 @@ import (
 	"gin/common"
 	"gin/model"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -142,7 +143,7 @@ func Login(ctx *gin.Context) {
 			"nickname": user.Name,
 			"gendar":   user.Gender,
 			"userAddress": gin.H{
-				"id":       string(userAddress.ID),
+				"id":       strconv.Itoa(int(userAddress.ID)),
 				"receiver": userAddress.Receiver,
 				"contact":  userAddress.Contact,
 				"address":  userAddress.Address,
