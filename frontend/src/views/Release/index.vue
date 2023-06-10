@@ -1,10 +1,10 @@
 <script setup>
 import { ElMessage } from 'element-plus'
 import { ref, reactive } from 'vue'
-// import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import 'element-plus/es/components/message-box/style/index'
 import { releaseAPI } from '@/apis/release'
-import { getImageUrl, uploadImageAPI } from '@/apis/image'
+import { getImageUrl, uploadImageAPI, deleteImageAPI } from '@/apis/image'
 
 const uploadUrl = 'http://localhost:8080/image/upload'
 const images = ref([])
@@ -50,19 +50,57 @@ const uploadImages = async () => {
   }
 }
 
-const onSubmit = async () => {
+const router = useRouter()
+const release = async () => {
+  const imageIds = images.value.map((images) => images.id.toString());
   const res = await releaseAPI({
     name: form.name,
     cate_id: form.cate_id,
     description: form.description,
     price: form.price,
-    picture: images.value.map((image) => image.id),
+    picture: imageIds,
   })
-  console.log(images.value)
+  console.log(res)
+  if (res.result == 'Succeed') {
+    ElMessage.success('发布成功')
+    router.replace({ path: '/' })
+  } else {
+    ElMessage.error('发布失败')
+  }
 }
 
-const del = async (index) => {
+const onSubmit = () => {
+  if (form.name === '') {
+    ElMessage.error('请输入名称')
+    return
+  } else if (form.cate_id === '') {
+    ElMessage.error('请选择分类')
+    return
+  } else if (form.description === '') {
+    ElMessage.error('请输入描述')
+    return
+  } else if (form.price === '') {
+    ElMessage.error('请输入价格')
+    return
+  } else if (images.value.length < 1 || images.value.length > 5) {
+    ElMessage.error('请上传1-5张图片')
+    return
+  }
+  release()
+}
+
+const onCancel = () => {
+  router.replace({ path: '/' })
+}
+
+const deleteImage = async (id) => {
+  console.log("deleteImage", id)
+  const res = await deleteImageAPI(id.toString())
+  console.log(res)
+}
+const del = async (index, id) => {
   // await deleteImageAPI(index)
+  await deleteImage(id)
   images.value.splice(index, 1)
   console.log(images.value)
 }
@@ -85,18 +123,20 @@ const del = async (index) => {
             <el-select v-model="form.cate_id" placeholder="请选择宝贝的分类">
               <el-option label="手机严选" value="1" />
               <el-option label="保真奢品" value="2" />
+              <el-option label="文玩珠宝" value="3" />
+              <el-option label="限量潮品" value="4" />
             </el-select>
           </el-form-item>
           <!-- 这里的uploadUrl必须再上面声明 -->
           <el-upload ref="upload" :action="uploadUrl" :show-file-list="false" :on-success="handleUploadSuccess"
             :before-upload="beforeUpload">
-            <el-button>上传图片</el-button>
+            <el-button style="margin-left: 40px;">上传图片</el-button>
           </el-upload>
           <div class="demo-image">
             <div class="block" v-for="(image, index) in images" :key="image.id">
               <!-- 通过调用getImageUrl(参数为图片id)接口将图片url绑定到 :src -->
               <el-image style="width: 100px; height: 100px" :src="getImageUrl(image.id)" :fit="fill"
-                @click="del(index)" />
+                @click="del(index, image.id)" />
               <!-- <h1></h1> -->
             </div>
           </div>
@@ -105,7 +145,7 @@ const del = async (index) => {
           </el-form-item>
           <el-form-item class="footer">
             <el-button type="primary" @click="onSubmit">发布</el-button>
-            <el-button>取消</el-button>
+            <el-button @click="onCancel">取消</el-button>
           </el-form-item>
         </el-form>
       </el-main>

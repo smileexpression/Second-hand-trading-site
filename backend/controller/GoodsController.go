@@ -224,11 +224,11 @@ func Release(ctx *gin.Context) {
 }
 
 type apiGood struct {
-	Id      uint
-	Name    string
-	Desc    string
-	Price   string
-	Picture string
+	Id      uint   `json:"ID"`
+	Name    string `json:"name"`
+	Desc    string `json:"desc"`
+	Price   string `json:"price"`
+	Picture string `json:"picture"`
 }
 
 func transApiGood(good model.Goods) apiGood {

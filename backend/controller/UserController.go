@@ -52,7 +52,7 @@ func Register(ctx *gin.Context) {
 		// Token:     receiveUser.Token,
 		Telephone: receiveUser.Telephone,
 		Password:  string(HashPassword),
-		Avatar:    "https://ts4.cn.mm.bing.net/th?id=OIP-C.Gve_dIeGxTpoiaU8CmdwOwHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2",
+		Avatar:    "1",
 	}
 	DB.Create(&newUser)
 	//发放Token
@@ -156,4 +156,36 @@ func Info(ctx *gin.Context) {
 	id := userinfo.ID
 	fmt.Println(id)
 	ctx.JSON(http.StatusOK, gin.H{"code": 200, "data": gin.H{"user": user}})
+}
+
+func UpdateAvatar(ctx *gin.Context) {
+	pictureID, isSuccess := ctx.GetQuery("pictureID")
+	user, is_Exist := ctx.Get("user")
+	if !is_Exist {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"msg": "user not exist"})
+		return
+	}
+	userInfo := user.(model.User)
+	if isSuccess == false {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code": 400,
+			"msg":  "获取头像失败",
+		})
+		return
+	}
+	if pictureID == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code": 400,
+			"msg":  "头像不能为空",
+		})
+		return
+	}
+	if userInfo.Avatar != pictureID {
+		userInfo.Avatar = pictureID
+	}
+	ctx.JSON(200, gin.H{
+		"code":     200,
+		"msg":      "更换头像成功",
+		"avatarID": userInfo.Avatar,
+	})
 }
