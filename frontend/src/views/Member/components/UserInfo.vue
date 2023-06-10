@@ -162,7 +162,7 @@ const doInfo = () => {
       </a>
       <a href="javascript:;">
         <span class="iconfont icon-dw"></span>
-        <p>地址管理</p>
+        <p>添加地址</p>
       </a>
     </div>
   </div>

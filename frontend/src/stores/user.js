@@ -5,7 +5,7 @@ import { ref } from "vue";
 import { loginAPI } from '@/apis/login'
 import { registerAPI } from "@/apis/register";
 import { useCartStore } from "./cartStore";
-import { getUserInfoAPI, updateAvatarAPI,changePasswordAPI, changeInfoAPI } from "@/apis/userInfo"
+import { updateAvatarAPI,changePasswordAPI, changeInfoAPI, addAddressAPI, delAddressAPI } from "@/apis/userInfo"
 
 export const useUserStore = defineStore ( 'user', ()=> {
     const userInfo = ref({})
@@ -44,7 +44,19 @@ export const useUserStore = defineStore ( 'user', ()=> {
     const changeInfo = async ({ name, gender }) => {
         const res = await changeInfoAPI({ name, gender })
         userInfo.nickname = res.result.name
-        userInfo,gender = res.result.gender
+        userInfo.gender = res.result.gender
+    }
+    
+    //增加地址
+    const addAddress = async ({ receiver, contact, address }) => {
+        const res = await addAddressAPI({ receiver, contact, address })
+        userInfo.userAddresses = res.userAddresses
+    }
+
+    //删除地址
+    const deladdress = async (id) => {
+        const res = await delAddressAPI(id)
+        userInfo.userAddresses = res.userAddresses
     }
 
     return{
@@ -54,7 +66,9 @@ export const useUserStore = defineStore ( 'user', ()=> {
         clearUserInfo,
         updateAvatar,
         changePassword,
-        changeInfo
+        changeInfo,
+        addAddress,
+        deladdress
     }
 },{
     persist: true,

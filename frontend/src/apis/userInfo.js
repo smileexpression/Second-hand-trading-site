@@ -42,4 +42,24 @@ export const changeInfoAPI = ({ name, gender }) => {
     })
 }
 
-//地址管理
+//新增地址
+export const addAddressAPI = ({ receiver, contact, address }) => {
+    return request({
+        url: 'member/addaddress',
+        method: 'POST',
+        data:{
+            receiver,
+            contact,
+            address
+        }
+    })
+}
+
+//删除地址
+export const delAddressAPI = (id) => {
+    return request({
+        url: 'member/deladdress',
+        method: 'POST',
+        params: id
+    })
+}
