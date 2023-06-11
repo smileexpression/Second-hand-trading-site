@@ -1,9 +1,10 @@
 package common
 
 import (
-	"gin/model"
-	"github.com/dgrijalva/jwt-go"
 	"time"
+
+	"github.com/Arron2411616261/online/model"
+	"github.com/dgrijalva/jwt-go"
 )
 
 var jwtKey = []byte("a_secret_crect")

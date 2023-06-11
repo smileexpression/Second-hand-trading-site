@@ -1,9 +1,8 @@
 package routes
 
 import (
-	"gin/controller"
-	"gin/middleware"
-
+	"github.com/Arron2411616261/online/controller"
+	"github.com/Arron2411616261/online/middleware"
 	"github.com/gin-gonic/gin"
 )
 

@@ -1,9 +1,8 @@
 package main
 
 import (
-	"gin/common"
-	"gin/routes"
-
+	"github.com/Arron2411616261/online/common"
+	"github.com/Arron2411616261/online/routes"
 	"github.com/gin-gonic/gin"
 )
 

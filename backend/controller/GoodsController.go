@@ -3,12 +3,13 @@ package controller
 import (
 	"crypto/rand"
 	"fmt"
-	"gin/common"
-	"gin/model"
+
 	"math/big"
 	"net/http"
 	"strconv"
 
+	"github.com/Arron2411616261/online/common"
+	"github.com/Arron2411616261/online/model"
 	"github.com/gin-gonic/gin"
 )
 

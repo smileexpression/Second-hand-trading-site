@@ -1,11 +1,11 @@
 package middleware
 
 import (
-	"gin/common"
-	"gin/model"
 	"net/http"
 	"strings"
 
+	"github.com/Arron2411616261/online/common"
+	"github.com/Arron2411616261/online/model"
 	"github.com/gin-gonic/gin"
 )
 

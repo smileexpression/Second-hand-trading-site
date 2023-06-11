@@ -2,9 +2,9 @@ package common
 
 import (
 	"fmt"
-	"gin/model"
 	"net/url"
 
+	"github.com/Arron2411616261/online/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
