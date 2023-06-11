@@ -141,6 +141,7 @@ const doInfo = () => {
   })
 }
 
+
 </script>
 
 <template>
@@ -169,15 +170,24 @@ const doInfo = () => {
   <div class="holder-container" v-if="userStore.userInfo.userAddresses === null">
     <el-empty description="暂无地址数据" />
   </div>
-  <div v-else class="addressWrapper">
-    <div class="text item" v-for="item in userStore.userInfo.userAddresses" :key="item.id">
-      <ul>
-        <li><span>收<i />货<i />人：</span>{{ item.receiver }} </li>
-        <li><span>联系方式：</span>{{ item.contact }}</li>
-        <li><span>收货地址：</span>{{ item.address }}</li>
-      </ul>
+  <div v-else class="like-container">
+    <div class="header">
+      <h4 style="font-size: 22px; font-weight: 400; padding: 18px ;">收货地址</h4>
     </div>
+    <div class="addressWrapper">
+      <div class="text item" v-for="item in userStore.userInfo.userAddress" :key="item.id">
+        <ul>
+          <li><span>收<i />货<i />人：</span>{{ item.receiver }} </li>
+          <li><span>联系方式：</span>{{ item.contact }}</li>
+          <li><span>收货地址：</span>{{ item.address }}</li>
+        </ul>
+        <div style="margin:auto; position: absolute; right: 30px;">
+          <el-button size="large" class="subBtn" style="width:100px;">删除地址</el-button>
+        </div>
+      </div>
+    </div> 
   </div>
+  
   <div class="like-container">
     <div class="home-panel">
       <div class="header">
@@ -225,9 +235,7 @@ const doInfo = () => {
           <el-radio v-model="infoForm.gender" label="女">女</el-radio>
         </el-form-item>
         <div style="margin:0 auto; text-align: center;">
-          <el-popconfirm title="确认修改吗？" confirm-button-text="确定" cancel-button-text="取消" @comfirm="">
             <el-button size="large" class="subBtn">确认更改</el-button>
-          </el-popconfirm>
           <el-button size="large" class="subBtn" @click="infoDialogVisible = false">取消</el-button>
         </div>
       </el-form>
@@ -422,8 +430,9 @@ const doInfo = () => {
 }
 
 .addressWrapper {
-  max-height: 500px;
+  max-height: 1000px;
   overflow-y: auto;
+  position: relative;
 }
 
 .text {
