@@ -1,11 +1,12 @@
 <script setup>
+import { getImageUrl } from '@/apis/image';
 import { useMouseInElement } from '@vueuse/core';
 import { watch, ref } from 'vue';
 const props = defineProps({
     // 商品图片列表
     imageList: Array
 })
-console.log(props.imageList)
+// console.log(props.imageList)
 // 图片列表
 // const imageList = [
 //   "https://yanxuan-item.nosdn.127.net/d917c92e663c5ed0bb577c7ded73e4ec.png",
@@ -32,9 +33,9 @@ const positionX = ref(0)
 const positionY = ref(0)
 const {elementX, elementY, isOutside } = useMouseInElement(target)
 watch([elementX, elementY, isOutside], () =>{
-    console.log('x y changed')
-    if(isOutside.value) return
-    console.log('return')
+
+    if(isOutside.value)
+      return
     if(elementX.value < layer.width*0.5){
         left.value = 0
     }else if(elementX.value > layer.width*1.5){
@@ -61,20 +62,20 @@ watch([elementX, elementY, isOutside], () =>{
   <div class="goods-image" v-if="imageList">
     <!-- 左侧大图-->
     <div class="middle" ref="target">
-      <img :src="imageList[activeIndex]" alt="" />
+      <img :src="getImageUrl(imageList[activeIndex])" alt="" />
       <!-- 蒙层小滑块 -->
       <div class="layer" v-show="!isOutside" :style="{ left: `${left}px`, top: `${top}px` }"></div>
     </div>
     <!-- 小图列表 -->
-    <ul class="small">
+    <ul class="small" v-if="imageList.length > 1">
       <li v-for="(img, i) in imageList" :key="i" @mouseenter="enterhandler(i)" :class="{active:i === activeIndex}">
-        <img :src="img" alt="" />
+        <img :src="getImageUrl(img)" alt="" />
       </li>
     </ul>
     <!-- 放大镜大图 -->
     <div class="large" :style="[
       {
-        backgroundImage: `url(${imageList[activeIndex]})`,
+        backgroundImage: `url(${getImageUrl(imageList[activeIndex])})`,
         backgroundPositionX: `${positionX}px`,
         backgroundPositionY: `${positionY}px`,
       },

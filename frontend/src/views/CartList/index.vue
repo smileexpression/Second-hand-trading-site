@@ -1,6 +1,8 @@
 <script setup>
+import { getImageUrl } from '@/apis/image';
 import { useCartStore } from '@/stores/cartStore';
 import { useRouter } from 'vue-router';
+import { ElMessage, ElMessageBox } from 'element-plus'
 const cartStore = useCartStore()
 const router = useRouter()
 
@@ -15,9 +17,31 @@ const delCart = (i) =>{
   cartStore.delCart([i.id])
 }
 const deleteCheckCart = () =>{
-  const selectedList = cartStore.cartList.filter(item => item.selected === true)
-  const selectedID = selectedList.map(item => (item.id) )
-  cartStore.delCart(selectedID)
+  ElMessageBox.confirm(
+    '将删除所有选中的商品，是否继续?',
+    '⚠警告',
+    {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  )
+    .then(() => {
+      ElMessage({
+        type: 'success',
+        message: '已删除',
+      })
+      const selectedList = cartStore.cartList.filter(item => item.selected === true)
+      const selectedID = selectedList.map(item => (item.id) )
+      cartStore.delCart(selectedID)
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: '已取消',
+      })
+    })
+
 }
 const checkGood = (i) =>{
   const id = i.id
@@ -39,8 +63,8 @@ const checkGood = (i) =>{
               <th width="120">
                 <el-checkbox :model-value="cartStore.allSelected" @change="allCheck" />
               </th>
-              <th width="400">商品信息</th>
-              <th width="220">价格</th>
+              <th width="600">商品信息</th>
+              <th width="240">价格</th>
               <th width="240">操作</th>
             </tr>
           </thead>
@@ -53,7 +77,7 @@ const checkGood = (i) =>{
               </td>
               <td>
                 <div class="goods">
-                  <RouterLink :to="`/detail/${i.id}`"><img :src="i.picture" alt="" /></RouterLink>
+                  <RouterLink :to="`/detail/${i.id}`"><img :src=" getImageUrl(i.picture)" alt="" /></RouterLink>
                   <div>
                     <p class="name ellipsis">
                       {{ i.name }}
@@ -62,7 +86,7 @@ const checkGood = (i) =>{
                 </div>
               </td>
               <td class="tc">
-                <p class="f16 red">&yen;{{ i.price.toFixed(2) }}</p>
+                <p class="f16 red">&yen;{{ i.price }}</p>
               </td>
               <td class="tc">
                 <p>
@@ -96,10 +120,10 @@ const checkGood = (i) =>{
       <div class="action">
         <div class="batch">
           共 {{cartStore.allCount}} 件商品，已选择 {{ cartStore.selectedCount }} 件，商品合计：
-          <span class="red">¥ {{cartStore.selectedPrice.toFixed(2)}} </span>
+          <span class="red">¥ {{cartStore.selectedPrice.toFixed(2) }} </span>
         </div>
         <div class="total">
-          <el-button size="large" type="primary" @click="deleteCheckCart()" >批量删除</el-button>
+          <el-button size="large" type="primary" @click="deleteCheckCart()" >批量删除!!!</el-button>
         </div>
       </div>
     </div>
@@ -181,11 +205,7 @@ const checkGood = (i) =>{
       width: 280px;
       font-size: 16px;
       padding-left: 10px;
-
-      .attr {
-        font-size: 14px;
-        color: #999;
-      }
+      margin-left: 50px;
     }
   }
 
@@ -211,7 +231,6 @@ const checkGood = (i) =>{
       font-weight: bold;
     }
   }
-
 
 }
 </style>
