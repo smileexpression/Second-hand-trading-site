@@ -4,13 +4,19 @@ import (
 	"fmt"
 	"gin/common"
 	"gin/model"
-	"net/http"
-	"strconv"
-
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	"net/http"
+	"strconv"
 )
+
+type apiAddress struct {
+	AddressID string `json:"id"`
+	Receiver  string `json:"receiver"`
+	Contact   string `json:"contact"`
+	Address   string `json:"address"`
+}
 
 // 注册接口函数
 func Register(ctx *gin.Context) {
@@ -55,16 +61,23 @@ func Register(ctx *gin.Context) {
 		Password:  string(HashPassword),
 		Avatar:    "1",
 	}
+	DB.Create(&newUser)
 
 	//测试address
-	var testAddress model.UserAddress
-	testAddress.Address = "中山大学珠海校区俊俊子的洞"
-	testAddress.Contact = "1234567"
-	testAddress.Receiver = "椰子融"
-	DB.Create(&testAddress)
+	var testAddress1 model.UserAddress
+	testAddress1.Address = "中山大学珠海校区俊俊子的洞"
+	testAddress1.Contact = "1234567"
+	testAddress1.Receiver = "椰子融"
+	testAddress1.UserID = newUser.ID
+	DB.Create(&testAddress1)
 
-	newUser.AddressID = testAddress.ID
-	DB.Create(&newUser)
+	var testAddress2 model.UserAddress
+	testAddress2.Address = "EDG的大树"
+	testAddress2.Contact = "1234567"
+	testAddress2.Receiver = "污渍"
+	testAddress2.UserID = newUser.ID
+	DB.Create(&testAddress2)
+
 	//发放Token
 	token, err := common.ReleaseToken(newUser)
 	if err != nil {
@@ -81,7 +94,7 @@ func Register(ctx *gin.Context) {
 			"nickname": newUser.Name,
 			"gender":   newUser.Gender,
 		},
-		"userAddress": "",
+		"userAddress": nil,
 	})
 }
 
@@ -129,27 +142,56 @@ func Login(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"code": 500, "msg": "系统异常"})
 	}
 
-	var userAddress model.UserAddress
-	DB.Where("id=?", user.AddressID).First(&userAddress)
+	//获取user对应的所有地址
+	var addressArray []model.UserAddress
+	DB.Model(&model.UserAddress{}).Where("user_id=?", user.ID).Find(&addressArray)
 
-	ctx.JSON(200, gin.H{
-		"code": 200,
-		"msg":  "登录成功",
-		"result": gin.H{
-			"id":       user.ID,
-			"account":  user.Telephone,
-			"token":    token,
-			"avatar":   user.Avatar,
-			"nickname": user.Name,
-			"gendar":   user.Gender,
-			"userAddress": gin.H{
-				"id":       strconv.Itoa(int(userAddress.ID)),
-				"receiver": userAddress.Receiver,
-				"contact":  userAddress.Contact,
-				"address":  userAddress.Address,
+	//for _, v := range addressArray {
+	//	println("id", v.ID)
+	//	println("Receiver", v.Receiver)
+	//	println("Contact", v.Contact)
+	//	println("Address", v.Address)
+	//	println("UserID", v.UserID)
+	//
+	//}
+
+	//如果user地址数组为空，则返回nil
+	if len(addressArray) == 0 {
+		ctx.JSON(200, gin.H{
+			"code": 200,
+			"msg":  "登录成功",
+			"result": gin.H{
+				"id":            user.ID,
+				"account":       user.Telephone,
+				"token":         token,
+				"avatar":        user.Avatar,
+				"nickname":      user.Name,
+				"gender":        user.Gender,
+				"userAddresses": nil,
+			},
+		})
+	} else {
+		//创建响应数组
+		var apiAddresses []apiAddress
+		for _, address := range addressArray {
+			resAddress := apiAddress{AddressID: strconv.Itoa(int(address.ID)), Receiver: address.Receiver, Contact: address.Receiver, Address: address.Address}
+			apiAddresses = append(apiAddresses, resAddress)
+		}
+		ctx.JSON(200, gin.H{
+			"code": 200,
+			"msg":  "登录成功",
+			"result": gin.H{
+				"id":            user.ID,
+				"account":       user.Telephone,
+				"token":         token,
+				"avatar":        user.Avatar,
+				"nickname":      user.Name,
+				"gender":        user.Gender,
+				"userAddresses": apiAddresses,
 			},
 		},
-	})
+		)
+	}
 }
 
 // 验证手机号是否已被注册
