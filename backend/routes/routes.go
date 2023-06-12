@@ -30,6 +30,7 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 		member.POST("/order", middleware.AuthMiddleware(), controller.CreateOrder)
 		member.GET("/order/:id", middleware.AuthMiddleware(), controller.GetOrder)
 		member.POST("/release", middleware.AuthMiddleware(), controller.Release)
+		member.GET("/order/pre", middleware.AuthMiddleware(), controller.GetFromCart)
 		member.GET("/updateavatar", middleware.AuthMiddleware(), controller.UpdateAvatar)
 		member.POST("/changepassword", middleware.AuthMiddleware(), controller.ChangePassword)
 		member.POST("/changeinfo", middleware.AuthMiddleware(), controller.ChangeInfo)

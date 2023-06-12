@@ -94,3 +94,85 @@ func GetOrder(ctx *gin.Context) {
 	fmt.Print("???\n")
 	fmt.Print(Order.AddressId)
 }
+
+type GoodsInCart struct {
+	Id string `json:"id"`
+}
+type SendAddress struct {
+	Id       string `json:"id"`
+	Receiver string `json:"receiver"`
+	Contact  string `json:"contact"`
+	Address  string `json:"address"`
+}
+type SendGood struct {
+	Id          string `json:"id"`
+	User        string `json:"user"`
+	Name        string `json:"name"`
+	Description string `json:"desc"`
+	Picture     string `json:"picture"`
+	Price       string `json:"price"`
+}
+type Result struct {
+	UserAddress SendAddress `json:"userAddress"`
+	Goods       SendGood    `json:"goods"`
+	Price       string      `json:"price"`
+}
+
+func GetFromCart(ctx *gin.Context) {
+
+	var goodsInCart GoodsInCart
+	if err := ctx.BindJSON(&goodsInCart); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	user, is_Exist := ctx.Get("user")
+	if is_Exist == false {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"msg": "user not exist"})
+		return
+	}
+	userInfo := user.(model.User)
+
+	DB := common.GetDB()
+
+	//获取数据库的相关数据
+	var good model.Goods
+	e := DB.Table("goods").Where("id = ?", goodsInCart.Id).Find(&good)
+	if e.Error != nil {
+		fmt.Print(e.Error)
+	}
+	var address model.UserAddress
+	e2 := DB.Table("user_addresses").Where("user_id = ?", userInfo.ID).Find(&address)
+	if e2.Error != nil {
+		fmt.Print(e.Error)
+	}
+
+	//填充发送的具体数据
+	var sendGood SendGood
+	sendGood.Id = strconv.Itoa(int(good.ID))
+	sendGood.Name = good.Name
+	sendGood.User = good.User
+	sendGood.Description = good.Description
+	sendGood.Picture = good.Picture
+	sendGood.Price = good.Price
+	//
+	var sendAddress SendAddress
+	sendAddress.Id = strconv.Itoa(int(address.ID))
+	sendAddress.Receiver = address.Receiver
+	sendAddress.Contact = address.Contact
+	sendAddress.Address = address.Address
+	//
+	var result Result
+	result.UserAddress = sendAddress
+	result.Goods = sendGood
+	result.Price = good.Price
+
+	ctx.JSON(200, gin.H{
+		"code":   "1",
+		"msg":    "操作成功",
+		"result": result,
+	})
+
+}
