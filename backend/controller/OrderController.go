@@ -101,21 +101,32 @@ type GoodsInCart struct {
 
 func GetFromCart(ctx *gin.Context) {
 
-	user, is_Exist := ctx.Get("user")
-	if is_Exist == false {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"msg": "user not exist"})
-		return
-	}
-	userInfo := user.(model.User)
+	// user, is_Exist := ctx.Get("user")
+	// if is_Exist == false {
+	// 	ctx.JSON(http.StatusUnauthorized, gin.H{"msg": "user not exist"})
+	// 	return
+	// }
+	// userInfo := user.(model.User)
 
-	DB := common.GetDB()
+	// DB := common.GetDB()
 
-	var goodsInCart GoodsInCart
-	if err := ctx.BindJSON(&goodsInCart); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
+	// var goodsInCart GoodsInCart
+	// if err := ctx.BindJSON(&goodsInCart); err != nil {
+	// 	ctx.JSON(http.StatusBadRequest, gin.H{
+	// 		"error": err.Error(),
+	// 	})
+	// 	return
+	// }
+
+	// var good model.Goods
+	// DB.Table("goods").Where("id = ?", goodsInCart.Id).Find(&good)
+
+	// ctx.JSON(200, gin.H{
+	// 	"code": "1",
+	// 	"msg":  "操作成功",
+	// 	//"address":,
+	// 	"goods": good,
+	// 	"price": good.Price,
+	// })
 
 }
