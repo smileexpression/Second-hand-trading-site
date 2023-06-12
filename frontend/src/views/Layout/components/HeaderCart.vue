@@ -1,10 +1,44 @@
 <script setup>
 import { useCartStore } from '@/stores/cartStore'
+import { getImageUrl } from '@/apis/image';
 const cartStore = useCartStore()
 
 </script>
 
-<template></template>
+ <template>
+  <div class="cart">
+    <a class="curr" href="javascript:;">
+      <i class="iconfont icon-cart"></i><em>{{ cartStore.cartList.length }}</em>
+    </a>
+    <div class="layer">
+      <div class="list">
+        
+        <div class="item" v-for="i in cartStore.cartList" :key="i">
+          <RouterLink :to="`/detail/${i.id}`">
+            <img :src="getImageUrl(i.picture) " alt="" />
+            <div class="center">
+              <p class="name ellipsis-2">
+                {{ i.name }}
+              </p>              
+            </div>
+            <div class="right">
+              <p class="price">&yen;{{ Number(i.price).toFixed(2) }}</p>              
+            </div>
+          </RouterLink>
+          <i class="iconfont icon-close-new" @click="cartStore.delCart([i.id.toString()])"></i>
+        </div>
+       
+      </div>
+      <div class="foot">
+        <div class="total">
+          <p>共 {{cartStore.allCount}}件商品</p>
+          <p>&yen; {{ cartStore.allPrice.toFixed(2) }}</p>
+        </div>
+        <el-button size="large" type="primary" @click="$router.push('/cartList')" >去购物车结算</el-button>
+      </div>
+    </div>
+</div>
+</template> 
 
 <style scoped lang="scss">
 .cart {

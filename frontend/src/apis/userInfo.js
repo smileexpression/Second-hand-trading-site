@@ -31,6 +31,35 @@ export const changePasswordAPI = ({ oldpassword, newpassword }) => {
 }
 
 //更改个人信息
+export const changeInfoAPI = ({ name, gender }) => {
+    return request({
+        url: 'member/changeinfo',
+        method: 'POST',
+        data: {
+            name,
+            gender
+        }
+    })
+}
 
+//新增地址
+export const addAddressAPI = ({ receiver, contact, address }) => {
+    return request({
+        url: 'member/addaddress',
+        method: 'POST',
+        data:{
+            receiver,
+            contact,
+            address
+        }
+    })
+}
 
-//地址管理
+//删除地址
+export const delAddressAPI = (id) => {
+    return request({
+        url: 'member/deladdress',
+        method: 'POST',
+        params: id
+    })
+}
