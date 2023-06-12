@@ -5,7 +5,7 @@ import { ref } from "vue";
 import { loginAPI } from '@/apis/login'
 import { registerAPI } from "@/apis/register";
 import { useCartStore } from "./cartStore";
-import { getUserInfoAPI, updateAvatarAPI,changePasswordAPI } from "@/apis/userInfo"
+import { updateAvatarAPI,changePasswordAPI, changeInfoAPI, addAddressAPI, delAddressAPI } from "@/apis/userInfo"
 
 export const useUserStore = defineStore ( 'user', ()=> {
     const userInfo = ref({})
@@ -14,7 +14,7 @@ export const useUserStore = defineStore ( 'user', ()=> {
     const getUserInfo = async ({ account, password }) => {
         const res = await loginAPI({ account, password })
         userInfo.value = res.result
-        cartStore.updateCart()
+        //cartStore.updateCart()
     }
 
     //注册用户
@@ -40,13 +40,35 @@ export const useUserStore = defineStore ( 'user', ()=> {
         const res = await changePasswordAPI({ oldpassword, newpassword })
     }
 
+    //修改个人信息
+    const changeInfo = async ({ name, gender }) => {
+        const res = await changeInfoAPI({ name, gender })
+        userInfo.nickname = res.result.name
+        userInfo.gender = res.result.gender
+    }
+    
+    //增加地址
+    const addAddress = async ({ receiver, contact, address }) => {
+        const res = await addAddressAPI({ receiver, contact, address })
+        userInfo.userAddresses = res.userAddresses
+    }
+
+    //删除地址
+    const deladdress = async (id) => {
+        const res = await delAddressAPI(id)
+        userInfo.userAddresses = res.userAddresses
+    }
+
     return{
         userInfo,
         getUserInfo,
         registerUser,
         clearUserInfo,
         updateAvatar,
-        changePassword
+        changePassword,
+        changeInfo,
+        addAddress,
+        deladdress
     }
 },{
     persist: true,
