@@ -187,6 +187,11 @@ const cancelAddress = () => {
   addressDialogVisible.value = false
 }
 
+//删除地址
+const deleteAddress = async (id) => {
+  await userStore.deladdress(id)
+}
+
 </script>
 
 <template>
@@ -227,7 +232,7 @@ const cancelAddress = () => {
           <li><span>收货地址：</span>{{ item.address }}</li>
         </ul>
         <div style="margin:auto; position: absolute; right: 30px;">
-          <el-button size="large" class="subBtn" style="width:100px;">删除地址</el-button>
+          <el-button size="large" class="subBtn" style="width:100px;" @click="deleteAddress(item.id)">删除地址</el-button>
         </div>
       </div>
     </div> 
