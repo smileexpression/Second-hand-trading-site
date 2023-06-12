@@ -151,6 +151,41 @@ const cancelInfo = () => {
   infoDialogVisible.value = false
 }
 
+//添加地址
+const addressDialogVisible = ref(false)
+const addressForm = ref({
+  receiver: '',
+  contact: '',
+  address: ''
+})
+const addressRules = ref({
+  receiver:[
+    {required: true, message: '收件人不能为空！', trigger: 'blur'}
+  ],
+  contact:[
+    { required: true, message: '手机号不能为空！', trigger: 'blur' },
+    { type: "string", len: 11, pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: '请输入正确的手机号！', trigger: 'blur' }
+  ],
+  address:[
+    {required: true, message: '收货地址不能为空！', trigger: 'blur'}
+  ]
+})
+//表单实例
+const addressFormRef = ref(null)
+const addAddress = () => {
+  const { receiver, contact, address } = addressForm.value
+  addressFormRef.value.validate(async (valid) => {
+    if(valid){
+      await userStore.addAddress({ receiver, contact, address })
+      ElMessage({ type: 'success', message: '操作成功' })
+    }
+  })
+}
+//取消重置表单
+const cancelAddress = () => {
+  addressFormRef.value.resetFields()
+  addressDialogVisible.value = false
+}
 
 </script>
 
@@ -171,7 +206,7 @@ const cancelInfo = () => {
         <span class="iconfont icon-aq"></span>
         <p>密码管理</p>
       </a>
-      <a href="javascript:;">
+      <a href="javascript:;" @click="addressDialogVisible = true">
         <span class="iconfont icon-dw"></span>
         <p>添加地址</p>
       </a>
@@ -251,6 +286,28 @@ const cancelInfo = () => {
       </el-form>
     </div>
   </el-dialog>
+
+  <!-- 添加收货地址对话框 -->
+  <el-dialog v-model="addressDialogVisible" title="添加收货地址" width="500" @close="cancelAddress">
+    <div class="form">
+      <el-form ref="addressFormRef" :model="addressForm" :rules="addressRules" label-position="right" label-width="80px" status-icon>
+        <el-form-item prop="receiver" label="收货人">
+          <el-input v-model="addressForm.receiver" />
+        </el-form-item>
+        <el-form-item prop="contact" label="手机号">
+          <el-input v-model="addressForm.contact" />
+        </el-form-item>
+        <el-form-item prop="address" label="收货地址">
+          <el-input v-model="addressForm.address" />
+        </el-form-item>
+        <div style="margin:0 auto; text-align: center;">
+            <el-button size="large" class="subBtn" @click="addAddress">确认添加</el-button>
+          <el-button size="large" class="subBtn" @click="cancelAddress">取消</el-button>
+        </div>
+      </el-form>
+    </div>
+  </el-dialog>
+
 </template>
 
 <style scoped lang="scss">
