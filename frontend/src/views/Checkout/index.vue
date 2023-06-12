@@ -10,12 +10,13 @@ const route = useRoute()
 const checkInfo = ref({})  // 订单对象
 const curAddress = ref({})
 const getCheckInfo = async () => {
-  const i = route.query.goodID 
-  console.log(i)
+  const i = route.query.goodID
+  console.log("router id", i, typeof (i))
   const res = await getCheckInfoAPI(i)
   checkInfo.value = res.result
-  const item = checkInfo.value.userAddresses.find(item => item.isDefault === 0)
-  curAddress.value = item
+  console.log("checkInfo", checkInfo.value)
+  // const item = checkInfo.value.userAddresses.find(item => item.isDefault === 0)
+  // curAddress.value = item
 }
 onMounted(() => getCheckInfo())
 
@@ -61,7 +62,7 @@ const createOrder = async () => {
     <div class="container">
       <div class="wrapper">
         <!-- 收货地址 -->
-      <h3 class="box-title">收货地址</h3>
+        <h3 class="box-title">收货地址</h3>
         <div class="box-body">
           <div class="address">
             <div class="text">

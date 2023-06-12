@@ -37,6 +37,9 @@ const turnToBottom = () => {
 
 const sendText = () => {
   console.log("sendText");
+  if (inputMsg.value === '') {
+    return
+  }
   addChatList()
   inputMsg.value = ''
   // setTimeout(() => {
