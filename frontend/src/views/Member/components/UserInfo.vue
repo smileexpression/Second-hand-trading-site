@@ -115,6 +115,42 @@ const doChange = () => {
     }
   })
 }
+//取消重置表单
+const cancelChange = () => {
+  passwordFormRef.value.resetFields()
+  passwordDialogVisible.value = false
+}
+
+//个人信息管理
+const infoDialogVisible = ref(false)
+const infoForm = ref({
+  account: `${userStore.userInfo.account}`,
+  name: `${userStore.userInfo.nickname}`,
+  gender: `${userStore.userInfo.gender}`
+})
+const infoRules = ref({
+  name: [
+    {required: true, message: '用户名不能为空！', trigger: 'blur'},
+    {type: "string", max: 20, message: '用户名应为长度至多为20的字符！', trigger: 'blur'}
+  ]
+})
+//表单实例
+const infoFormRef = ref(null)
+const doInfo = () => {
+  const { name, gender } = infoForm.value
+  infoFormRef.value.validate(async (valid) => {
+    if(valid){
+      await userStore.changeInfo({ name, gender })
+      ElMessage({ type: 'success', message: '修改成功' })
+    }
+  })
+}
+//取消重置表单
+const cancelInfo = () => {
+  infoFormRef.value.resetFields()
+  infoDialogVisible.value = false
+}
+
 
 </script>
 
@@ -128,7 +164,7 @@ const doChange = () => {
           <img :src="getImageUrl(userStore.userInfo.avatar)" />
         </el-upload>
       </div>
-      <h4>{{ userStore.userInfo.nickname }}</h4>
+      <h4 @click="infoDialogVisible = true">{{ userStore.userInfo.nickname }}</h4>
     </div>
     <div class="item">
       <a href="javascript:;" @click="passwordDialogVisible = true">
@@ -137,10 +173,31 @@ const doChange = () => {
       </a>
       <a href="javascript:;">
         <span class="iconfont icon-dw"></span>
-        <p>地址管理</p>
+        <p>添加地址</p>
       </a>
     </div>
   </div>
+  <div class="holder-container" v-if="userStore.userInfo.userAddresses === null">
+    <el-empty description="暂无地址数据" />
+  </div>
+  <div v-else class="like-container">
+    <div class="header">
+      <h4 style="font-size: 22px; font-weight: 400; padding: 18px ;">收货地址</h4>
+    </div>
+    <div class="addressWrapper">
+      <div class="text item" v-for="item in userStore.userInfo.userAddress" :key="item.id">
+        <ul>
+          <li><span>收<i />货<i />人：</span>{{ item.receiver }} </li>
+          <li><span>联系方式：</span>{{ item.contact }}</li>
+          <li><span>收货地址：</span>{{ item.address }}</li>
+        </ul>
+        <div style="margin:auto; position: absolute; right: 30px;">
+          <el-button size="large" class="subBtn" style="width:100px;">删除地址</el-button>
+        </div>
+      </div>
+    </div> 
+  </div>
+  
   <div class="like-container">
     <div class="home-panel">
       <div class="header">
@@ -153,7 +210,7 @@ const doChange = () => {
   </div>
 
   <!-- 更改密码对话框 -->
-  <el-dialog v-model="passwordDialogVisible" title="更改密码" width="450">
+  <el-dialog v-model="passwordDialogVisible" title="更改密码" width="450" @close="cancelChange">
     <div class="form">
       <el-form ref="passwordFormRef" :model="passwordForm" :rules="passwordRules" label-position="right" label-width="80px" status-icon>
         <el-form-item prop="oldpassword" label="原密码">
@@ -167,7 +224,29 @@ const doChange = () => {
         </el-form-item>
         <div style="margin:0 auto; text-align: center;">
             <el-button size="large" class="subBtn" @click="doChange">确认更改</el-button>
-            <el-button size="large" class="subBtn" @click="passwordDialogVisible = false">取消</el-button>
+            <el-button size="large" class="subBtn" @click="cancelChange">取消</el-button>
+        </div>
+      </el-form>
+    </div>
+  </el-dialog>
+
+  <!-- 修改个人信息对话框 -->
+  <el-dialog v-model="infoDialogVisible" title="修改个人信息" width="450" @close="cancelInfo">
+    <div class="form">
+      <el-form ref="infoFormRef" :model="infoForm" :rules="infoRules" label-position="right" label-width="70px" status-icon>
+        <el-form-item prop="account" label="账号">
+          <el-input v-model="infoForm.account" disabled />
+        </el-form-item>
+        <el-form-item prop="name" label="用户名">
+          <el-input v-model="infoForm.name" />
+        </el-form-item>
+        <el-form-item prop="gender" label="性别">
+          <el-radio v-model="infoForm.gender" label="男">男</el-radio>
+          <el-radio v-model="infoForm.gender" label="女">女</el-radio>
+        </el-form-item>
+        <div style="margin:0 auto; text-align: center;">
+            <el-button size="large" class="subBtn" @click="doInfo">确认更改</el-button>
+          <el-button size="large" class="subBtn" @click="cancelInfo">取消</el-button>
         </div>
       </el-form>
     </div>
@@ -359,4 +438,42 @@ const doChange = () => {
   width: 40%;
   color: #fff;
 }
+
+.addressWrapper {
+  max-height: 1000px;
+  overflow-y: auto;
+  position: relative;
+}
+
+.text {
+  flex: 1;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+
+  &.item {
+    border: 1px solid #f5f5f5;
+    margin-bottom: 10px;
+    cursor: pointer;
+
+    &.active,
+    &:hover {
+      border-color: $xtxColor;
+      background: lighten($xtxColor, 50%);
+    }
+
+    >ul {
+      padding: 10px;
+      font-size: 14px;
+      line-height: 30px;
+    }
+  }
+}
+
+.holder-container {
+      min-height: 500px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 </style>
