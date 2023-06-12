@@ -11,6 +11,7 @@ import PayBack from '@/views/Pay/PayBack.vue'
 import Member from '@/views/Member/index.vue'
 import UserInfo from '@/views/Member/components/UserInfo.vue'
 import UserOrder from '@/views/Member/components/UserOrder.vue'
+import SoldOrder from '@/views/Member/components/SoldOrder.vue'
 
 import Release from '@/views/Release/index.vue'
 import CartList from '@/views/CartList/index.vue'
@@ -58,6 +59,10 @@ const router = createRouter({
             {
               path: 'order',
               component: UserOrder
+            },
+            {
+              path: 'soldorder',
+              component: SoldOrder
             }
           ]
         },

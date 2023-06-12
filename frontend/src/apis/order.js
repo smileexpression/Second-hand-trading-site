@@ -9,3 +9,11 @@ export const getUserOrder = (params) => {
         params
     })
 }
+
+export const getSoldOrder = (params) => {
+    return request({
+        url: '/member/soldorder',
+        method: 'GET',
+        params
+    })
+}
