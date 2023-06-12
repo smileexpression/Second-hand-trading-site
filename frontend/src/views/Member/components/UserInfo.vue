@@ -115,6 +115,11 @@ const doChange = () => {
     }
   })
 }
+//取消重置表单
+const cancelChange = () => {
+  passwordFormRef.value.resetFields()
+  passwordDialogVisible.value = false
+}
 
 //个人信息管理
 const infoDialogVisible = ref(false)
@@ -139,6 +144,11 @@ const doInfo = () => {
       ElMessage({ type: 'success', message: '修改成功' })
     }
   })
+}
+//取消重置表单
+const cancelInfo = () => {
+  infoFormRef.value.resetFields()
+  infoDialogVisible.value = false
 }
 
 
@@ -200,7 +210,7 @@ const doInfo = () => {
   </div>
 
   <!-- 更改密码对话框 -->
-  <el-dialog v-model="passwordDialogVisible" title="更改密码" width="450">
+  <el-dialog v-model="passwordDialogVisible" title="更改密码" width="450" @close="cancelChange">
     <div class="form">
       <el-form ref="passwordFormRef" :model="passwordForm" :rules="passwordRules" label-position="right" label-width="80px" status-icon>
         <el-form-item prop="oldpassword" label="原密码">
@@ -214,16 +224,16 @@ const doInfo = () => {
         </el-form-item>
         <div style="margin:0 auto; text-align: center;">
             <el-button size="large" class="subBtn" @click="doChange">确认更改</el-button>
-            <el-button size="large" class="subBtn" @click="passwordDialogVisible = false">取消</el-button>
+            <el-button size="large" class="subBtn" @click="cancelChange">取消</el-button>
         </div>
       </el-form>
     </div>
   </el-dialog>
 
   <!-- 修改个人信息对话框 -->
-  <el-dialog v-model="infoDialogVisible" title="修改个人信息" width="450">
+  <el-dialog v-model="infoDialogVisible" title="修改个人信息" width="450" @close="cancelInfo">
     <div class="form">
-      <el-form :model="infoForm" :rules="infoRules" label-position="right" label-width="70px" status-icon>
+      <el-form ref="infoFormRef" :model="infoForm" :rules="infoRules" label-position="right" label-width="70px" status-icon>
         <el-form-item prop="account" label="账号">
           <el-input v-model="infoForm.account" disabled />
         </el-form-item>
@@ -235,8 +245,8 @@ const doInfo = () => {
           <el-radio v-model="infoForm.gender" label="女">女</el-radio>
         </el-form-item>
         <div style="margin:0 auto; text-align: center;">
-            <el-button size="large" class="subBtn">确认更改</el-button>
-          <el-button size="large" class="subBtn" @click="infoDialogVisible = false">取消</el-button>
+            <el-button size="large" class="subBtn" @click="doInfo">确认更改</el-button>
+          <el-button size="large" class="subBtn" @click="cancelInfo">取消</el-button>
         </div>
       </el-form>
     </div>
