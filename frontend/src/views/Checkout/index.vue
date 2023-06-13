@@ -3,6 +3,7 @@ import { getCheckInfoAPI, createOrderAPI } from '@/apis/checkout'
 import { useRouter, useRoute } from 'vue-router'
 import { ref, onMounted } from 'vue'
 import { useCartStore } from '@/stores/cartStore';
+import { getImageUrl } from '@/apis/image';
 const cartStore = useCartStore()
 
 const router = useRouter()
@@ -36,22 +37,25 @@ const confirm = () => {
 
 // 创建订单
 const createOrder = async () => {
+  if (curAddress.value.id === undefined) {
+    alert("请先选择收货地址")
+    return
+  }
+  console.log("checkInfo id", checkInfo.value.goods.id)
+  console.log("address id", curAddress.value.id)
   const res = await createOrderAPI({
-    goods: checkInfo.value.goods.map(item => {
-      return {
-        id: item.id,
-      }
-    }),
+    goodId: checkInfo.value.goods.id,
     addressId: curAddress.value.id
   })
-  const orderId = res.result.id
+  console.log("createOrder", res)
+  const orderId = res.id
   router.push({
     path: 'pay',
     query: {
       id: orderId
     }
   })
-  // 更新购物车
+  // 更新购物车 这个地方的逻辑有问题，购物车还有bug
   cartStore.updateCart()
 }
 
@@ -90,28 +94,21 @@ const createOrder = async () => {
               </tr>
             </thead>
             <tbody>
-              <tr v-for="i in checkInfo.goods" :key="i.id">
+              <tr>
                 <td>
                   <a href="javascript:;" class="info">
-                    <img :src="i.picture" alt="">
+                    <img :src="getImageUrl(checkInfo.goods?.picture)" alt="">
                     <div class="right">
-                      <p>{{ i.name }}</p>
-                      <p>{{ i.desc }}</p>
+                      <p>{{ checkInfo.goods?.name }}</p>
+                      <p>{{ checkInfo.goods?.desc }}</p>
                     </div>
                   </a>
                 </td>
-                <td>&yen;{{ i.price }}</td>
+                <td>&yen;{{ checkInfo.goods?.price }}</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <!-- 配送时间 -->
-        <!-- <h3 class="box-title">配送时间</h3>
-          <div class="box-body">
-            <a class="my-btn active" href="javascript:;">不限送货时间：周一至周日</a>
-            <a class="my-btn" href="javascript:;">工作日送货：周一至周五</a>
-            <a class="my-btn" href="javascript:;">双休日、假日送货：周六至周日</a>
-          </div> -->
         <!-- 支付方式 -->
         <h3 class="box-title">支付方式</h3>
         <div class="box-body">
@@ -125,11 +122,11 @@ const createOrder = async () => {
           <div class="total">
             <dl>
               <dt>商品件数：</dt>
-              <dd>{{ checkInfo.summary?.goodsCount }}件</dd>
+              <dd>1件</dd>
             </dl>
             <dl>
               <dt>应付总额：</dt>
-              <dd class="price">{{ checkInfo.summary?.totalPrice.toFixed(2) }}</dd>
+              <dd class="price">&yen;{{ checkInfo.goods?.price }}</dd>
             </dl>
           </div>
         </div>
