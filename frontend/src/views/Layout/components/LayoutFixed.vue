@@ -14,7 +14,10 @@ const categoryStore = useCategoryStore()
 <template>
   <div class="app-header-sticky" :class="{ show: y > 78 }">
     <div class="container">
-      <RouterLink class="logo" to="/" />
+      <!-- <RouterLink class="logo" to="/" /> -->
+      <h1 class="title">
+        <RouterLink to="/">海鲜市场</RouterLink>
+      </h1>
       <!-- 导航区域 -->
       <ul class="app-header-nav ">
         <li class="home" v-for="item in categoryStore.categoryList" :key="item.Id">
@@ -57,11 +60,37 @@ const categoryStore = useCategoryStore()
     align-items: center;
   }
 
-  .logo {
+  // .logo {
+  //   width: 200px;
+  //   height: 80px;
+  //   background: url("@/assets/images/logo.png") no-repeat right 2px;
+  //   background-size: 160px auto;
+  // }
+
+  .title {
+    margin-right: 0px;
     width: 200px;
+    text-align: center;
     height: 80px;
-    background: url("@/assets/images/logo.png") no-repeat right 2px;
-    background-size: 160px auto;
+
+    a {
+      font-size: 50px;
+      line-height: 80px;
+      // height: 132px;
+      display: inline-block;
+      font-family: 'FZShuTi';
+      font-weight: lighter;
+
+      &:hover {
+        color: $xtxColor;
+        border-bottom: 1px solid $xtxColor;
+      }
+    }
+
+    .active {
+      color: $xtxColor;
+      border-bottom: 1px solid $xtxColor;
+    }
   }
 
   .right {
