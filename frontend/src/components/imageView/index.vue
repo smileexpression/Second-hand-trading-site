@@ -62,12 +62,12 @@ watch([elementX, elementY, isOutside], () =>{
   <div class="goods-image" v-if="imageList">
     <!-- 左侧大图-->
     <div class="middle" ref="target">
-      <img :src="getImageUrl(imageList[activeIndex])" alt="" />
+      <img :src="getImageUrl(imageList[activeIndex])" alt="" style="object-fit: fill;"/>
       <!-- 蒙层小滑块 -->
       <div class="layer" v-show="!isOutside" :style="{ left: `${left}px`, top: `${top}px` }"></div>
     </div>
     <!-- 小图列表 -->
-    <ul class="small" v-if="imageList.length > 1">
+    <ul class="small" v-if="imageList.length > 0">
       <li v-for="(img, i) in imageList" :key="i" @mouseenter="enterhandler(i)" :class="{active:i === activeIndex}">
         <img :src="getImageUrl(img)" alt="" />
       </li>
@@ -95,7 +95,10 @@ watch([elementX, elementY, isOutside], () =>{
     height: 400px;
     background: #f5f5f5;
   }
-
+img{
+  width: 400px;
+  height: 400px;
+}
   .large {
     position: absolute;
     top: 0;

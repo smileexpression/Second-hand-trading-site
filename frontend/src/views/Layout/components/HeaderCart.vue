@@ -19,7 +19,10 @@ const cartStore = useCartStore()
             <div class="center">
               <p class="name ellipsis-2">
                 {{ i.name }}
-              </p>              
+              </p> 
+              <p class="desc">
+                {{ i.desc }}
+              </p>   
             </div>
             <div class="right">
               <p class="price">&yen;{{ Number(i.price).toFixed(2) }}</p>              
@@ -192,7 +195,16 @@ const cartStore = useCartStore()
           .name {
             font-size: 16px;
           }
-
+          .desc{
+            font-size: 10px;
+            color: #999;
+            display: -webkit-box;/*作为弹性伸缩盒子模型显示*/
+            -webkit-box-orient: vertical;/*伸缩盒子的子元素排列：从上到下*/
+            -webkit-line-clamp: 2; /*显示的行数；如果要设置2行加...则设置为2*/
+            overflow: hidden; /*超出的文本隐藏*/
+            text-overflow: ellipsis; /* 溢出用省略号*/
+          }
+        
           .attr {
             color: #999;
             padding-top: 5px;
