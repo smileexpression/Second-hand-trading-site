@@ -69,7 +69,7 @@ func GetOneGood(c *gin.Context) {
 	} else {
 		var picTarget model.Picture
 
-		if err := db.Table("pictures").Where("id = ?", target.ID).First(&picTarget).Error; err != nil {
+		if err := db.Table("pictures").Where("good_id = ?", target.ID).First(&picTarget).Error; err != nil {
 			if err == gorm.ErrRecordNotFound {
 				c.JSON(404, gin.H{
 					"err warning": "There is a error in pictures database,please contact the administrator",
