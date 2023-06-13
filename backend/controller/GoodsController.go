@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gin/common"
 	"gin/model"
+	"gorm.io/gorm"
 	"math/big"
 	"net/http"
 	"strconv"
@@ -59,14 +60,33 @@ func GetOneGood(c *gin.Context) {
 	idStr := c.Query("id")
 	id, _ := strconv.ParseInt(idStr, 10, 64)
 	var target model.Goods
-	db.Table("goods").Where("id = ?", id).First(&target)
-	//if err != nil {
-	//	fmt.Println("断点位于查表")
-	//}
+	if err := db.Table("goods").Where("id = ?", id).First(&target).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(404, gin.H{
+				"err warning": "Record of good no found",
+			})
+		}
+	} else {
+		var picTarget model.Picture
 
-	c.JSON(200, gin.H{
-		"result": target,
-	})
+		if err := db.Table("pictures").Where("good_id = ?", target.ID).First(&picTarget).Error; err != nil {
+			if err == gorm.ErrRecordNotFound {
+				c.JSON(404, gin.H{
+					"err warning": "There is a error in pictures database,please contact the administrator",
+				})
+			}
+		} else {
+			//用户头像一般不会出错 简化代码不处理
+			var user model.User
+			db.Table("users").First(&user, target.User)
+			c.JSON(200, gin.H{
+				"result":   target,
+				"pictures": picTarget,
+				"user":     user,
+			})
+		}
+	}
+
 }
 
 func RecentIdle(ctx *gin.Context) {
