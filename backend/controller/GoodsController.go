@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"gin/common"
 	"gin/model"
-	"gorm.io/gorm"
 	"math/big"
 	"net/http"
 	"strconv"
+
+	"gorm.io/gorm"
 
 	"github.com/gin-gonic/gin"
 )
@@ -69,7 +70,7 @@ func GetOneGood(c *gin.Context) {
 	} else {
 		var picTarget model.Picture
 
-		if err := db.Table("pictures").Where("id = ?", target.ID).First(&picTarget).Error; err != nil {
+		if err := db.Table("pictures").Where("good_id = ?", target.ID).First(&picTarget).Error; err != nil {
 			if err == gorm.ErrRecordNotFound {
 				c.JSON(404, gin.H{
 					"err warning": "There is a error in pictures database,please contact the administrator",
@@ -78,10 +79,11 @@ func GetOneGood(c *gin.Context) {
 		} else {
 			//用户头像一般不会出错 简化代码不处理
 			var user model.User
+			p := [5]string{picTarget.Picture1, picTarget.Picture2, picTarget.Picture3, picTarget.Picture4, picTarget.Picture5}
 			db.Table("users").First(&user, target.User)
 			c.JSON(200, gin.H{
 				"result":   target,
-				"pictures": picTarget,
+				"pictures": p,
 				"user":     user,
 			})
 		}
