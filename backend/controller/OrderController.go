@@ -95,9 +95,6 @@ func GetOrder(ctx *gin.Context) {
 	fmt.Print(Order.AddressId)
 }
 
-type GoodsInCart struct {
-	Id string `json:"id"`
-}
 type SendAddress struct {
 	Id       string `json:"id"`
 	Receiver string `json:"receiver"`
@@ -113,20 +110,14 @@ type SendGood struct {
 	Price       string `json:"price"`
 }
 type Result struct {
-	UserAddress SendAddress `json:"userAddress"`
-	Goods       SendGood    `json:"goods"`
-	Price       string      `json:"price"`
+	UserAddresses []SendAddress `json:"userAddresses"`
+	Goods         SendGood      `json:"goods"`
+	Price         string        `json:"price"`
 }
 
 func GetFromCart(ctx *gin.Context) {
 
-	var goodsInCart GoodsInCart
-	if err := ctx.BindJSON(&goodsInCart); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
+	idStr := ctx.Query("goodID")
 
 	user, is_Exist := ctx.Get("user")
 	if is_Exist == false {
@@ -139,11 +130,11 @@ func GetFromCart(ctx *gin.Context) {
 
 	//获取数据库的相关数据
 	var good model.Goods
-	e := DB.Table("goods").Where("id = ?", goodsInCart.Id).Find(&good)
+	e := DB.Table("goods").Where("id = ?", idStr).Find(&good)
 	if e.Error != nil {
 		fmt.Print(e.Error)
 	}
-	var address model.UserAddress
+	var address []model.UserAddress
 	e2 := DB.Table("user_addresses").Where("user_id = ?", userInfo.ID).Find(&address)
 	if e2.Error != nil {
 		fmt.Print(e.Error)
@@ -158,14 +149,17 @@ func GetFromCart(ctx *gin.Context) {
 	sendGood.Picture = good.Picture
 	sendGood.Price = good.Price
 	//
-	var sendAddress SendAddress
-	sendAddress.Id = strconv.Itoa(int(address.ID))
-	sendAddress.Receiver = address.Receiver
-	sendAddress.Contact = address.Contact
-	sendAddress.Address = address.Address
+	addrNum := len(address)
+	sendAddress := make([]SendAddress, addrNum)
+	for i := 0; i < addrNum; i++ {
+		sendAddress[i].Id = strconv.Itoa(int(address[i].ID))
+		sendAddress[i].Receiver = address[i].Receiver
+		sendAddress[i].Contact = address[i].Contact
+		sendAddress[i].Address = address[i].Address
+	}
 	//
 	var result Result
-	result.UserAddress = sendAddress
+	result.UserAddresses = sendAddress
 	result.Goods = sendGood
 	result.Price = good.Price
 
