@@ -37,6 +37,9 @@ const turnToBottom = () => {
 
 const sendText = () => {
   console.log("sendText");
+  if (inputMsg.value === '') {
+    return
+  }
   addChatList()
   inputMsg.value = ''
   // setTimeout(() => {
@@ -112,7 +115,7 @@ onMounted(() => {
       .name {
         font-size: 20px;
         font-weight: 600;
-        color: #fff;
+        color: #000000;
       }
 
       .detail {
@@ -143,7 +146,7 @@ onMounted(() => {
   .botoom {
     width: 100%;
     height: 70vh;
-    background-color: rgb(50, 54, 68);
+    background-color: rgb(255, 255, 255);
     border-radius: 20px;
     padding: 20px;
     box-sizing: border-box;
@@ -183,11 +186,13 @@ onMounted(() => {
             max-width: 90%;
             padding: 20px;
             border-radius: 20px 20px 20px 5px;
-            background-color: rgb(56, 60, 75);
-            color: #fff;
+            background-color: #F5F5F5;
+            color: #000000;
+            font-weight: 550;
+            font-size: 15px;
 
             &:hover {
-              background-color: rgb(39, 42, 55);
+              background-color: #d6d6d6;
             }
           }
 
@@ -234,11 +239,13 @@ onMounted(() => {
             max-width: 90%;
             padding: 20px;
             border-radius: 20px 20px 5px 20px;
-            background-color: rgb(29, 144, 245);
+            background-color: #53d6ba;
             color: #fff;
+            font-weight: 550;
+            font-size: 15px;
 
             &:hover {
-              background-color: rgb(26, 129, 219);
+              background-color: #32bc9e;
             }
           }
 
@@ -309,9 +316,9 @@ onMounted(() => {
       .inputs {
         width: 90%;
         height: 50px;
-        background-color: rgb(66, 70, 86);
+        background-color: #F5F5F5;
         border-radius: 15px;
-        border: 2px solid rgb(34, 135, 225);
+        border: 2px solid #53d6ba;
         padding: 10px;
         box-sizing: border-box;
         transition: 0.2s;
@@ -326,13 +333,13 @@ onMounted(() => {
       }
 
       .send {
-        background-color: rgb(29, 144, 245);
+        background-color: #53d6ba;
         border: 0;
         transition: 0.3s;
-        box-shadow: 0px 0px 5px 0px rgba(0, 136, 255);
+        box-shadow: 0px 0px 5px 0px #32bc9e;
 
         &:hover {
-          box-shadow: 0px 0px 10px 0px rgba(0, 136, 255);
+          box-shadow: 0px 0px 10px 0px #32bc9e;
         }
       }
     }
