@@ -12,7 +12,10 @@
         </div>
         <h4>交易管理</h4>
         <div class="links">
-          <RouterLink to="/member/order">我的订单</RouterLink>
+          <RouterLink to="/member/order">我买到的</RouterLink>
+        </div>
+        <div class="links">
+          <RouterLink to="/member/soldorder">我卖出的</RouterLink>
         </div>
       </div>
     </div>

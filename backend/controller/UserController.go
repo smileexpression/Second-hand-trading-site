@@ -4,12 +4,19 @@ import (
 	"fmt"
 	"gin/common"
 	"gin/model"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	"net/http"
+	"strconv"
 )
+
+type apiAddress struct {
+	AddressID string `json:"id"`
+	Receiver  string `json:"receiver"`
+	Contact   string `json:"contact"`
+	Address   string `json:"address"`
+}
 
 // 注册接口函数
 func Register(ctx *gin.Context) {
@@ -54,16 +61,23 @@ func Register(ctx *gin.Context) {
 		Password:  string(HashPassword),
 		Avatar:    "1",
 	}
+	DB.Create(&newUser)
 
 	//测试address
-	var testAddress model.UserAddress
-	testAddress.Address = "中山大学珠海校区俊俊子的洞"
-	testAddress.Contact = "1234567"
-	testAddress.Receiver = "椰子融"
-	DB.Create(&testAddress)
+	var testAddress1 model.UserAddress
+	testAddress1.Address = "中山大学珠海校区俊俊子的洞"
+	testAddress1.Contact = "1234567"
+	testAddress1.Receiver = "椰子融"
+	testAddress1.UserID = newUser.ID
+	DB.Create(&testAddress1)
 
-	newUser.AddressID = testAddress.ID
-	DB.Create(&newUser)
+	var testAddress2 model.UserAddress
+	testAddress2.Address = "EDG的大树"
+	testAddress2.Contact = "1234567"
+	testAddress2.Receiver = "污渍"
+	testAddress2.UserID = newUser.ID
+	DB.Create(&testAddress2)
+
 	//发放Token
 	token, err := common.ReleaseToken(newUser)
 	if err != nil {
@@ -80,7 +94,7 @@ func Register(ctx *gin.Context) {
 			"nickname": newUser.Name,
 			"gender":   newUser.Gender,
 		},
-		"userAddress": "",
+		"userAddress": nil,
 	})
 }
 
@@ -128,27 +142,56 @@ func Login(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"code": 500, "msg": "系统异常"})
 	}
 
-	var userAddress model.UserAddress
-	DB.Where("id=?", user.AddressID).First(&userAddress)
+	//获取user对应的所有地址
+	var addressArray []model.UserAddress
+	DB.Model(&model.UserAddress{}).Where("user_id=?", user.ID).Find(&addressArray)
 
-	ctx.JSON(200, gin.H{
-		"code": 200,
-		"msg":  "登录成功",
-		"result": gin.H{
-			"id":       user.ID,
-			"account":  user.Telephone,
-			"token":    token,
-			"avatar":   user.Avatar,
-			"nickname": user.Name,
-			"gendar":   user.Gender,
+	//for _, v := range addressArray {
+	//	println("id", v.ID)
+	//	println("Receiver", v.Receiver)
+	//	println("Contact", v.Contact)
+	//	println("Address", v.Address)
+	//	println("UserID", v.UserID)
+	//
+	//}
+
+	//如果user地址数组为空，则返回nil
+	if len(addressArray) == 0 {
+		ctx.JSON(200, gin.H{
+			"code": 200,
+			"msg":  "登录成功",
+			"result": gin.H{
+				"id":            user.ID,
+				"account":       user.Telephone,
+				"token":         token,
+				"avatar":        user.Avatar,
+				"nickname":      user.Name,
+				"gender":        user.Gender,
+				"userAddresses": nil,
+			},
+		})
+	} else {
+		//创建响应数组
+		var apiAddresses []apiAddress
+		for _, address := range addressArray {
+			resAddress := apiAddress{AddressID: strconv.Itoa(int(address.ID)), Receiver: address.Receiver, Contact: address.Contact, Address: address.Address}
+			apiAddresses = append(apiAddresses, resAddress)
+		}
+		ctx.JSON(200, gin.H{
+			"code": 200,
+			"msg":  "登录成功",
+			"result": gin.H{
+				"id":            user.ID,
+				"account":       user.Telephone,
+				"token":         token,
+				"avatar":        user.Avatar,
+				"nickname":      user.Name,
+				"gender":        user.Gender,
+				"userAddresses": apiAddresses,
+			},
 		},
-		"userAddress": gin.H{
-			"id":       userAddress.ID,
-			"receiver": userAddress.Receiver,
-			"contact":  userAddress.Contact,
-			"address":  userAddress.Address,
-		},
-	})
+		)
+	}
 }
 
 // 验证手机号是否已被注册
@@ -258,13 +301,163 @@ func ChangePassword(ctx *gin.Context) {
 	}
 
 	//更换密码
-	println("oldpassword:", userInfo.Password)
+	//println("oldpassword:", userInfo.Password)
 	userInfo.Password = string(HashPassword)
-	println("newpassword:", userInfo.Password)
+	//println("newpassword:", userInfo.Password)
 	DB.Model(&userInfo).Where("id=?", userInfo.ID).Update("password", userInfo.Password)
 	//返回响应
 	ctx.JSON(200, gin.H{
 		"code": 200,
 		"msg":  "更换密码成功",
 	})
+}
+
+func ChangeInfo(ctx *gin.Context) {
+	DB := common.GetDB()
+	var receiveInfo model.User
+	if err := ctx.BindJSON(&receiveInfo); err != nil {
+		ctx.JSON(422, gin.H{"code": 422, "msg": "获取失败"})
+		return
+	}
+
+	newName := receiveInfo.Name
+	newGender := receiveInfo.Gender
+
+	if len(newName) == 0 || len(newGender) == 0 {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code": 400,
+			"msg":  "个人信息不完整，请重新填写",
+		})
+		return
+	}
+	user, is_Exist := ctx.Get("user")
+	if !is_Exist {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"msg": "user not exist"})
+		return
+	}
+	userInfo := user.(model.User)
+
+	if userInfo.Name != newName || userInfo.Gender != newGender {
+		userInfo.Name = newName
+		userInfo.Gender = newGender
+		DB.Model(&userInfo).Where("id=?", userInfo.ID).Updates(map[string]interface{}{"name": userInfo.Name, "gender": userInfo.Gender})
+	}
+	ctx.JSON(200, gin.H{
+		"code": 200,
+		"msg":  "操作成功",
+		"result": gin.H{
+			"nickname": userInfo.Name,
+			"gender":   userInfo.Gender,
+		},
+	})
+}
+
+func AddAddress(ctx *gin.Context) {
+	DB := common.GetDB()
+	var receiveAddress model.UserAddress
+	if err := ctx.BindJSON(&receiveAddress); err != nil {
+		ctx.JSON(422, gin.H{"code": 422, "msg": "获取失败"})
+		return
+	}
+
+	if len(receiveAddress.Receiver) == 0 || len(receiveAddress.Contact) == 0 || len(receiveAddress.Address) == 0 {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code": 400,
+			"msg":  "地址信息不完整，请重新填写",
+		})
+		return
+	}
+
+	user, is_Exist := ctx.Get("user")
+	if !is_Exist {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"msg": "user not exist"})
+		return
+	}
+	userInfo := user.(model.User)
+	receiveAddress.UserID = userInfo.ID
+
+	DB.Create(&receiveAddress)
+
+	var addressArray []model.UserAddress
+	DB.Model(&model.UserAddress{}).Where("user_id=?", userInfo.ID).Find(&addressArray)
+
+	//for _, v := range addressArray {
+	//	println("id", v.ID)
+	//	println("Receiver", v.Receiver)
+	//	println("Contact", v.Contact)
+	//	println("Address", v.Address)
+	//	println("UserID", v.UserID)
+	//
+	//}
+
+	var apiAddresses []apiAddress
+	for _, address := range addressArray {
+		resAddress := apiAddress{AddressID: strconv.Itoa(int(address.ID)), Receiver: address.Receiver, Contact: address.Contact, Address: address.Address}
+		apiAddresses = append(apiAddresses, resAddress)
+	}
+	ctx.JSON(200, gin.H{
+		"code":          200,
+		"msg":           "新增收货地址成功",
+		"userAddresses": apiAddresses,
+	},
+	)
+}
+
+func DeleteAddress(ctx *gin.Context) {
+	DB := common.GetDB()
+	addressID, isExist := ctx.GetQuery("id")
+
+	if !isExist {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code": 400,
+			"msg":  "没有传入参数id",
+		})
+		return
+	}
+	if len(addressID) == 0 {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"code": 400,
+			"msg":  "id为空",
+		})
+		return
+	}
+
+	user, is_Exist := ctx.Get("user")
+	if !is_Exist {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"code": 400, "msg": "user not exist"})
+		return
+	}
+	userInfo := user.(model.User)
+
+	if err := DB.Where("id = ?", addressID).First(&model.UserAddress{}).Error; err == gorm.ErrRecordNotFound {
+		//记录为空
+		ctx.JSON(http.StatusOK, gin.H{"code": 200, "msg": "该记录不存在"})
+		return
+	}
+
+	DB.Where("id=?", addressID).Delete(&model.UserAddress{})
+
+	var addressArray []model.UserAddress
+	DB.Model(&model.UserAddress{}).Where("user_id=?", userInfo.ID).Find(&addressArray)
+
+	//for _, v := range addressArray {
+	//	println("id", v.ID)
+	//	println("Receiver", v.Receiver)
+	//	println("Contact", v.Contact)
+	//	println("Address", v.Address)
+	//	println("UserID", v.UserID)
+	//
+	//}
+
+	var apiAddresses []apiAddress
+	for _, address := range addressArray {
+		resAddress := apiAddress{AddressID: strconv.Itoa(int(address.ID)), Receiver: address.Receiver, Contact: address.Contact, Address: address.Address}
+		apiAddresses = append(apiAddresses, resAddress)
+	}
+	ctx.JSON(200, gin.H{
+		"code":          200,
+		"msg":           "删除收货地址成功",
+		"userAddresses": apiAddresses,
+	},
+	)
 }
