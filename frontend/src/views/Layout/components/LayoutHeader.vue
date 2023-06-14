@@ -7,8 +7,11 @@ const categoryStore = useCategoryStore()
 <template>
   <header class='app-header'>
     <div class="container">
-      <h1 class="logo">
+      <!-- <h1 class="logo">
         <RouterLink to="/">小兔鲜</RouterLink>
+      </h1> -->
+      <h1 class="title">
+        <RouterLink to="/">海鲜市场</RouterLink>
       </h1>
       <ul class="app-header-nav">
         <li class="home" v-for="item in categoryStore.categoryList" :key="item.Id">
@@ -35,15 +38,41 @@ const categoryStore = useCategoryStore()
     align-items: center;
   }
 
-  .logo {
+  // .logo {
+  //   width: 200px;
+
+  //   a {
+  //     display: block;
+  //     height: 132px;
+  //     width: 100%;
+  //     text-indent: -9999px;
+  //     background: url('@/assets/images/logo.png') no-repeat center 18px / contain;
+  //   }
+  // }
+
+  .title {
+    margin-right: 0px;
     width: 200px;
+    text-align: center;
+    height: 132px;
 
     a {
-      display: block;
+      font-size: 50px;
+      line-height: 132px;
       height: 132px;
-      width: 100%;
-      text-indent: -9999px;
-      background: url('@/assets/images/logo.png') no-repeat center 18px / contain;
+      display: inline-block;
+      font-family: 'FZShuTi';
+      font-weight: lighter;
+
+      &:hover {
+        color: $xtxColor;
+        border-bottom: 1px solid $xtxColor;
+      }
+    }
+
+    .active {
+      color: $xtxColor;
+      border-bottom: 1px solid $xtxColor;
     }
   }
 
