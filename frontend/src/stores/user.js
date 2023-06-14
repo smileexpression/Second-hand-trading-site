@@ -14,7 +14,7 @@ export const useUserStore = defineStore ( 'user', ()=> {
     const getUserInfo = async ({ account, password }) => {
         const res = await loginAPI({ account, password })
         userInfo.value = res.result
-        //cartStore.updateCart()
+        cartStore.updateCart()
     }
 
     //注册用户

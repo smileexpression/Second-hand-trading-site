@@ -4,14 +4,20 @@ import { useRoute } from 'vue-router'
 import { ref, onMounted } from 'vue'
 import {ElMessage} from 'element-plus'
 import {useCartStore} from '@/stores/cartStore'
+import { getImageUrl } from '@/apis/image'
 import imageView from '@/components/imageView/index.vue';
 
 const goods = ref({})
+const pictures = ref({})
+const user = ref({})
 const category = ["手机严选","保真奢品","文玩珠宝","限量潮品"]
 const route = useRoute()
 const getGoods = async () =>{
     const res = await getDetail(route.params.id)
     goods.value = res.result
+    pictures.value = res.pictures
+    user.value = res.user
+    // console.log(pictures.value)
     // console.log(goods.value)
 }
 onMounted(() => getGoods())
@@ -55,7 +61,7 @@ const addCart = () =>{
           <div class="goods-info">
             <div class="media">
               <!-- 图片预览区 -->
-              <imageView :imageList="[goods.picture]"/>
+              <imageView :imageList="pictures"/>
             </div>
             <div class="spec">
               <!-- 商品信息区 -->
@@ -66,13 +72,13 @@ const addCart = () =>{
               </p>
               <div class="g-service">
                  <dl>                  
-                  <!-- <dt>卖家</dt>                
-                  <img :src = "goods.user.avator" alt="" /> 
-                  <dd>{{goods.user.nickname}}</dd>
+                  <dt>卖家</dt>                
+                  <img :src = "getImageUrl(user.avatar)" alt="" /> 
+                  <dd>{{user.nickname}}</dd>
                 </dl>
                 <dl>
                   <dt>联系方式</dt>
-                  <dd>{{goods.user.id}}</dd>  -->
+                  <dd>{{user.account}}</dd> 
                 </dl>
               </div>
               <!-- 按钮组件 -->
