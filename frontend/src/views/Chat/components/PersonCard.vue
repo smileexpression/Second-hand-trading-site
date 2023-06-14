@@ -12,7 +12,7 @@ const props = defineProps({
     default: "",
   }
 });
-console.log("person", props.imgUrl, props.nickname);
+// console.log("person", props.imgUrl, props.nickname);
 </script>
 
 <template>

@@ -16,7 +16,7 @@ const props = defineProps({
 watch(
   () => props.chatList,
   (newVal, oldVal) => {
-    console.log(newVal, oldVal);
+    // console.log(newVal, oldVal);
     msgList.value = newVal
     turnToBottom()
   }
@@ -27,7 +27,7 @@ const addChatList = async () => {
     you: `${msgList.value.Id}`,
     content: inputMsg.value,
   })
-  console.log(res);
+  // console.log(res);
 }
 
 const turnToBottom = () => {
@@ -36,7 +36,7 @@ const turnToBottom = () => {
 }
 
 const sendText = () => {
-  console.log("sendText");
+  // console.log("sendText");
   if (inputMsg.value === '') {
     return
   }

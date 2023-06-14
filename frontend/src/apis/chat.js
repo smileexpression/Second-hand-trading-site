@@ -13,3 +13,11 @@ export const addChatListAPI = (data) => {
     data
   })
 }
+
+export const addChatAPI = (data) => {
+  return httpInstance({
+    url: '/chat/addchat',
+    method: 'POST',
+    data
+  })
+}

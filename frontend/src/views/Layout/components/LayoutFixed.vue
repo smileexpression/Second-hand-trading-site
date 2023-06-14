@@ -2,7 +2,7 @@
 // vueUse
 import { useScroll } from '@vueuse/core'
 import { useCategoryStore } from '@/stores/category';
-
+import HeaderCart from './HeaderCart.vue';
 const { y } = useScroll(window)
 
 // 使用pinia中的数据
@@ -28,6 +28,7 @@ const categoryStore = useCategoryStore()
         <i class="iconfont icon-search"></i>
         <input type="text" placeholder="搜一搜">
       </div>
+      <HeaderCart />
     </div>
   </div>
 </template>
@@ -83,7 +84,7 @@ const categoryStore = useCategoryStore()
 
       &:hover {
         color: $xtxColor;
-        border-bottom: 1px solid $xtxColor;
+        // border-bottom: 1px solid $xtxColor;
       }
     }
 
@@ -141,6 +142,25 @@ const categoryStore = useCategoryStore()
       color: $xtxColor;
       border-bottom: 1px solid $xtxColor;
     }
+  }
+}
+
+.search {
+  width: 170px;
+  height: 32px;
+  position: relative;
+  border-bottom: 1px solid #e7e7e7;
+  line-height: 32px;
+
+  .icon-search {
+    font-size: 18px;
+    margin-left: 5px;
+  }
+
+  input {
+    width: 140px;
+    padding-left: 5px;
+    color: #666;
   }
 }
 </style>

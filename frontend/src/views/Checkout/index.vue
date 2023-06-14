@@ -35,10 +35,6 @@ const confirm = () => {
   activeAddress.value = {}
 }
 
-const delCart = (i) => {
-  cartStore.delCart([i.id])
-}
-
 // 创建订单
 const createOrder = async () => {
   if (curAddress.value.id === undefined) {

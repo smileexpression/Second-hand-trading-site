@@ -1,30 +1,32 @@
 <script setup>
 import { getDetail } from '@/apis/detail'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
-import {ElMessage} from 'element-plus'
-import {useCartStore} from '@/stores/cartStore'
+import { ElMessage } from 'element-plus'
+import { useCartStore } from '@/stores/cartStore'
 import { getImageUrl } from '@/apis/image'
 import imageView from '@/components/imageView/index.vue';
+import { addChatAPI } from '@/apis/chat'
 
 const goods = ref({})
 const pictures = ref({})
 const user = ref({})
-const category = ["手机严选","保真奢品","文玩珠宝","限量潮品"]
+const category = ["手机严选", "保真奢品", "文玩珠宝", "限量潮品"]
 const route = useRoute()
-const getGoods = async () =>{
-    const res = await getDetail(route.params.id)
-    goods.value = res.result
-    pictures.value = res.pictures
-    user.value = res.user
-    // console.log(pictures.value)
-    // console.log(goods.value)
+const router = useRouter()
+const getGoods = async () => {
+  const res = await getDetail(route.params.id)
+  goods.value = res.result
+  pictures.value = res.pictures
+  user.value = res.user
+  // console.log(pictures.value)
+  // console.log(goods.value)
 }
 onMounted(() => getGoods())
 
 const cartStore = useCartStore()
-const addCart = () =>{
-  if(!goods.value.forsale){
+const addCart = () => {
+  if (!goods.value.forsale) {
     //商品在售，可以加入购物车
     //console.log(goods.value.forSale)
     cartStore.addCart({
@@ -34,14 +36,27 @@ const addCart = () =>{
       picture: goods.value.picture,
       selected: true
     })
-  }else{
+  } else {
     //商品已卖出
     ElMessage.warning('来晚了，商品已卖出')
     //console.log(goods.value.forSale)
   }
 }
 
+// 聊天
+const addChat = async () => {
+  // console.log('aaaa', user.value.ID);
+  const res = await addChatAPI({
+    you: `${user.value.ID}`,
+  })
+  // console.log(res);
+}
 
+const onAddChat = () => {
+  addChat()
+  // router.replace('chat')
+  router.replace({ path: '/chat' })
+}
 </script>
 
 <template>
@@ -50,9 +65,9 @@ const addCart = () =>{
       <div class="bread-container">
         <el-breadcrumb separator=">">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: `/category/${goods.Cate_Id}` }">{{ category[goods.Cate_Id-1] }}
-          </el-breadcrumb-item>          
-          <el-breadcrumb-item>{{goods.name}}</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: `/category/${goods.Cate_Id}` }">{{ category[goods.Cate_Id - 1] }}
+          </el-breadcrumb-item>
+          <el-breadcrumb-item>{{ goods.name }}</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
       <!-- 商品信息 -->
@@ -61,28 +76,28 @@ const addCart = () =>{
           <div class="goods-info">
             <div class="media">
               <!-- 图片预览区 -->
-              <imageView :imageList="pictures"/>
+              <imageView :imageList="pictures" />
             </div>
             <div class="spec">
               <!-- 商品信息区 -->
-              <p class="g-name"> {{goods.name}} </p>
-              <p class="g-desc">{{goods.desc}} </p>
+              <p class="g-name"> {{ goods.name }} </p>
+              <p class="g-desc">{{ goods.desc }} </p>
               <p class="g-price">
-                <span>{{Number(goods.price).toFixed(2)}}</span>
+                <span>{{ Number(goods.price).toFixed(2) }}</span>
               </p>
               <div class="g-service">
-                 <dl>                  
-                  <dt>卖家</dt>                
-                  <img :src = "getImageUrl(user.avatar)" alt="" /> 
-                  <dd>{{user.nickname}}</dd>
+                <dl>
+                  <dt>卖家</dt>
+                  <img :src="getImageUrl(user.avatar)" alt="" />
+                  <dd @click="onAddChat">{{ user.nickname }}</dd>
                 </dl>
                 <dl>
                   <dt>联系方式</dt>
-                  <dd>{{user.account}}</dd> 
+                  <dd @click="onAddChat">{{ user.account }}</dd>
                 </dl>
               </div>
               <!-- 按钮组件 -->
-              <div >
+              <div>
                 <el-button size="large" class="btn" @click="addCart()">
                   加入购物车
                 </el-button>
@@ -163,11 +178,13 @@ const addCart = () =>{
         width: 80px;
         color: #999;
       }
+
       img {
-          width: 50px;
-          height: 50px;
-          border-radius: 100%;
-        }
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+      }
+
       dd {
         margin-left: 10px;
         color: #666;
@@ -192,12 +209,13 @@ const addCart = () =>{
   }
 
 }
+
 .btn {
   margin-top: 20px;
 
 }
+
 .bread-container {
   padding: 25px 0;
 }
-
 </style>
