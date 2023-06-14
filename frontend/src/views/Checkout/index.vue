@@ -35,6 +35,10 @@ const confirm = () => {
   activeAddress.value = {}
 }
 
+const delCart = (i) => {
+  cartStore.delCart([i.id])
+}
+
 // 创建订单
 const createOrder = async () => {
   if (curAddress.value.id === undefined) {
@@ -55,7 +59,8 @@ const createOrder = async () => {
       id: orderId
     }
   })
-  // 更新购物车 这个地方的逻辑有问题，购物车还有bug
+  // 更新购物车
+  cartStore.delCart([checkInfo.value.goods.id])
   cartStore.updateCart()
 }
 
