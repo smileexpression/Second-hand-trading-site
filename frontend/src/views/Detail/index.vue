@@ -49,13 +49,19 @@ const addChat = async () => {
   const res = await addChatAPI({
     you: `${user.value.ID}`,
   })
+  if (res.result === "bug") {
+    ElMessage.warning('不能和自己聊天哦')
+    return
+  } else {
+    ElMessage.success('已添加到聊天列表')
+    router.replace({ path: '/chat' })
+  }
   // console.log(res);
 }
 
 const onAddChat = () => {
   addChat()
   // router.replace('chat')
-  router.replace({ path: '/chat' })
 }
 </script>
 

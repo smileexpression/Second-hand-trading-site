@@ -84,6 +84,13 @@ func AddChat(ctx *gin.Context) {
 
 	var chatList, check model.ChatList
 	ctx.BindJSON(&chatList)
+	// 将string转为uint
+	if chatList.You == strconv.Itoa(int(userinfo.ID)) {
+		ctx.JSON(200, gin.H{
+			"result": "bug",
+		})
+		return
+	}
 	DB.Table("chat_lists").Where("me = ? and you = ?", userinfo.ID, chatList.You).First(&check)
 	if check.ID != 0 {
 		ctx.JSON(200, gin.H{
