@@ -55,7 +55,8 @@ const createOrder = async () => {
       id: orderId
     }
   })
-  // 更新购物车 这个地方的逻辑有问题，购物车还有bug
+  // 更新购物车
+  cartStore.delCart([checkInfo.value.goods.id])
   cartStore.updateCart()
 }
 

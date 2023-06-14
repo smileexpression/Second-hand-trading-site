@@ -66,7 +66,7 @@ const categoryStore = useCategoryStore()
 
       &:hover {
         color: $xtxColor;
-        border-bottom: 1px solid $xtxColor;
+        // border-bottom: 1px solid $xtxColor;
       }
     }
 

@@ -5,7 +5,7 @@ const props = defineProps({
     type: String,
   }
 })
-console.log("head", props.imgUrl)
+// console.log("head", props.imgUrl)
 </script >
 
 <template>
