@@ -12,7 +12,7 @@ const props = defineProps({
     default: "",
   }
 });
-console.log("person", props.imgUrl, props.nickname);
+// console.log("person", props.imgUrl, props.nickname);
 </script>
 
 <template>
@@ -35,7 +35,7 @@ console.log("person", props.imgUrl, props.nickname);
   width: 250px;
   height: 80px;
   border-radius: 10px;
-  background-color: rgb(50, 54, 68);
+  background-color: rgb(255, 255, 255);
   position: relative;
   margin: 25px 0;
   cursor: pointer;
@@ -54,7 +54,7 @@ console.log("person", props.imgUrl, props.nickname);
       margin-left: 20px;
 
       .name {
-        color: #fff;
+        color: #000000;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -72,13 +72,17 @@ console.log("person", props.imgUrl, props.nickname);
   }
 
   &:hover {
-    background-color: #1d90f5;
+    background-color: #27BB9A;
     transition: 0.3s;
-    box-shadow: 0px 0px 10px 0px rgba(0, 136, 255);
+    box-shadow: 0px 0px 10px 0px #34c8a8;
 
     // box-shadow:  0 5px 20px rgba(251, 152, 11, .5);
     .info {
       .info-detail {
+        .name {
+          color: #fff;
+        }
+
         .detail {
           color: #fff;
         }

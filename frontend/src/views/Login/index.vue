@@ -63,8 +63,11 @@ const doLogin = () => {
   <div>
     <header class="login-header">
       <div class="container m-top-20">
-        <h1 class="logo">
+        <!-- <h1 class="logo">
           <RouterLink to="/">小兔鲜</RouterLink>
+        </h1> -->
+        <h1 class="title">
+          <RouterLink to="/">海鲜市场</RouterLink>
         </h1>
         <RouterLink class="entry" to="/">
           进入网站首页
@@ -104,7 +107,7 @@ const doLogin = () => {
 
     <footer class="login-footer">
       <div class="container">
-        <p>
+        <!-- <p>
           <a href="javascript:;">关于我们</a>
           <a href="javascript:;">帮助中心</a>
           <a href="javascript:;">售后服务</a>
@@ -112,8 +115,8 @@ const doLogin = () => {
           <a href="javascript:;">商务合作</a>
           <a href="javascript:;">搜索推荐</a>
           <a href="javascript:;">友情链接</a>
-        </p>
-        <p>CopyRight &copy; 小兔鲜儿</p>
+        </p> -->
+        <p>CopyRight &copy; TKL</p>
       </div>
     </footer>
   </div>
@@ -139,6 +142,32 @@ const doLogin = () => {
       width: 100%;
       text-indent: -9999px;
       background: url("@/assets/images/logo.png") no-repeat center 18px / contain;
+    }
+  }
+
+  .title {
+    margin-right: 0px;
+    width: 200px;
+    text-align: center;
+    height: 132px;
+
+    a {
+      font-size: 50px;
+      line-height: 132px;
+      height: 132px;
+      display: inline-block;
+      font-family: 'FZShuTi';
+      font-weight: lighter;
+
+      &:hover {
+        color: $xtxColor;
+        border-bottom: 1px solid $xtxColor;
+      }
+    }
+
+    .active {
+      color: $xtxColor;
+      border-bottom: 1px solid $xtxColor;
     }
   }
 

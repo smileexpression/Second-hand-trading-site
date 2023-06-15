@@ -83,23 +83,23 @@ onUnmounted(() => {
     width: 280px;
 
     .title {
-      color: #fff;
+      color: #000000;
       padding-left: 10px;
-      margin-top: 20px;
+      margin-top: 15px;
     }
 
     .online-person {
-      margin-top: 50px;
+      margin-top: 10px;
 
       .onlin-text {
         padding-left: 10px;
-        color: rgb(176, 178, 189);
+        color: #000000;
       }
 
       .person-cards-wrapper {
         padding-left: 10px;
         height: 65vh;
-        margin-top: 20px;
+        margin-top: 5px;
         overflow: hidden;
         overflow-y: scroll;
         box-sizing: border-box;

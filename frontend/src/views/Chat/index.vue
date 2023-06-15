@@ -23,7 +23,7 @@ import chathome from '@/views/Chat/components/chathome.vue'
   padding-top: 20px;
   // width: 90vw;
   // height: 90vh;
-  background-color: rgb(39, 42, 55);
+  background-color: #F5F5F5;
   border-radius: 15px;
   // position: relative;
   // left: 50%;

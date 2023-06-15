@@ -11,7 +11,9 @@ https://apifox.com/apidoc/shared-344f5ea8-7a45-4270-99db-1b293b9c0053
 #### 安装指南
 
 1. 安装步骤：分别移步backend和frontend目录查看README.md
+
 2. 环境要求：
+   
    - Go 1.20
    
    - Node.js 18.16.0（16.0.0以上）
@@ -35,6 +37,167 @@ https://apifox.com/apidoc/shared-344f5ea8-7a45-4270-99db-1b293b9c0053
    vue3 + vite +  pinia + vue router  + element plus + axios
 
 #### 代码目录结构
+
+```
+|-- tkl
+ |-- LICENSE
+ |-- README.md
+ |-- 简单需求分析.md
+ |-- backend
+ | |-- go.mod
+ | |-- go.sum
+ | |-- main.go
+ | |-- README.md
+ | |-- common
+ | | |-- database.go
+ | | |-- jwt.go
+ | |-- controller
+ | | |-- BannerController.go
+ | | |-- CartController.go
+ | | |-- ChatController.go
+ | | |-- GoodsController.go
+ | | |-- ImageController.go
+ | | |-- OrderController.go
+ | | |-- UserController.go
+ | |-- middleware
+ | | |-- AuthMiddleware.go
+ | | |-- CORSMiddleware.go
+ | | |-- RecoveryMiddleware.go
+ | |-- model
+ | | |-- banner.go
+ | | |-- Cart.go
+ | | |-- category.go
+ | | |-- chat.go
+ | | |-- chatList.go
+ | | |-- commodity.go
+ | | |-- goods.go
+ | | |-- image.go
+ | | |-- order.go
+ | | |-- picture.go
+ | | |-- user.go
+ | | |-- userAddress.go
+ | |-- routes
+ | |-- routes.go
+ |-- frontend
+ |-- index.html
+ |-- jsconfig.json
+ |-- package-lock.json
+ |-- package.json
+ |-- README.md
+ |-- vite.config.js
+ |-- public
+ | |-- favicon.ico
+ |-- src
+ |-- App.vue
+ |-- main.js
+ |-- apis
+ | |-- cart.js
+ | |-- category.js
+ | |-- chat.js
+ | |-- checkout.js
+ | |-- detail.js
+ | |-- home.js
+ | |-- image.js
+ | |-- layout.js
+ | |-- likelist.js
+ | |-- login.js
+ | |-- order.js
+ | |-- pay.js
+ | |-- register.js
+ | |-- release.js
+ | |-- testAPI.js
+ | |-- userInfo.js
+ |-- assets
+ | |-- base.css
+ | |-- logo.svg
+ | |-- main.css
+ | |-- images
+ | |-- img
+ | |-- emoji
+ |-- components
+ | |-- HelloWorld.vue
+ | |-- TheWelcome.vue
+ | |-- WelcomeItem.vue
+ | |-- icons
+ | | |-- IconCommunity.vue
+ | | |-- IconDocumentation.vue
+ | | |-- IconEcosystem.vue
+ | | |-- IconSupport.vue
+ | | |-- IconTooling.vue
+ | |-- imageView
+ | |-- index.vue
+ |-- composables
+ | |-- useCountDown.js
+ |-- directives
+ | |-- index.js
+ |-- router
+ | |-- index.js
+ |-- stores
+ | |-- cartStore.js
+ | |-- category.js
+ | |-- counter.js
+ | |-- user.js
+ |-- styles
+ | |-- common.scss
+ | |-- var.scss
+ | |-- element
+ | |-- index.scss
+ |-- utils
+ | |-- http.js
+ |-- views
+ |-- CartList
+ | |-- index.vue
+ |-- Category
+ | |-- index.vue
+ | |-- composables
+ | |-- useBanner.js
+ | |-- useCategory.js
+ |-- Chat
+ | |-- index.vue
+ | |-- components
+ | |-- chathome.vue
+ | |-- chatwindow.vue
+ | |-- HeadPortrait.vue
+ | |-- Nav.vue
+ | |-- PersonCard.vue
+ |-- Checkout
+ | |-- index.vue
+ |-- Detail
+ | |-- index.vue
+ |-- Home
+ | |-- index.vue
+ | |-- components
+ | |-- GoodsItem.vue
+ | |-- HomeBanner.vue
+ | |-- HomeCategory.vue
+ | |-- HomeHot.vue
+ | |-- HomeNew.vue
+ | |-- HomePanel.vue
+ | |-- HomeProduct.vue
+ |-- Layout
+ | |-- index.vue
+ | |-- components
+ | |-- HeaderCart.vue
+ | |-- LayoutFixed.vue
+ | |-- LayoutFooter.vue
+ | |-- LayoutHeader.vue
+ | |-- LayoutNav.vue
+ |-- Login
+ | |-- index.vue
+ |-- Member
+ | |-- index.vue
+ | |-- components
+ | |-- SoldOrder.vue
+ | |-- UserInfo.vue
+ | |-- UserOrder.vue
+ |-- Pay
+ | |-- index.vue
+ | |-- PayBack.vue
+ |-- Register
+ | |-- index.vue
+ |-- Release
+ |-- index.vue
+```
 
 #### 示例和演示
 
