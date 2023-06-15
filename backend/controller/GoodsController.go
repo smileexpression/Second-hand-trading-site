@@ -68,7 +68,6 @@ func GetOneGood(c *gin.Context) {
 		}
 	} else {
 		var picTarget model.Picture
-
 		if err := db.Table("pictures").Where("good_id = ?", target.ID).First(&picTarget).Error; err != nil {
 			if err == gorm.ErrRecordNotFound {
 				c.JSON(404, gin.H{
@@ -79,9 +78,10 @@ func GetOneGood(c *gin.Context) {
 			//用户头像一般不会出错 简化代码不处理
 			var user model.User
 			db.Table("users").First(&user, target.User)
+			p := [5]string{picTarget.Picture1, picTarget.Picture2, picTarget.Picture3, picTarget.Picture4, picTarget.Picture5}
 			c.JSON(200, gin.H{
 				"result":   target,
-				"pictures": picTarget,
+				"pictures": p,
 				"user":     user,
 			})
 		}

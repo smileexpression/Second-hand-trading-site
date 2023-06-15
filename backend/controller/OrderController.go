@@ -174,5 +174,8 @@ func GetFromCart(ctx *gin.Context) {
 		"msg":    "操作成功",
 		"result": result,
 	})
+}
 
+func SoldList(c *gin.Context)  {
+	
 }
