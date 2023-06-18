@@ -12,9 +12,9 @@ https://apifox.com/apidoc/shared-344f5ea8-7a45-4270-99db-1b293b9c0053
 
 1. 安装步骤：
    
-   - [backend](.\backend\README.md)
+   - [backend](./backend/README.md)
    
-   - [frontend](.\frontend\README.md)
+   - [frontend](./frontend/README.md)
 
 2. 环境要求：
    
@@ -24,9 +24,9 @@ https://apifox.com/apidoc/shared-344f5ea8-7a45-4270-99db-1b293b9c0053
 
 #### 运行指南
 
-- [backend](.\backend\README.md)
+- [backend](./backend/README.md)
 
-- [frontend](.\frontend\README.md)
+- [frontend](./frontend/README.md)
 
 #### 贡献指南
 
