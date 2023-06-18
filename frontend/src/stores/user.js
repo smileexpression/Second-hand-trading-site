@@ -32,7 +32,7 @@ export const useUserStore = defineStore ( 'user', ()=> {
     //更改头像
     const updateAvatar = async ({ pictrueID }) => {
         const res = await updateAvatarAPI(pictrueID)
-        userInfo.avatar = res.avatarID
+        userInfo.value.avatar = res.avatarID
     }
 
     //更改密码
@@ -41,22 +41,22 @@ export const useUserStore = defineStore ( 'user', ()=> {
     }
 
     //修改个人信息
-    const changeInfo = async ({ name, gender }) => {
-        const res = await changeInfoAPI({ name, gender })
-        userInfo.nickname = res.result.name
-        userInfo.gender = res.result.gender
+    const changeInfo = async ({ nickname, gender }) => {
+        const res = await changeInfoAPI({ nickname, gender })
+        userInfo.value.nickname = res.result.nickname
+        userInfo.value.gender = res.result.gender
     }
     
     //增加地址
     const addAddress = async ({ receiver, contact, address }) => {
         const res = await addAddressAPI({ receiver, contact, address })
-        userInfo.userAddresses = res.userAddresses
+        userInfo.value.userAddresses = res.userAddresses
     }
 
     //删除地址
     const deladdress = async (id) => {
         const res = await delAddressAPI(id)
-        userInfo.userAddresses = res.userAddresses
+        userInfo.value.userAddresses = res.userAddresses
     }
 
     return{

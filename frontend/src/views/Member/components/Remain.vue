@@ -1,29 +1,30 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getSoldOrder } from '@/apis/order';
+import { getRemain } from '@/apis/order';
 import { getImageUrl } from '@/apis/image';
 
+
 // 订单列表
-const orderList = ref([])
-const total = ref(0)
+const RemainList = ref([])
+const total =ref(0)
 
 const params = ref({
     page: 1,
     pageSize: 2
 })
 
-const getOrderList = async () => {
-  const res = await getSoldOrder(params.value)
-  orderList.value = res.result
+const getRemainList = async () => {
+  const res = await getRemain(params.value)
+  RemainList.value = res.result.item
   total.value = res.result.counts
 }
 
-onMounted(() => getOrderList())
+onMounted(() => getRemainList())
 
 //页数切换
 const pageChange = (page) => {
   params.value.page = page
-  getOrderList()
+  getRemainList()
 }
 
 </script>
@@ -31,15 +32,14 @@ const pageChange = (page) => {
 <template>
   <div class="order-container">
       <div class="main-container">
-        <div class="holder-container" v-if="orderList.length === 0">
+        <div class="holder-container" v-if="RemainList.length === 0">
           <el-empty description="暂无订单数据" />
         </div>
         <div v-else>
           <!-- 订单列表 -->
-          <div class="order-item" v-for="order in orderList" :key="order.id">
+          <div class="order-item" v-for="order in RemainList" :key="order.id">
             <div class="head">
-              <span>下单时间：{{ order.createTime }}</span>
-              <span>订单编号：{{ order.id }}</span>
+              <span>发布时间：{{ order.createTime }}</span>
             </div>
             <div class="body">
               <div class="column goods">
@@ -57,16 +57,13 @@ const pageChange = (page) => {
                       </p>
                     </div>
                     <div class="price">¥{{ order.skus.realPay?.toFixed(2) }}</div>
-                    <div class="count">x1</div>
                   </li>
                 </ul>
               </div>
-              <div class="column amount">
-                <p class="red">¥{{ order.payMoney?.toFixed(2) }}</p>
-                <p>在线支付</p>
-              </div>
               <div class="column action">
+                <RouterLink :to="`/detail/${order.skus.id}`">
                 <p><a href="javascript:;">查看详情</a></p>
+                </RouterLink>
               </div>
             </div>
           </div>
