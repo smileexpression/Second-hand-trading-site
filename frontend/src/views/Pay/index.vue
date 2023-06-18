@@ -11,9 +11,12 @@ const router = useRouter()
 const payInfo = ref({})
 const getPayInfo = async () => {
   const res = await getOrderAPI(route.query.id)
-  payInfo.value = res.result
+  payInfo.value = res
+  console.log("payInfo", payInfo.value)
+  console.log(typeof (payInfo.value.countdown))
   // 初始化倒计时秒数
-  start(res.result.countdown)
+  const start_time = parseInt(payInfo.value.countdown)
+  start(start_time)
 }
 onMounted(() => getPayInfo())
 
@@ -42,7 +45,7 @@ const pay = async () => {
         </div>
         <div class="amount">
           <span>应付总额：</span>
-          <span>¥{{ payInfo.payMoney?.toFixed(2) }}</span>
+          <span>¥{{ payInfo.payMoney }}</span>
         </div>
       </div>
       <!-- 付款方式 -->
@@ -52,14 +55,6 @@ const pay = async () => {
           <p>支付平台</p>
           <a class="btn alipay" @click="pay"></a>
         </div>
-        <!-- <div class="item">
-          <p>支付方式</p>
-          <a class="btn" href="javascript:;">招商银行</a>
-          <a class="btn" href="javascript:;">工商银行</a>
-          <a class="btn" href="javascript:;">建设银行</a>
-          <a class="btn" href="javascript:;">农业银行</a>
-          <a class="btn" href="javascript:;">交通银行</a>
-        </div> -->
       </div>
     </div>
   </div>

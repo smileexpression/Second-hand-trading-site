@@ -21,7 +21,7 @@ export const useCartStore = defineStore('cart', () =>{
                 await insertCartAPI(goods.id)
                 updateCart()
                 ElMessage.success('成功加入购物车')
-                console.log(goods.id)
+                // console.log(goods.id)
             }
         }else
         {//未登录则 提示无法加入购物车
@@ -46,8 +46,12 @@ export const useCartStore = defineStore('cart', () =>{
     }
     const updateCart = async() =>{
         const request = await findNewCartListAPI()
-        cartList.value = request.result
-        // console.log(cartList.value)
+        if(request.result){            
+            cartList.value = request.result
+            // console.log(cartList.value)
+        }else{
+            cartList.value = []
+        }
     }
     const clearCart = () =>{
         cartList.value =[]

@@ -2,7 +2,7 @@
 // vueUse
 import { useScroll } from '@vueuse/core'
 import { useCategoryStore } from '@/stores/category';
-
+import HeaderCart from './HeaderCart.vue';
 const { y } = useScroll(window)
 
 // 使用pinia中的数据
@@ -14,7 +14,10 @@ const categoryStore = useCategoryStore()
 <template>
   <div class="app-header-sticky" :class="{ show: y > 78 }">
     <div class="container">
-      <RouterLink class="logo" to="/" />
+      <!-- <RouterLink class="logo" to="/" /> -->
+      <h1 class="title">
+        <RouterLink to="/">海鲜市场</RouterLink>
+      </h1>
       <!-- 导航区域 -->
       <ul class="app-header-nav ">
         <li class="home" v-for="item in categoryStore.categoryList" :key="item.Id">
@@ -25,6 +28,7 @@ const categoryStore = useCategoryStore()
         <i class="iconfont icon-search"></i>
         <input type="text" placeholder="搜一搜">
       </div>
+      <HeaderCart />
     </div>
   </div>
 </template>
@@ -57,11 +61,37 @@ const categoryStore = useCategoryStore()
     align-items: center;
   }
 
-  .logo {
+  // .logo {
+  //   width: 200px;
+  //   height: 80px;
+  //   background: url("@/assets/images/logo.png") no-repeat right 2px;
+  //   background-size: 160px auto;
+  // }
+
+  .title {
+    margin-right: 0px;
     width: 200px;
+    text-align: center;
     height: 80px;
-    background: url("@/assets/images/logo.png") no-repeat right 2px;
-    background-size: 160px auto;
+
+    a {
+      font-size: 50px;
+      line-height: 80px;
+      // height: 132px;
+      display: inline-block;
+      font-family: 'FZShuTi';
+      font-weight: lighter;
+
+      &:hover {
+        color: $xtxColor;
+        // border-bottom: 1px solid $xtxColor;
+      }
+    }
+
+    .active {
+      color: $xtxColor;
+      border-bottom: 1px solid $xtxColor;
+    }
   }
 
   .right {
@@ -112,6 +142,25 @@ const categoryStore = useCategoryStore()
       color: $xtxColor;
       border-bottom: 1px solid $xtxColor;
     }
+  }
+}
+
+.search {
+  width: 170px;
+  height: 32px;
+  position: relative;
+  border-bottom: 1px solid #e7e7e7;
+  line-height: 32px;
+
+  .icon-search {
+    font-size: 18px;
+    margin-left: 5px;
+  }
+
+  input {
+    width: 140px;
+    padding-left: 5px;
+    color: #666;
   }
 }
 </style>
