@@ -295,8 +295,6 @@ func BoughtList(c *gin.Context) {
 				result = append(result, r)
 				println(" 循环结束：", i)
 			}
-			fmt.Printf("数据：%+v\n", result[0])
-			fmt.Printf("数据：%+v\n", result[1])
 
 			c.JSON(200, gin.H{
 				"count":  count,

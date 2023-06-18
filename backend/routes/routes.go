@@ -39,6 +39,7 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 		member.GET("/soldorder", middleware.AuthMiddleware(), controller.SoldList)
 		member.GET("/getorder", middleware.AuthMiddleware(), controller.BoughtList)
 		member.GET("/remain", middleware.AuthMiddleware(), controller.SaleList)
+
 	}
 
 	goods := r.Group("")
