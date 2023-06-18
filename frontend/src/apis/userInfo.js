@@ -31,12 +31,12 @@ export const changePasswordAPI = ({ oldpassword, newpassword }) => {
 }
 
 //更改个人信息
-export const changeInfoAPI = ({ name, gender }) => {
+export const changeInfoAPI = ({ nickname, gender }) => {
     return request({
         url: 'member/changeinfo',
         method: 'POST',
         data: {
-            name,
+            nickname,
             gender
         }
     })
@@ -60,6 +60,6 @@ export const delAddressAPI = (id) => {
     return request({
         url: 'member/deladdress',
         method: 'POST',
-        params: id
+        params: {id}
     })
 }

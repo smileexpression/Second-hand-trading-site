@@ -17,3 +17,11 @@ export const getSoldOrder = (params) => {
         params
     })
 }
+
+export const getRemain = (params) => {
+    return request({
+        url: '/member/remain',
+        method: 'GET',
+        params
+    })
+}
