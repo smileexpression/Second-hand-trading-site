@@ -10,7 +10,11 @@ https://apifox.com/apidoc/shared-344f5ea8-7a45-4270-99db-1b293b9c0053
 
 #### 安装指南
 
-1. 安装步骤：分别移步backend和frontend目录查看README.md
+1. 安装步骤：
+   
+   - [backend](.\backend\README.md)
+   
+   - [frontend](.\frontend\README.md)
 
 2. 环境要求：
    
@@ -20,7 +24,9 @@ https://apifox.com/apidoc/shared-344f5ea8-7a45-4270-99db-1b293b9c0053
 
 #### 运行指南
 
-分别移步backend和frontend目录查看README.md
+- [backend](.\backend\README.md)
+
+- [frontend](.\frontend\README.md)
 
 #### 贡献指南
 
@@ -44,7 +50,7 @@ https://apifox.com/apidoc/shared-344f5ea8-7a45-4270-99db-1b293b9c0053
  |-- README.md
  |-- 简单需求分析.md
  |-- backend
- | |-- go.mod
+ | |-- go.mod    
  | |-- go.sum
  | |-- main.go
  | |-- README.md
