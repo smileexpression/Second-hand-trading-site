@@ -12,6 +12,7 @@ import Member from '@/views/Member/index.vue'
 import UserInfo from '@/views/Member/components/UserInfo.vue'
 import UserOrder from '@/views/Member/components/UserOrder.vue'
 import SoldOrder from '@/views/Member/components/SoldOrder.vue'
+import Remain from '@/views/Member/components/Remain.vue'
 
 import Release from '@/views/Release/index.vue'
 import CartList from '@/views/CartList/index.vue'
@@ -63,6 +64,10 @@ const router = createRouter({
             {
               path: 'soldorder',
               component: SoldOrder
+            },
+            {
+              path: 'remain',
+              component: Remain
             }
           ]
         },

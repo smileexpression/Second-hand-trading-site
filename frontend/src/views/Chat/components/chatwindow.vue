@@ -323,7 +323,7 @@ onMounted(() => {
         box-sizing: border-box;
         transition: 0.2s;
         font-size: 20px;
-        color: #fff;
+        color: #000000;
         font-weight: 100;
         margin: 0 20px;
 
