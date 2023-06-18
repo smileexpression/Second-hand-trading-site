@@ -125,11 +125,11 @@ const cancelChange = () => {
 const infoDialogVisible = ref(false)
 const infoForm = ref({
   account: `${userStore.userInfo.account}`,
-  name: `${userStore.userInfo.nickname}`,
+  nickname: `${userStore.userInfo.nickname}`,
   gender: `${userStore.userInfo.gender}`
 })
 const infoRules = ref({
-  name: [
+  nickname: [
     {required: true, message: '用户名不能为空！', trigger: 'blur'},
     {type: "string", max: 20, message: '用户名应为长度至多为20的字符！', trigger: 'blur'}
   ]
@@ -137,10 +137,10 @@ const infoRules = ref({
 //表单实例
 const infoFormRef = ref(null)
 const doInfo = () => {
-  const { name, gender } = infoForm.value
+  const { nickname, gender } = infoForm.value
   infoFormRef.value.validate(async (valid) => {
     if(valid){
-      await userStore.changeInfo({ name, gender })
+      await userStore.changeInfo({ nickname, gender })
       ElMessage({ type: 'success', message: '修改成功' })
     }
   })
@@ -225,7 +225,7 @@ const deleteAddress = async (id) => {
       <h4 style="font-size: 22px; font-weight: 400; padding: 18px ;">收货地址</h4>
     </div>
     <div class="addressWrapper">
-      <div class="text item" v-for="item in userStore.userInfo.userAddress" :key="item.id">
+      <div class="text item" v-for="item in userStore.userInfo.userAddresses" :key="item.id">
         <ul>
           <li><span>收<i />货<i />人：</span>{{ item.receiver }} </li>
           <li><span>联系方式：</span>{{ item.contact }}</li>
@@ -277,8 +277,8 @@ const deleteAddress = async (id) => {
         <el-form-item prop="account" label="账号">
           <el-input v-model="infoForm.account" disabled />
         </el-form-item>
-        <el-form-item prop="name" label="用户名">
-          <el-input v-model="infoForm.name" />
+        <el-form-item prop="nickname" label="用户名">
+          <el-input v-model="infoForm.nickname" />
         </el-form-item>
         <el-form-item prop="gender" label="性别">
           <el-radio v-model="infoForm.gender" label="男">男</el-radio>
