@@ -4,7 +4,7 @@ import request from '@/utils/http'
 
 export const getUserOrder = (params) => {
     return request({
-        url: '/member/order',
+        url: '/member/getorder',
         method: 'GET',
         params
     })

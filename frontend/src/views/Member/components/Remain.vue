@@ -15,8 +15,8 @@ const params = ref({
 
 const getRemainList = async () => {
   const res = await getRemain(params.value)
-  RemainList.value = res.result.item
-  total.value = res.result.counts
+  RemainList.value = res.result
+  total.value = res.counts
 }
 
 onMounted(() => getRemainList())
