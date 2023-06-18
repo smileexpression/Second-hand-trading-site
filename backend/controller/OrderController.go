@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"gin/common"
 	"gin/model"
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"net/http"
 	"strconv"
-
-	"github.com/gin-gonic/gin"
 )
 
 type OrderInfo struct {
@@ -170,6 +170,192 @@ func GetFromCart(ctx *gin.Context) {
 	})
 }
 
-func SoldList(c *gin.Context)  {
-	
+// 以下是用户查询已发布及买到的商品的接口
+type gif struct {
+	Id        uint
+	Name      string
+	Image     string
+	AttrsText string
+	RealPay   float64
+}
+
+type summary struct {
+	Id        uint
+	CreatTime string
+	Skus      gif
+	PayMoney  float64
+}
+
+// 临时收录获取订单记录的所有接口
+func SoldList(c *gin.Context) {
+
+	user, _ := c.Get("user")
+	userinfo := user.(model.User)
+	uId := userinfo.ID
+	db := common.GetDB()
+	p, _ := strconv.Atoi(c.Query("page"))
+	ps, _ := strconv.Atoi(c.Query("pageSize"))
+	var glist []model.Goods
+	if err := db.Table("goods").Where("user = ? AND is_sold = ?", uId, 1).Find(&glist).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(404, gin.H{
+				"err warning": "Record of good no found",
+			})
+		} else {
+			c.JSON(500, gin.H{
+				"error warning": "unknow error",
+			})
+		}
+	} else {
+		count := len(glist)
+		idlist := make([]uint, count)
+		for i, g := range glist {
+			idlist[i] = g.ID
+		}
+		var olist []model.Order
+		//如果issold与order绑定成功这里应该没有错误，为了可读性就不检错了
+		db.Table("orders").Where("good_id IN (?)", idlist).Find(&olist)
+		var result []summary
+		b := (p - 1) * ps
+		e := b + ps
+		if (b + 1) > count {
+			c.JSON(400, gin.H{
+				"runtime error": "page out of range",
+			})
+		} else {
+			for i := b; (i < count) && (i < e); i++ {
+				var r summary
+				r.Id = olist[i].ID
+				r.CreatTime = olist[i].CreatedAt.Format("2006-01-02 15:04:05")
+				r.Skus.Id = glist[i].ID
+				r.Skus.Name = glist[i].Name
+				r.Skus.Image = glist[i].Picture
+				r.Skus.AttrsText = glist[i].Description
+				r.Skus.RealPay, _ = strconv.ParseFloat(glist[i].Price, 64)
+				r.PayMoney, _ = strconv.ParseFloat(glist[i].Price, 64)
+				result = append(result, r)
+			}
+			c.JSON(200, gin.H{
+				"count":  count,
+				"result": result,
+			})
+		}
+	}
+
+}
+
+func BoughtList(c *gin.Context) {
+
+	user, _ := c.Get("user")
+	userinfo := user.(model.User)
+	uId := userinfo.ID
+	db := common.GetDB()
+	p, _ := strconv.Atoi(c.Query("page"))
+	ps, _ := strconv.Atoi(c.Query("pageSize"))
+	var olist []model.Order
+	if err := db.Table("orders").Where("user_id", uId).Find(&olist).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(404, gin.H{
+				"err warning": "Record of good no found",
+			})
+		} else {
+			c.JSON(500, gin.H{
+				"error warning": "unknow error",
+			})
+		}
+	} else {
+		count := len(olist)
+		idlist := make([]int, count)
+		for i, o := range olist {
+			idlist[i], _ = strconv.Atoi(o.Good_Id)
+		}
+		var glist []model.Goods
+		db.Table("goods").Where("id IN (?)", idlist).Find(&glist)
+		var result []summary
+		b := (p - 1) * ps
+		println(b)
+		e := b + ps
+		println(e)
+		if (b + 1) > count {
+			c.JSON(400, gin.H{
+				"runtime error": "page out of range",
+			})
+		} else {
+			for i := b; (i < count) && (i < e); i++ {
+				println("循环开始：", i)
+				var r summary
+				r.Id = olist[i].ID
+				r.CreatTime = olist[i].CreatedAt.Format("2006-01-02 15:04:05")
+				r.Skus.Id = glist[i].ID
+				r.Skus.Name = glist[i].Name
+				r.Skus.Image = glist[i].Picture
+				r.Skus.AttrsText = glist[i].Description
+				r.Skus.RealPay, _ = strconv.ParseFloat(glist[i].Price, 64)
+				r.PayMoney, _ = strconv.ParseFloat(glist[i].Price, 64)
+				result = append(result, r)
+				println(" 循环结束：", i)
+			}
+			fmt.Printf("数据：%+v\n", result[0])
+			fmt.Printf("数据：%+v\n", result[1])
+
+			c.JSON(200, gin.H{
+				"count":  count,
+				"result": result,
+			})
+		}
+	}
+
+}
+
+type summary2 struct {
+	CreatTime string
+	Skus      gif
+}
+
+func SaleList(c *gin.Context) {
+
+	user, _ := c.Get("user")
+	userinfo := user.(model.User)
+	uId := userinfo.ID
+	db := common.GetDB()
+	p, _ := strconv.Atoi(c.Query("page"))
+	ps, _ := strconv.Atoi(c.Query("pageSize"))
+	var glist []model.Goods
+	if err := db.Table("goods").Where("user = ? AND is_sold = ?", uId, 0).Find(&glist).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(404, gin.H{
+				"err warning": "Record of good no found",
+			})
+		} else {
+			c.JSON(500, gin.H{
+				"error warning": "unknow error",
+			})
+		}
+	} else {
+		count := len(glist)
+		var result []summary2
+		b := (p - 1) * ps
+		e := b + ps
+		if (b + 1) > count {
+			c.JSON(400, gin.H{
+				"runtime error": "page out of range",
+			})
+		} else {
+			for i := b; (i < count) && (i < e); i++ {
+				var r summary2
+				r.CreatTime = glist[i].CreatedAt.Format("2006-01-02 15:04:05")
+				r.Skus.Id = glist[i].ID
+				r.Skus.Name = glist[i].Name
+				r.Skus.Image = glist[i].Picture
+				r.Skus.AttrsText = glist[i].Description
+				r.Skus.RealPay, _ = strconv.ParseFloat(glist[i].Price, 64)
+				result = append(result, r)
+			}
+			c.JSON(200, gin.H{
+				"count":  count,
+				"result": result,
+			})
+		}
+	}
+
 }

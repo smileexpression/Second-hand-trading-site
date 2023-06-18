@@ -36,6 +36,9 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 		member.POST("/changeinfo", middleware.AuthMiddleware(), controller.ChangeInfo)
 		member.POST("/addaddress", middleware.AuthMiddleware(), controller.AddAddress)
 		member.POST("/deladdress", middleware.AuthMiddleware(), controller.DeleteAddress)
+		member.GET("/soldorder", middleware.AuthMiddleware(), controller.SoldList)
+		member.GET("/getorder", middleware.AuthMiddleware(), controller.BoughtList)
+		member.GET("/remain", middleware.AuthMiddleware(), controller.SaleList)
 	}
 
 	goods := r.Group("")
