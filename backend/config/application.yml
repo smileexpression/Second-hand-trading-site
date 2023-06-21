@@ -1,0 +1,11 @@
+server:
+  port: 8080
+datasource:
+  driverNmae: mysql
+  host: gz-cynosdbmysql-grp-04b3z61j.sql.tencentcdb.com
+  port: 20464
+  database: gin
+  username: root
+  password: Wobujidemimale123
+  charset: utf8
+  loc: Asia/Shanghai
