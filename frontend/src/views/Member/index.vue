@@ -17,6 +17,9 @@
         <div class="links">
           <RouterLink to="/member/soldorder">我卖出的</RouterLink>
         </div>
+        <div class="links">
+          <RouterLink to="/member/remain">尚未卖出</RouterLink>
+        </div>
       </div>
     </div>
     <div class="article">
