@@ -156,7 +156,7 @@ type GoodInfo struct { //用于接收body参数
 func Release(ctx *gin.Context) {
 
 	user, is_Exist := ctx.Get("user")
-	if is_Exist == false {
+	if !is_Exist {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"msg": "user not exist"})
 		return
 	}

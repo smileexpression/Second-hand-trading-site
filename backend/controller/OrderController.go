@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"gin/common"
 	"gin/model"
-	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type OrderInfo struct {
@@ -120,7 +121,7 @@ func GetFromCart(ctx *gin.Context) {
 	idStr := ctx.Query("goodID")
 
 	user, is_Exist := ctx.Get("user")
-	if is_Exist == false {
+	if !is_Exist {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"msg": "user not exist"})
 		return
 	}
