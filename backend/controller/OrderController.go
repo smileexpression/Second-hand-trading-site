@@ -294,6 +294,7 @@ func BoughtList(c *gin.Context) {
 				r.PayMoney, _ = strconv.ParseFloat(glist[i].Price, 64)
 				result = append(result, r)
 				println(" 循环结束：", i)
+
 			}
 
 			c.JSON(200, gin.H{
