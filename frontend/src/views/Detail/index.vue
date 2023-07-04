@@ -100,11 +100,15 @@ const onAddChat = () => {
                 <dl>
                   <dt>联系方式</dt>
                   <dd @click="onAddChat">{{ user.account }}</dd>
+                  <el-button size="middle" round @click="onAddChat()">
+                  加入聊天列表
+                  </el-button>
                 </dl>
+
               </div>
               <!-- 按钮组件 -->
               <div>
-                <el-button size="large" class="btn" @click="addCart()">
+                <el-button type="primary" size="large" class="btn" @click="addCart()">
                   加入购物车
                 </el-button>
               </div>
@@ -218,7 +222,6 @@ const onAddChat = () => {
 
 .btn {
   margin-top: 20px;
-
 }
 
 .bread-container {
