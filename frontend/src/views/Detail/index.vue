@@ -17,10 +17,9 @@ const router = useRouter()
 const getGoods = async () => {
   const res = await getDetail(route.params.id)
   goods.value = res.result
-  pictures.value = res.pictures
+  pictures.value = res.pictures.filter(i => i!='')
   user.value = res.user
   // console.log(pictures.value)
-  // console.log(goods.value)
 }
 onMounted(() => getGoods())
 
@@ -28,13 +27,14 @@ const cartStore = useCartStore()
 const addCart = () => {
   if (!goods.value.forsale) {
     //商品在售，可以加入购物车
-    //console.log(goods.value.forSale)
+    // console.log(user.value.account)
     cartStore.addCart({
       id: String(goods.value.ID),
       name: goods.value.name,
       price: Number(goods.value.price),
       picture: goods.value.picture,
-      selected: true
+      selected: true,
+      owner: user.value.account
     })
   } else {
     //商品已卖出
