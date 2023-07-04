@@ -179,6 +179,9 @@ const addAddress = () => {
       await userStore.addAddress({ receiver, contact, address })
       ElMessage({ type: 'success', message: '操作成功' })
     }
+
+    addressFormRef.value.resetFields()
+    addressDialogVisible.value = false
   })
 }
 //取消重置表单
