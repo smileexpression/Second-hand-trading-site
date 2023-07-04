@@ -8,7 +8,7 @@ const orderList = ref([])
 const total = ref(0)
 
 const params = ref({
-    page: 1,
+    page: 0,
     pageSize: 2
 })
 
