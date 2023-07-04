@@ -100,15 +100,16 @@ func RecentIdle(ctx *gin.Context) {
 		//do not thing
 	}
 	var count int64
-	DB.Table("goods").Where("is_sold=?", false).Count(&count)
+	var ids []uint
+	DB.Table("goods").Where("is_sold=?", false).Count(&count).Pluck("id", &ids)
 	if IntNum > int(count) {
 		IntNum = int(count) //让返回的数目不大于库存
 	}
 	var recentGoods = make([]model.Goods, IntNum)
 
 	for i := int(count); i > int(count)-IntNum; i-- {
-		print(int(count) - i)
-		DB.Table("goods").Where("id = ? AND is_sold=?", i, false).Find(&recentGoods[int(count)-i])
+		print(int(count)-i, "fenge", i, "\n")
+		DB.Table("goods").Where("id = ? AND is_sold=?", ids[i-1], false).Find(&recentGoods[int(count)-i])
 	}
 
 	ctx.JSON(200, gin.H{
@@ -155,7 +156,7 @@ type GoodInfo struct { //用于接收body参数
 func Release(ctx *gin.Context) {
 
 	user, is_Exist := ctx.Get("user")
-	if is_Exist == false {
+	if !is_Exist {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"msg": "user not exist"})
 		return
 	}

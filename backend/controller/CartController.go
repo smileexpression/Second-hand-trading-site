@@ -4,19 +4,20 @@ import (
 	"fmt"
 	"gin/common"
 	"gin/model"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 type CartGoods struct {
 	Id          string `json:"id"`
 	Cate_Id     string
 	User        string `json:"user" gorm:"type:varchar(255);not null"`
-	Name        string `json:"name"gorm:"type:varchar(50);not null"`
-	Picture     string `json:"picture"gorm:"type:varchar(1024);not null"`
-	Price       string `json:"price"gorm:"type:float;not null"`
-	Description string `json:"desc"gorm:"type:varchar(255);not null"`
+	Name        string `json:"name" gorm:"type:varchar(50);not null"`
+	Picture     string `json:"picture" gorm:"type:varchar(1024);not null"`
+	Price       string `json:"price" gorm:"type:float;not null"`
+	Description string `json:"desc" gorm:"type:varchar(255);not null"`
 	Is_Sold     bool   `json:"forsale"`
 }
 
@@ -159,9 +160,11 @@ func CartOut(c *gin.Context) {
 	err := db.Table("carts").Joins("left join goods ON carts.good_id = goods.id").Where("carts.user_id = ?", uId).Scan(&result)
 	if err.Error != nil {
 		//错误处理
+		panic(err)
 	}
 	if err.RowsAffected == 0 {
 		//错误处理
+		panic(err)
 	}
 	// 输出查询结果
 	c.JSON(200, gin.H{

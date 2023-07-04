@@ -3,15 +3,32 @@ package main
 import (
 	"gin/common"
 	"gin/routes"
+	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 )
 
 func main() {
+	InitConfig()
 	common.InitDB()
 	r := gin.Default()
 	r = routes.CollectRoute(r)
-	//后端接口简单样例，具体路由设计可以看 https://blog.csdn.net/m0_51592186/article/details/118913401
-	r.Run(":8080")
-	// 监听并在 0.0.0.0:8080 上启动服务
+
+	port := viper.GetString("server.port")
+	if port != "" {
+		panic(r.Run(":" + port))
+	}
+	panic(r.Run())
+}
+
+func InitConfig() {
+	workDir, _ := os.Getwd()
+	viper.SetConfigName("application")
+	viper.SetConfigType("yml")
+	viper.AddConfigPath(workDir + "/config")
+	err := viper.ReadInConfig()
+	if err != nil {
+		panic(err)
+	}
 }

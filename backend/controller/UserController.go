@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"gin/common"
 	"gin/model"
+	"net/http"
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-	"net/http"
-	"strconv"
 )
 
 type apiAddress struct {
@@ -229,7 +230,7 @@ func UpdateAvatar(ctx *gin.Context) {
 		return
 	}
 	userInfo := user.(model.User)
-	if isSuccess == false {
+	if !isSuccess {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"code": 400,
 			"msg":  "获取头像失败",

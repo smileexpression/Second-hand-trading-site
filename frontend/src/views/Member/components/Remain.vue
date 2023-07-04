@@ -9,14 +9,14 @@ const RemainList = ref([])
 const total =ref(0)
 
 const params = ref({
-    page: 1,
+    page: 0,
     pageSize: 2
 })
 
 const getRemainList = async () => {
   const res = await getRemain(params.value)
-  RemainList.value = res.result.item
-  total.value = res.result.counts
+  RemainList.value = res.result
+  total.value = res.counts
 }
 
 onMounted(() => getRemainList())

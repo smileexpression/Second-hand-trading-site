@@ -8,14 +8,14 @@ const orderList = ref([])
 const total = ref(0)
 
 const params = ref({
-    page: 1,
+    page: 0,
     pageSize: 2
 })
 
 const getOrderList = async () => {
   const res = await getSoldOrder(params.value)
   orderList.value = res.result
-  total.value = res.result.counts
+  total.value = res.counts
 }
 
 onMounted(() => getOrderList())
