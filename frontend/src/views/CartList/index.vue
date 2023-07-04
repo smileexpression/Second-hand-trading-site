@@ -123,7 +123,7 @@ const checkGood = (i) =>{
           <span class="red">¥ {{cartStore.selectedPrice.toFixed(2) }} </span>
         </div>
         <div class="total">
-          <el-button size="large" type="primary" @click="deleteCheckCart()" >批量删除!!!</el-button>
+          <el-button size="large" type="danger" @click="deleteCheckCart()" >批量删除!!!</el-button>
         </div>
       </div>
     </div>
