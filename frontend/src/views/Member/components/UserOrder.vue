@@ -10,7 +10,7 @@ const total =ref(0)
 
 const params = ref({
     page: 1,
-    pageSize: 2
+    pageSize: 5
 })
 
 const getOrderList = async () => {
