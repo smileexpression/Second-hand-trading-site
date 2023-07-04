@@ -95,13 +95,13 @@ const onAddChat = () => {
                 <dl>
                   <dt>卖家</dt>
                   <img :src="getImageUrl(user.avatar)" alt="" />
-                  <dd @click="onAddChat">{{ user.nickname }}</dd>
+                  <dd>{{ user.nickname }}</dd>
                 </dl>
                 <dl>
                   <dt>联系方式</dt>
-                  <dd @click="onAddChat">{{ user.account }}</dd>
+                  <dd>{{ user.account }}</dd>
                   <el-button size="middle" round @click="onAddChat()">
-                  加入聊天列表
+                    加入聊天列表
                   </el-button>
                 </dl>
 
