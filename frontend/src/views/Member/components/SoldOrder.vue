@@ -9,7 +9,7 @@ const total = ref(0)
 
 const params = ref({
     page: 1,
-    pageSize: 2
+    pageSize: 5
 })
 
 const getOrderList = async () => {
@@ -38,7 +38,7 @@ const pageChange = (page) => {
           <!-- 订单列表 -->
           <div class="order-item" v-for="order in orderList" :key="order.Id">
             <div class="head">
-              <span>下单时间：{{ order.CreateTime }}</span>
+              <span>下单时间：{{ order.CreatTime }}</span>
               <span>订单编号：{{ order.Id }}</span>
             </div>
             <div class="body">
