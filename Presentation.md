@@ -160,6 +160,41 @@
   }
   ```
 
+- 获取数据表中符合条件的最后若干条记录
+
+  ```go
+  func RecentIdle(ctx *gin.Context) {
+	    DB := common.GetDB()
+
+	    NUM := ctx.DefaultQuery("limit", "4")
+	    IntNum, err := strconv.Atoi(NUM)
+	    if err != nil {
+		      print(err)
+		      //do not thing
+	    } 
+
+	    var count int64
+	    var ids []uint
+      //获取未出售的商品的数量以及id集合
+	    DB.Table("goods").Where("is_sold=?", false).Count(&count).Pluck("id", &ids)
+	    if IntNum > int(count) {
+		      IntNum = int(count) //让返回的数目不大于库存
+	    }
+	    var recentGoods = make([]model.Goods, IntNum)
+
+      //获取id集合的最后若干个id的商品信息
+	    for i := int(count); i > int(count)-IntNum; i-- {
+		      DB.Table("goods").Where("id = ? AND is_sold=?", ids[i-1], false).Find(&recentGoods[int(count)-i])
+	    }
+
+	    ctx.JSON(200, gin.H{
+		      "code":   "1",
+		      "msg":    "获取最近发布成功",
+		      "result": recentGoods,
+	    })
+  }
+  ```
+
 ### 项目代码介绍
 
 暂无
