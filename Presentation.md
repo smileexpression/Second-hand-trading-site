@@ -32,24 +32,25 @@
 
 - 张隽滔
   
-  - 购物车(CartList)
+  - 购物车（CartList）
   
-  - 商品详情页(Detail)
+  - 商品详情页（Detail）
 
 - 叶梓荣
-
-  - 登录(Login)
-
-  - 注册(Register)
-
-  - 会员中心(Member)
+  
+  - 登录（Login）
+  
+  - 注册（Register）
+  
+  - 会员中心（Member）
+    
     - 个人中心
-
+    
     - 我买到的
     
     - 我卖出的
-
-    - 尚为卖出
+    
+    - 尚未卖出
 
 #### 后端开发
 
@@ -245,7 +246,6 @@ Second-hand trading site
 │      ├─utils
 │      └─views
 └─image_test               // 存放图片测试数据
-
 ```
 
 #### 技术栈
