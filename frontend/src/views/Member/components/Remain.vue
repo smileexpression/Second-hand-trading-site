@@ -9,14 +9,14 @@ const RemainList = ref([])
 const total =ref(0)
 
 const params = ref({
-    page: 0,
+    page: 1,
     pageSize: 2
 })
 
 const getRemainList = async () => {
   const res = await getRemain(params.value)
   RemainList.value = res.result
-  total.value = res.counts
+  total.value = res.count
 }
 
 onMounted(() => getRemainList())
@@ -37,31 +37,32 @@ const pageChange = (page) => {
         </div>
         <div v-else>
           <!-- 订单列表 -->
-          <div class="order-item" v-for="order in RemainList" :key="order.id">
+          <div class="order-item" v-for="order in RemainList" :key="order.Id">
             <div class="head">
-              <span>发布时间：{{ order.createTime }}</span>
+              <span>发布时间：{{ order.CreateTime }}</span>
             </div>
             <div class="body">
               <div class="column goods">
                 <ul>
-                  <li :key="order.skus.id">
+                  <li :key="order.Skus.Id">
                     <a class="image" href="javascript:;">
-                      <img :src="getImageUrl(order.skus.image)" alt="" />
+                      <img :src="getImageUrl(order.Skus.Image)" alt="" />
                     </a>
                     <div class="info">
                       <p class="name ellipsis-2">
-                        {{ order.skus.name }}
+                        {{ order.Skus.Name }}
                       </p>
                       <p class="attr ellipsis">
-                        <span>{{ order.skus.attrsText }}</span>
+                        <span>{{ order.Skus.AttrsText }}</span>
                       </p>
                     </div>
-                    <div class="price">¥{{ order.skus.realPay?.toFixed(2) }}</div>
+                    <div class="price">¥{{ order.Skus.RealPay?.toFixed(2) }}</div>
+                    <div class="count">x1</div>
                   </li>
                 </ul>
               </div>
               <div class="column action">
-                <RouterLink :to="`/detail/${order.skus.id}`">
+                <RouterLink :to="`/detail/${order.Skus.Id}`">
                 <p><a href="javascript:;">查看详情</a></p>
                 </RouterLink>
               </div>
