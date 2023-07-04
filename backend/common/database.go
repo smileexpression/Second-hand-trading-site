@@ -14,6 +14,7 @@ var DB *gorm.DB
 
 func InitDB() *gorm.DB {
 	//可以用navicat或datagrip等数据库操作软件，利用下面的信息登录数据库查看数据
+
 	host := viper.GetString("datasource.host")
 	port := viper.GetString("datasource.port")
 	database := viper.GetString("datasource.database")
@@ -45,8 +46,6 @@ func InitDB() *gorm.DB {
 	db.AutoMigrate(&model.Order{})
 	db.AutoMigrate(&model.Image{})
 	db.AutoMigrate(&model.UserAddress{})
-	//check check
-	//如果你能发现这句话，来东京湾寻找光吧！
 
 	DB = db
 	return db
