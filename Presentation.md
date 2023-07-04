@@ -30,6 +30,12 @@
   
   - 发布闲置页（Release）
 
+- 张隽滔
+  
+  - 购物车(CartList)
+  
+  - 商品详情页(Detail)
+
 #### 后端开发
 
 - 黄裔杰
@@ -53,12 +59,26 @@
 - 叶文熙
   
   - 登录/注册接口（登录、注册、对密码加密，发放Token，验证手机号是否被注册）
+  
   - 中间件接口（AuthMiddleware)
+  
   - 修改头像接口
+  
   - 修改密码接口
+  
   - 个人信息接口
+  
   - 修改个人信息接口
+  
   - 添加/删除地址接口
+
+- 苏东鹏
+  
+  - 获取商品详情
+  
+  - 购物车相关接口（维护购物车记录并提供查询）
+  
+  - 有关闲置查询接口（查询发布、卖出、买到闲置列表接口）
 
 ## 项目介绍
 
@@ -147,21 +167,95 @@
   }
   ```
 
+- 获取数据表中符合条件的最后若干条记录
+  
+  ```go
+  func RecentIdle(ctx *gin.Context) {
+        DB := common.GetDB()
+  
+        NUM := ctx.DefaultQuery("limit", "4")
+        IntNum, err := strconv.Atoi(NUM)
+        if err != nil {
+              print(err)
+              //do not thing
+        } 
+  
+        var count int64
+        var ids []uint
+      //获取未出售的商品的数量以及id集合
+        DB.Table("goods").Where("is_sold=?", false).Count(&count).Pluck("id", &ids)
+        if IntNum > int(count) {
+              IntNum = int(count) //让返回的数目不大于库存
+        }
+        var recentGoods = make([]model.Goods, IntNum)
+  
+      //获取id集合的最后若干个id的商品信息
+        for i := int(count); i > int(count)-IntNum; i-- {
+              DB.Table("goods").Where("id = ? AND is_sold=?", ids[i-1], false).Find(&recentGoods[int(count)-i])
+        }
+  
+        ctx.JSON(200, gin.H{
+              "code":   "1",
+              "msg":    "获取最近发布成功",
+              "result": recentGoods,
+        })
+  }
+  ```
+
 ### 项目代码介绍
 
 #### 结构
 
-可以通过列出项目的文件结构或模块组成，来帮助读者快速了解代码的组织结构和功能划分。可以考虑使用目录树或类似的图形化工具来呈现。
+```
+Second-hand trading site
+├─backend                  // 后端目录
+│  ├─common                  // 存放通用的代码和工具函数
+│  ├─config                  // 存放项目的配置文件
+│  ├─controller              // 存放控制器文件
+│  ├─middleware              // 存放中间件文件
+│  ├─model                   // 存放数据模型文件
+│  └─routes                  // 存放路由文件
+│
+├─frontend                 // 前端目录
+│  ├─public                  // 存放前端静态资源文件
+│  └─src                     // 存放前端源代码
+│      ├─apis                  // API请求
+│      ├─assets                
+│      ├─components            // 组件
+│      ├─composables
+│      ├─directives
+│      ├─router                // 路由
+│      ├─stores                // 状态管理
+│      ├─styles
+│      ├─utils
+│      └─views
+└─image_test               // 存放图片测试数据
+
+```
 
 #### 技术栈
 
-- 后端
-  
-  - Go
-  
-  - Gin
-  
-  - GORM
+##### 后端
+
+- Go
+
+- Gin
+
+- MySQL
+
+- GORM
+
+##### 前端
+
+- Vue.js
+
+- Pinia
+
+- Vue Router
+
+- Axios
+
+- Element Plus
 
 #### 代码片段
 
