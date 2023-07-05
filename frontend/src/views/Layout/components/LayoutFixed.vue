@@ -24,10 +24,10 @@ const categoryStore = useCategoryStore()
           <RouterLink active-class="active" :to="`/category/${item.Id}`">{{ item.Name }}</RouterLink>
         </li>
       </ul>
-      <div class="search">
+      <!-- <div class="search">
         <i class="iconfont icon-search"></i>
         <input type="text" placeholder="搜一搜">
-      </div>
+      </div> -->
       <HeaderCart />
     </div>
   </div>
