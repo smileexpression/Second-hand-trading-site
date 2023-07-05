@@ -57,7 +57,7 @@ const release = async () => {
     name: form.name,
     cate_id: form.cate_id,
     description: form.description,
-    price: form.price,
+    price: form.price.toString(),
     picture: imageIds,
   })
   console.log(res)
@@ -141,7 +141,8 @@ const del = async (index, id) => {
             </div>
           </div>
           <el-form-item label="价格">
-            <el-input v-model="form.price" style="width: 200px;" />
+            <!-- <el-input v-model="form.price" style="width: 200px;" /> -->
+            <el-input-number v-model="form.price" :precision="2" :step="0.01" :min="0" style="width: 200px;" />
           </el-form-item>
           <el-form-item class="footer">
             <el-button type="primary" @click="onSubmit">发布</el-button>
