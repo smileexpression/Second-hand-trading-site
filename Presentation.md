@@ -278,9 +278,10 @@
   }
   ```
 
--中间件自动验证用户权限
+-使用中间件自动验证用户权限
 
   ```go
+  //中间件 AuthMiddleware()定义
   func AuthMiddleware() gin.HandlerFunc {
 	  return func(ctx *gin.Context) {
 		  //获取anthorization header
@@ -323,6 +324,52 @@
 
 		  ctx.Next()
 	  }
+  }
+  //////routes文件内使用:
+  goods := r.Group("")
+	{
+		goods.GET("/goods", controller.GetOneGood)
+		goods.GET("/goods/relevant", middleware.AuthMiddleware(), controller.RecommendGoods)
+	}
+  ```
+
+-中间件使用例子
+
+  ```go
+  //////从上下文中获取用户信息(ctx.Get("user"))
+
+  func UpdateAvatar(ctx *gin.Context) {
+	  DB := common.GetDB()
+	  pictureID, isSuccess := ctx.GetQuery("pictureID")
+	  user, is_Exist := ctx.Get("user")
+	  if !is_Exist {
+		  ctx.JSON(http.StatusUnauthorized, gin.H{"msg": "user not exist"})
+		  return
+	  }
+	  userInfo := user.(model.User)
+	  if !isSuccess {
+		  ctx.JSON(http.StatusBadRequest, gin.H{
+			  "code": 400,
+			  "msg":  "获取头像失败",
+		  })
+		  return
+	  }
+	  if pictureID == "" {
+		  ctx.JSON(http.StatusBadRequest, gin.H{
+			  "code": 400,
+			  "msg":  "头像不能为空",
+		  })
+		  return
+	  }
+	  if userInfo.Avatar != pictureID {
+		  userInfo.Avatar = pictureID
+	  }
+	  DB.Model(&userInfo).Where("id=?", userInfo.ID).Update("avatar", userInfo.Avatar)
+	  ctx.JSON(200, gin.H{
+		  "code":     200,
+		  "msg":      "更换头像成功",
+		  "avatarID": userInfo.Avatar,
+	  })
   }
   ```
 
