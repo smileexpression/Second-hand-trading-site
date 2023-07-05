@@ -105,7 +105,7 @@ const doRegister = () => {
         <div class="account-box">
           <div class="form">
             <el-form ref="registerFormRef" :model="registerForm" :rules="registerRules" label-position="right"
-              label-width="70px" status-icon>
+              label-width="80px" status-icon>
               <el-form-item prop="account" label="账户">
                 <el-input v-model="registerForm.account" />
               </el-form-item>

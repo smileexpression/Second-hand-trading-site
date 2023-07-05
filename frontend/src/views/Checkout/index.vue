@@ -65,7 +65,9 @@ const addAddress = () => {
       await userStore.addAddress({ receiver, contact, address })
       ElMessage({ type: 'success', message: '操作成功' })
     }
-    checkInfo.value.userAddresses.push({ receiver, contact, address })
+    // console.log(address_last)
+    checkInfo.value.userAddresses = userStore.userInfo.userAddresses
+    // checkInfo.value.userAddresses.push({ address_last[address_last.length - 1], receiver, contact, address })
     addressFormRef.value.resetFields()
     addressDialogVisible.value = false
   })
