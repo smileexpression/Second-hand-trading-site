@@ -3,6 +3,7 @@ import { getImageUrl } from '@/apis/image';
 import { useCartStore } from '@/stores/cartStore';
 import { useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { getDetail } from '@/apis/detail'
 const cartStore = useCartStore()
 const router = useRouter()
 
@@ -43,12 +44,25 @@ const deleteCheckCart = () =>{
     })
 
 }
-const checkGood = (i) =>{
-  const id = i.id
-  router.push({
-    path: 'checkout',
-    query: { goodID: id }    
-  })
+const checkGood = async (i) =>{
+  const res = await getDetail(i.id)
+  console.log(res.result)
+  if(!res.result.forsale){
+    const id = i.id
+    router.push({
+      path: 'checkout',
+      query: { goodID: id }    
+    })
+  }
+  else{
+    ElMessage({
+        type: 'warning',
+        message: '手慢了，商品已卖出',
+      })
+    console.log("手慢了，商品已卖出")
+    cartStore.delCart([i.id])
+  }
+
 }
 
 </script>
