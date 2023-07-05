@@ -30,7 +30,7 @@ export const useUserStore = defineStore ( 'user', ()=> {
     }
 
     //更改头像
-    const updateAvatar = async ({ pictrueID }) => {
+    const updateAvatar = async ( pictrueID ) => {
         const res = await updateAvatarAPI(pictrueID)
         userInfo.value.avatar = res.avatarID
     }
