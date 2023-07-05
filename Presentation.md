@@ -81,6 +81,7 @@
   - 修改头像接口
   
   - 修改密码接口
+  
   - 商品推荐接口
   
   - 修改个人信息接口
@@ -108,65 +109,63 @@
 ### 项目实现过程中遇到的问题及解决办法
 
 - 中间件
-
+  
   该中间件用于解决身份验证的问题。在Web应用程序中，有些路由或功能可能需要用户进行身份验证才能访问。该中间件可以确保只有具有有效身份验证令牌的用户才能通过身份验证，并且只有经过身份验证的用户才能继续访问受保护的路由或功能。
-
+  
   具体来说，该中间件执行以下操作：
-
+  
   1. 验证令牌格式：它检查请求中的令牌是否具有正确的格式（以 "Bearer " 前缀开头）。
   2. 验证令牌有效性：它解析和验证令牌，确保令牌是有效的、未过期的，并且具有正确的签名。
   3. 验证用户存在性：它从令牌中提取用户ID，并在数据库中查找对应的用户，确保用户存在。
   4. 设置用户信息：如果所有的验证步骤都通过了，它将用户对象设置到请求的上下文中，以便后续的处理函数可以使用用户信息进行进一步的操作。
-
+  
   通过使用该中间件，开发人员可以轻松地将身份验证逻辑应用于需要保护的路由或功能，确保只有经过身份验证的用户才能访问这些资源。这有助于增强应用程序的安全性，并防止未经授权的访问。
-
+  
   ```go
   func AuthMiddleware() gin.HandlerFunc {
-  	return func(ctx *gin.Context) {
-  		//获取anthorization header
-  		tokenString := ctx.GetHeader("Authorization")
-  		//验证token格式
-  		if tokenString == "" || !strings.HasPrefix(tokenString, "Bearer ") {
-  			ctx.JSON(http.StatusUnauthorized, gin.H{
-  				"code": 401,
-  				"msg":  "权限不足",
-  			})
-  			ctx.Abort()
-  			return
-  		}
+      return func(ctx *gin.Context) {
+          //获取anthorization header
+          tokenString := ctx.GetHeader("Authorization")
+          //验证token格式
+          if tokenString == "" || !strings.HasPrefix(tokenString, "Bearer ") {
+              ctx.JSON(http.StatusUnauthorized, gin.H{
+                  "code": 401,
+                  "msg":  "权限不足",
+              })
+              ctx.Abort()
+              return
+          }
   
-  		tokenString = tokenString[7:]
+          tokenString = tokenString[7:]
   
-  		token, claims, err := common.ParseToken(tokenString)
-  		if err != nil || !token.Valid {
-  			ctx.JSON(http.StatusUnauthorized, gin.H{"code": 401, "msg": "权限不足"})
-  			ctx.Abort()
-  			return
-  		}
+          token, claims, err := common.ParseToken(tokenString)
+          if err != nil || !token.Valid {
+              ctx.JSON(http.StatusUnauthorized, gin.H{"code": 401, "msg": "权限不足"})
+              ctx.Abort()
+              return
+          }
   
-  		//验证通过后获取claim中的userid
-  		userid := claims.UserID
+          //验证通过后获取claim中的userid
+          userid := claims.UserID
   
-  		DB := common.GetDB()
-  		var user model.User
-  		DB.First(&user, userid)
+          DB := common.GetDB()
+          var user model.User
+          DB.First(&user, userid)
   
-  		//用户不存在
-  		if user.ID == 0 {
-  			ctx.JSON(http.StatusUnauthorized, gin.H{"code": 401, "msg": "权限不足"})
-  			ctx.Abort()
-  			return
-  		}
+          //用户不存在
+          if user.ID == 0 {
+              ctx.JSON(http.StatusUnauthorized, gin.H{"code": 401, "msg": "权限不足"})
+              ctx.Abort()
+              return
+          }
   
-  		//用户存在 将user的信息写入上下文
-  		ctx.Set("user", user)
+          //用户存在 将user的信息写入上下文
+          ctx.Set("user", user)
   
-  		ctx.Next()
-  	}
+          ctx.Next()
+      }
   }
   ```
-
-  
 
 - 上传图片
   
@@ -315,22 +314,40 @@ Second-hand trading site
 - Go
 
 - Gin
+  
+  基于Go语言的Web框架，提供了路由、中间件、错误处理等功能，可以帮助开发者更快速地构建Web应用程序。Gin具有高性能和低内存消耗的特点，同时也是一个轻量级框架
 
 - MySQL
 
 - GORM
+  
+  基于Go语言的ORM（对象关系映射）库，提供了简单易用的API，可以帮助开发者更方便地操作数据库
 
 ##### 前端
 
-- Vue.js
+- Vue.js                     
+  
+  用于构建用户界面的渐进式JavaScript框架。
+
+- Vite
+  
+  Vue提供的官方脚手架，相较于vue-cli更轻量、速度更快
 
 - Pinia
+  
+  Vue官方推荐的状态管理库，相较于Vuex更轻量和易于使用
 
 - Vue Router
+  
+  用于管理Vue.js应用程序路由的官方路由器库。提供了路由管理和导航的功能
 
 - Axios
+  
+  基于Promise的HTTP客户端，可以用于发送HTTP请求。可以在浏览器和Node.js环境中使用，并且提供了许多功能，例如拦截器、取消请求等
 
 - Element Plus
+  
+  基于 Vue 3，面向设计师和开发者的组件库
 
 #### 代码片段
 
