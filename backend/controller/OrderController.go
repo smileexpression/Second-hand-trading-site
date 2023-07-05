@@ -220,8 +220,9 @@ func SoldList(c *gin.Context) {
 		b := (p - 1) * ps
 		e := b + ps
 		if (b + 1) > count {
-			c.JSON(400, gin.H{
-				"runtime error": "page out of range",
+			c.JSON(200, gin.H{
+				"count":  count,
+				"result": result,
 			})
 		} else {
 			for i := b; (i < count) && (i < e); i++ {
@@ -278,8 +279,9 @@ func BoughtList(c *gin.Context) {
 		e := b + ps
 		println(e)
 		if (b + 1) > count {
-			c.JSON(400, gin.H{
-				"runtime error": "page out of range",
+			c.JSON(200, gin.H{
+				"count":  count,
+				"result": result,
 			})
 		} else {
 			for i := b; (i < count) && (i < e); i++ {
@@ -337,8 +339,9 @@ func SaleList(c *gin.Context) {
 		b := (p - 1) * ps
 		e := b + ps
 		if (b + 1) > count {
-			c.JSON(400, gin.H{
-				"runtime error": "page out of range",
+			c.JSON(200, gin.H{
+				"count":  count,
+				"result": result,
 			})
 		} else {
 			for i := b; (i < count) && (i < e); i++ {

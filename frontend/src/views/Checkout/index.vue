@@ -4,8 +4,10 @@ import { useRouter, useRoute } from 'vue-router'
 import { ref, onMounted } from 'vue'
 import { useCartStore } from '@/stores/cartStore';
 import { getImageUrl } from '@/apis/image';
+import { useUserStore } from "@/stores/user";
+import { ElMessage } from "element-plus";
 const cartStore = useCartStore()
-
+const userStore = useUserStore()
 const router = useRouter()
 const route = useRoute()
 const checkInfo = ref({})  // 订单对象
@@ -33,6 +35,45 @@ const confirm = () => {
   curAddress.value = activeAddress.value
   showDialog.value = false
   activeAddress.value = {}
+}
+
+// 添加地址
+const addressDialogVisible = ref(false)
+const addressForm = ref({
+  receiver: '',
+  contact: '',
+  address: ''
+})
+const addressRules = ref({
+  receiver: [
+    { required: true, message: '收件人不能为空！', trigger: 'blur' }
+  ],
+  contact: [
+    { required: true, message: '手机号不能为空！', trigger: 'blur' },
+    { type: "string", len: 11, pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: '请输入正确的手机号！', trigger: 'blur' }
+  ],
+  address: [
+    { required: true, message: '收货地址不能为空！', trigger: 'blur' }
+  ]
+})
+//表单实例
+const addressFormRef = ref(null)
+const addAddress = () => {
+  const { receiver, contact, address } = addressForm.value
+  addressFormRef.value.validate(async (valid) => {
+    if (valid) {
+      await userStore.addAddress({ receiver, contact, address })
+      ElMessage({ type: 'success', message: '操作成功' })
+    }
+
+    addressFormRef.value.resetFields()
+    addressDialogVisible.value = false
+  })
+}
+//取消重置表单
+const cancelAddress = () => {
+  addressFormRef.value.resetFields()
+  addressDialogVisible.value = false
 }
 
 // 创建订单
@@ -71,7 +112,7 @@ const createOrder = async () => {
         <div class="box-body">
           <div class="address">
             <div class="text">
-              <div class="none" v-if="!curAddress">您需要先添加收货地址才可提交订单。</div>
+              <div class="none" v-if="!curAddress">您需要先选择收货地址才可提交订单。</div>
               <ul v-else>
                 <li><span>收<i />货<i />人：</span>{{ curAddress.receiver }}</li>
                 <li><span>联系方式：</span>{{ curAddress.contact }}</li>
@@ -79,8 +120,8 @@ const createOrder = async () => {
               </ul>
             </div>
             <div class="action">
-              <el-button size="large" @click="showDialog = true">切换地址</el-button>
-              <el-button size="large" @click="addFlag = true">添加地址</el-button>
+              <el-button size="large" @click="showDialog = true">选择地址</el-button>
+              <el-button size="large" @click="addressDialogVisible = true">添加地址</el-button>
             </div>
           </div>
         </div>
@@ -158,6 +199,27 @@ const createOrder = async () => {
     </template>
   </el-dialog>
   <!-- 添加地址 -->
+  <!-- 添加收货地址对话框 -->
+  <el-dialog v-model="addressDialogVisible" title="添加收货地址" width="500" @close="cancelAddress">
+    <div class="form">
+      <el-form ref="addressFormRef" :model="addressForm" :rules="addressRules" label-position="right" label-width="80px"
+        status-icon>
+        <el-form-item prop="receiver" label="收货人">
+          <el-input v-model="addressForm.receiver" />
+        </el-form-item>
+        <el-form-item prop="contact" label="手机号">
+          <el-input v-model="addressForm.contact" />
+        </el-form-item>
+        <el-form-item prop="address" label="收货地址">
+          <el-input v-model="addressForm.address" />
+        </el-form-item>
+        <div style="margin:0 auto; text-align: center;">
+          <el-button size="large" class="subBtn" @click="addAddress">确认添加</el-button>
+          <el-button size="large" class="subBtn" @click="cancelAddress">取消</el-button>
+        </div>
+      </el-form>
+    </div>
+  </el-dialog>
 </template>
 
 <style scoped lang="scss">
@@ -293,6 +355,101 @@ const createOrder = async () => {
       }
     }
   }
+}
+
+.form {
+  padding: 0 20px 20px 20px;
+
+  &-item {
+    margin-bottom: 28px;
+
+    .input {
+      position: relative;
+      height: 36px;
+
+      >i {
+        width: 34px;
+        height: 34px;
+        background: #cfcdcd;
+        color: #fff;
+        position: absolute;
+        left: 1px;
+        top: 1px;
+        text-align: center;
+        line-height: 34px;
+        font-size: 18px;
+      }
+
+      input {
+        padding-left: 44px;
+        border: 1px solid #cfcdcd;
+        height: 36px;
+        line-height: 36px;
+        width: 100%;
+
+        &.error {
+          border-color: $priceColor;
+        }
+
+        &.active,
+        &:focus {
+          border-color: $xtxColor;
+        }
+      }
+
+      .code {
+        position: absolute;
+        right: 1px;
+        top: 1px;
+        text-align: center;
+        line-height: 34px;
+        font-size: 14px;
+        background: #f5f5f5;
+        color: #666;
+        width: 90px;
+        height: 34px;
+        cursor: pointer;
+      }
+    }
+
+    >.error {
+      position: absolute;
+      font-size: 12px;
+      line-height: 28px;
+      color: $priceColor;
+
+      i {
+        font-size: 14px;
+        margin-right: 2px;
+      }
+    }
+  }
+
+  .agree {
+    a {
+      color: #069;
+    }
+  }
+
+  .btn {
+    display: block;
+    width: 100%;
+    height: 40px;
+    color: #fff;
+    text-align: center;
+    line-height: 40px;
+    background: $xtxColor;
+
+    &.disabled {
+      background: #cfcdcd;
+    }
+  }
+}
+
+.subBtn {
+  background: $xtxColor;
+  width: 40%;
+  color: #fff;
 }
 
 .my-btn {

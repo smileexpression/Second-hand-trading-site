@@ -125,13 +125,16 @@ const cancelChange = () => {
 const infoDialogVisible = ref(false)
 const infoForm = ref({
   account: `${userStore.userInfo.account}`,
-  nickname: `${userStore.userInfo.nickname}`,
-  gender: `${userStore.userInfo.gender}`
+  nickname: '',
+  gender: ''
 })
 const infoRules = ref({
   nickname: [
     {required: true, message: '用户名不能为空！', trigger: 'blur'},
     {type: "string", max: 20, message: '用户名应为长度至多为20的字符！', trigger: 'blur'}
+  ],
+  gender: [
+    {required: true, message: '请选择性别！', trigger: 'blur'}
   ]
 })
 //表单实例
@@ -142,7 +145,11 @@ const doInfo = () => {
     if(valid){
       await userStore.changeInfo({ nickname, gender })
       ElMessage({ type: 'success', message: '修改成功' })
+      infoFormRef.value.resetFields()
+      infoDialogVisible.value = false
     }
+
+    
   })
 }
 //取消重置表单
@@ -179,6 +186,9 @@ const addAddress = () => {
       await userStore.addAddress({ receiver, contact, address })
       ElMessage({ type: 'success', message: '操作成功' })
     }
+
+    addressFormRef.value.resetFields()
+    addressDialogVisible.value = false
   })
 }
 //取消重置表单

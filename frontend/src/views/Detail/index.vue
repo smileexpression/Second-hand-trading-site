@@ -17,10 +17,9 @@ const router = useRouter()
 const getGoods = async () => {
   const res = await getDetail(route.params.id)
   goods.value = res.result
-  pictures.value = res.pictures
+  pictures.value = res.pictures.filter(i => i!='')
   user.value = res.user
   // console.log(pictures.value)
-  // console.log(goods.value)
 }
 onMounted(() => getGoods())
 
@@ -28,13 +27,14 @@ const cartStore = useCartStore()
 const addCart = () => {
   if (!goods.value.forsale) {
     //商品在售，可以加入购物车
-    //console.log(goods.value.forSale)
+    // console.log(user.value.account)
     cartStore.addCart({
       id: String(goods.value.ID),
       name: goods.value.name,
       price: Number(goods.value.price),
       picture: goods.value.picture,
-      selected: true
+      selected: true,
+      owner: user.value.account
     })
   } else {
     //商品已卖出
@@ -95,16 +95,20 @@ const onAddChat = () => {
                 <dl>
                   <dt>卖家</dt>
                   <img :src="getImageUrl(user.avatar)" alt="" />
-                  <dd @click="onAddChat">{{ user.nickname }}</dd>
+                  <dd>{{ user.nickname }}</dd>
                 </dl>
                 <dl>
                   <dt>联系方式</dt>
-                  <dd @click="onAddChat">{{ user.account }}</dd>
+                  <dd>{{ user.account }}</dd>
+                  <el-button size="middle" round @click="onAddChat()">
+                    加入聊天列表
+                  </el-button>
                 </dl>
+
               </div>
               <!-- 按钮组件 -->
               <div>
-                <el-button size="large" class="btn" @click="addCart()">
+                <el-button type="primary" size="large" class="btn" @click="addCart()">
                   加入购物车
                 </el-button>
               </div>
@@ -218,7 +222,6 @@ const onAddChat = () => {
 
 .btn {
   margin-top: 20px;
-
 }
 
 .bread-container {

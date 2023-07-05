@@ -8,14 +8,14 @@ const orderList = ref([])
 const total = ref(0)
 
 const params = ref({
-    page: 0,
-    pageSize: 2
+    page: 1,
+    pageSize: 5
 })
 
 const getOrderList = async () => {
   const res = await getSoldOrder(params.value)
   orderList.value = res.result
-  total.value = res.counts
+  total.value = res.count
 }
 
 onMounted(() => getOrderList())
@@ -36,37 +36,34 @@ const pageChange = (page) => {
         </div>
         <div v-else>
           <!-- 订单列表 -->
-          <div class="order-item" v-for="order in orderList" :key="order.id">
+          <div class="order-item" v-for="order in orderList" :key="order.Id">
             <div class="head">
-              <span>下单时间：{{ order.createTime }}</span>
-              <span>订单编号：{{ order.id }}</span>
+              <span>下单时间：{{ order.CreatTime }}</span>
+              <span>订单编号：{{ order.Id }}</span>
             </div>
             <div class="body">
               <div class="column goods">
                 <ul>
-                  <li :key="order.skus.id">
+                  <li :key="order.Skus.Id">
                     <a class="image" href="javascript:;">
-                      <img :src="getImageUrl(order.skus.image)" alt="" />
+                      <img :src="getImageUrl(order.Skus.Image)" alt="" />
                     </a>
                     <div class="info">
                       <p class="name ellipsis-2">
-                        {{ order.skus.name }}
+                        {{ order.Skus.Name }}
                       </p>
                       <p class="attr ellipsis">
-                        <span>{{ order.skus.attrsText }}</span>
+                        <span>{{ order.Skus.AttrsText }}</span>
                       </p>
                     </div>
-                    <div class="price">¥{{ order.skus.realPay?.toFixed(2) }}</div>
+                    <div class="price">¥{{ order.Skus.RealPay?.toFixed(2) }}</div>
                     <div class="count">x1</div>
                   </li>
                 </ul>
               </div>
               <div class="column amount">
-                <p class="red">¥{{ order.payMoney?.toFixed(2) }}</p>
+                <p class="red">¥{{ order.PayMoney?.toFixed(2) }}</p>
                 <p>在线支付</p>
-              </div>
-              <div class="column action">
-                <p><a href="javascript:;">查看详情</a></p>
               </div>
             </div>
           </div>

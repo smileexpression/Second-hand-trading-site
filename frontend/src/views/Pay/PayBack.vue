@@ -27,7 +27,9 @@ onMounted(() => getOrderInfo())
         <!-- <p>支付方式：<span>支付宝</span></p> -->
         <p>支付金额：<span>¥{{ orderInfo.payMoney }}</span></p>
         <div class="btn">
-          <el-button type="primary" style="margin-right:20px">查看订单</el-button>
+          <el-button type="primary" style="margin-right:20px">
+            <RouterLink to="/member/order">查看订单</RouterLink>
+          </el-button>
           <el-button>
             <RouterLink to="/">回到首页</RouterLink>
           </el-button>

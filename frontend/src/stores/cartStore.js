@@ -12,7 +12,9 @@ export const useCartStore = defineStore('cart', () =>{
     const cartList = ref([])
     //定义action 
     const addCart = async (goods) =>{
-        if(isLogin.value){
+        // console.log(userStore.userInfo.account)
+        // console.log(goods.owner)
+        if(isLogin.value && goods.owner!=userStore.userInfo.account){
             //登录之后添加购物车
             const itemExisted = cartList.value.find((item) => goods.id === item.id)
             if(itemExisted){
@@ -23,9 +25,13 @@ export const useCartStore = defineStore('cart', () =>{
                 ElMessage.success('成功加入购物车')
                 // console.log(goods.id)
             }
-        }else
+        }else if(!isLogin.value)
         {//未登录则 提示无法加入购物车
             ElMessage('请先登录')
+        }
+        else if(goods.owner == userStore.userInfo.account)
+        {
+            ElMessage('不能购买自己发布的商品！')
         }
 
 
