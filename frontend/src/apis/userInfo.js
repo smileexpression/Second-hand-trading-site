@@ -10,11 +10,11 @@ export const getUserInfoAPI = () => {
 }
 
 //更换头像
-export const updateAvatarAPI = (pictrueID) => {
+export const updateAvatarAPI = (pictureID) => {
     return request({
         url: '/member/updateavatar',
         method: 'POST',
-        params: pictrueID
+        params: {pictureID}
     })
 }
 

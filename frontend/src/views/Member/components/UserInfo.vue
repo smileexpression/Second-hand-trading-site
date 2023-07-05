@@ -43,7 +43,7 @@ const beforeUpload = (file) => {
 //上传头像成功
 const updateSuccess = (res, upload) => {
   //获取图片ID
-  image.value = res.imageIds
+  image.value = res.imageIds[0]
   console.log(image);
 
   //用图片ID更改头像
