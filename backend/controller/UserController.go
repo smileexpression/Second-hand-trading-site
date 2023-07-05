@@ -64,21 +64,6 @@ func Register(ctx *gin.Context) {
 	}
 	DB.Create(&newUser)
 
-	//测试address
-	var testAddress1 model.UserAddress
-	testAddress1.Address = "中山大学珠海校区俊俊子的洞"
-	testAddress1.Contact = "1234567"
-	testAddress1.Receiver = "椰子融"
-	testAddress1.UserID = newUser.ID
-	DB.Create(&testAddress1)
-
-	var testAddress2 model.UserAddress
-	testAddress2.Address = "EDG的大树"
-	testAddress2.Contact = "1234567"
-	testAddress2.Receiver = "污渍"
-	testAddress2.UserID = newUser.ID
-	DB.Create(&testAddress2)
-
 	//发放Token
 	token, err := common.ReleaseToken(newUser)
 	if err != nil {
