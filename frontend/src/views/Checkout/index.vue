@@ -65,7 +65,7 @@ const addAddress = () => {
       await userStore.addAddress({ receiver, contact, address })
       ElMessage({ type: 'success', message: '操作成功' })
     }
-
+    checkInfo.value.userAddresses.push({ receiver, contact, address })
     addressFormRef.value.resetFields()
     addressDialogVisible.value = false
   })
@@ -82,13 +82,13 @@ const createOrder = async () => {
     alert("请先选择收货地址")
     return
   }
-  console.log("checkInfo id", checkInfo.value.goods.id)
-  console.log("address id", curAddress.value.id)
+  // console.log("checkInfo id", checkInfo.value.goods.id)
+  // console.log("address id", curAddress.value.id)
   const res = await createOrderAPI({
     goodId: checkInfo.value.goods.id,
     addressId: curAddress.value.id
   })
-  console.log("createOrder", res)
+  // console.log("createOrder", res)
   const orderId = res.id
   router.push({
     path: 'pay',
