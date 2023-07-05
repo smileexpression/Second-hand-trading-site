@@ -134,7 +134,7 @@ const doRegister = () => {
 
     <footer class="login-footer">
       <div class="container">
-        <p>
+        <!-- <p>
           <a href="javascript:;">关于我们</a>
           <a href="javascript:;">帮助中心</a>
           <a href="javascript:;">售后服务</a>
@@ -142,8 +142,8 @@ const doRegister = () => {
           <a href="javascript:;">商务合作</a>
           <a href="javascript:;">搜索推荐</a>
           <a href="javascript:;">友情链接</a>
-        </p>
-        <p>CopyRight &copy; 小兔鲜儿</p>
+        </p> -->
+        <p>CopyRight &copy; TKL</p>
       </div>
     </footer>
   </div>
