@@ -73,14 +73,14 @@ func Register(ctx *gin.Context) {
 		"code": 200,
 		"msg":  "注册成功",
 		"result": gin.H{
-			"id":       newUser.ID,
-			"account":  newUser.Telephone,
-			"token":    token,
-			"avatar":   newUser.Avatar,
-			"nickname": newUser.Name,
-			"gender":   newUser.Gender,
+			"id":            newUser.ID,
+			"account":       newUser.Telephone,
+			"token":         token,
+			"avatar":        newUser.Avatar,
+			"nickname":      newUser.Name,
+			"gender":        newUser.Gender,
+			"userAddresses": nil,
 		},
-		"userAddress": nil,
 	})
 }
 
